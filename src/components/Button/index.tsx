@@ -1,19 +1,17 @@
 import React from 'react';
 import {StyleSheet, Pressable} from 'react-native';
-import {FC} from 'react';
 import Typography from '../Typography';
-// import Svg, {Rect} from 'react-native-svg';
 import Cross from '../../../assets/svg/cross.svg';
 import COLORS from '../../COLORS';
 
 type ButtonType = 'primary' | 'secondary' | 'link';
 type ButtonSize = 'large' | 'small' | 'pills';
-type ImageTypes = 'cross';
+type SvgTypes = 'cross';
 
 type Props = {
   type: ButtonType;
   children: string;
-  svg?: ImageTypes;
+  svg?: SvgTypes;
   size: ButtonSize;
   onPress: () => void;
 };
@@ -36,30 +34,33 @@ const buttonColorMap = {
   link: 'transparent',
 };
 
-const Button: FC<Props> = ({
-  children,
-  onPress,
-  size,
-  svg,
-  type,
-  ...restProps
-}) => {
+const Button = ({children, onPress, size, svg, type, ...restProps}: Props) => {
   const textColor = textColorMap[type];
   const textFontSize = textFontSizeMap[size];
   const buttonColor = buttonColorMap[type];
+  //@ts-ignore
+  //TODO: find appropriate type for pressed
+  const getButtonColor = pressed => {
+    if (pressed && buttonColor === COLORS.violet20) {
+      return COLORS.violet100;
+    } else if (pressed && buttonColor !== COLORS.violet20) {
+      return COLORS.violet20;
+    }
+    return buttonColor;
+  };
   return (
     <Pressable
       style={({pressed}) => [
         styles.button,
         styles[size],
         {
-          backgroundColor: pressed ? COLORS.violet20 : buttonColor,
+          backgroundColor: getButtonColor(pressed),
         },
       ]}
       onPress={onPress}
       {...restProps}>
       {svg && <Cross width={22} height={22} style={{marginRight: 15}} />}
-      <Typography fontSize={textFontSize} color={textColor}>
+      <Typography style={{fontSize: textFontSize, color: textColor}}>
         {children}
       </Typography>
     </Pressable>
@@ -68,38 +69,28 @@ const Button: FC<Props> = ({
 
 const styles = StyleSheet.create({
   button: {
-    margin: 10,
+    marginVertical: 10,
     borderRadius: 16,
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // primary: {
-  //   backgroundColor: COLORS.violet100,
-  // },
-  // secondary: {
-  //   backgroundColor: COLORS.violet20,
-  // },
-  // link: {
-  //   backgroundColor: 'none',
-  // },
   large: {
     height: 56,
-    width: 343,
+    width: '100%',
     padding: 8,
   },
   small: {
     height: 56,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    width: 164,
+    width: '50%',
   },
   pills: {
     height: 32,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    width: 78,
+    width: '20%',
     borderRadius: 40,
   },
 });

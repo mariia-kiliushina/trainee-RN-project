@@ -12,7 +12,7 @@ import {capitalizeFirstLetter} from '../../utils/helpers';
 type FontType = 'regular' | 'bold';
 
 type Props = TextProps & {
-  fontType: FontType;
+  fontType?: FontType;
   children: ReactNode;
   style?: StyleProp<TextStyle>;
 };

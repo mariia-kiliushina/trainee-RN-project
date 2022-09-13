@@ -10,25 +10,28 @@ const Home = () => {
   const [timesPressedLink, setTimesPressedLink] = useState(0);
   return (
     <View style={styles.main}>
-      <Typography color={COLORS.baseDark50} fontType="bold">
+      <Typography
+        style={{alignSelf: 'center', color: COLORS.baseDark50}}
+        fontType="bold">
         {timesPressedPrimary}
       </Typography>
-      <View style={styles.flexContainer}>
-        <Button
-          size="large"
-          onPress={() => setTimesPressedPrimary(current => current + 1)}
-          svg="cross"
-          type="primary">
-          Press me
-        </Button>
-        <Button
-          size="large"
-          onPress={() => setTimesPressedPrimary(current => current + 1)}
-          type="primary">
-          Press me
-        </Button>
-      </View>
-      <Typography color={COLORS.baseDark50} fontType="regular">
+      <Button
+        size="large"
+        onPress={() => setTimesPressedPrimary(current => current + 1)}
+        svg="cross"
+        type="primary">
+        Press me
+      </Button>
+      <Button
+        size="large"
+        onPress={() => setTimesPressedPrimary(current => current + 1)}
+        type="primary">
+        Press me
+      </Button>
+
+      <Typography
+        style={{alignSelf: 'center', color: COLORS.baseDark50}}
+        fontType="bold">
         {timesPressedSecondary}
       </Typography>
       <Button
@@ -57,7 +60,9 @@ const Home = () => {
         type="secondary">
         Press me
       </Button>
-      <Typography color={COLORS.baseDark50} fontType="bold">
+      <Typography
+        style={{alignSelf: 'center', color: COLORS.baseDark50}}
+        fontType="bold">
         {timesPressedLink}
       </Typography>
 
@@ -74,18 +79,10 @@ const Home = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    padding: 16,
-  },
-  flexContainer: {
     width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'stretch',
+    backgroundColor: '#F5FCFF',
+    paddingHorizontal: 20,
+    paddingTop: 60,
   },
 });
 export default Home;
