@@ -1,26 +1,35 @@
-import React from 'react';
-import {StyleSheet, View, Text, TextProps} from 'react-native';
-import {FC} from 'react';
-import {capitalizeFirstLetter} from '../../helpers';
+import React, {ReactNode} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextProps,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
+import {capitalizeFirstLetter} from '../../utils/helpers';
 
 type FontType = 'regular' | 'bold';
 
 type Props = TextProps & {
-  fontType?: FontType;
-  children: string | number;
-  color: string;
-  fontSize?: number;
+  fontType: FontType;
+  children: ReactNode;
+  style?: StyleProp<TextStyle>;
 };
 
-const Typography: FC<Props> = ({
+const Typography = ({
   children,
   fontType = 'regular',
+  style,
   ...restProps
-}) => {
-  const fontFamily = 'Inter-' + capitalizeFirstLetter(fontType);
+}: Props) => {
+  const fontFamily = `Inter-${capitalizeFirstLetter(fontType)}`;
+
   return (
     <View>
-      <Text style={[styles.text, {fontFamily}, {...restProps}]}>
+      <Text
+        style={[styles.text, {fontFamily: fontFamily}, style]}
+        {...restProps}>
         {children}
       </Text>
     </View>
