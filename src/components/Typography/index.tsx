@@ -1,13 +1,13 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {StyleSheet, View, Text, TextProps} from 'react-native';
 import {FC} from 'react';
-import {capitalizeFirstLetter} from '../helpers';
+import {capitalizeFirstLetter} from '../../helpers';
 
 type FontType = 'regular' | 'bold';
 
 type Props = TextProps & {
   fontType: FontType;
-  children: ReactNode;
+  children: string;
 };
 
 const Typography: FC<Props> = ({
