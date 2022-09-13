@@ -1,13 +1,15 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {StyleSheet, View, Text, TextProps} from 'react-native';
 import {FC} from 'react';
-import {capitalizeFirstLetter} from '../helpers';
+import {capitalizeFirstLetter} from '../../helpers';
 
 type FontType = 'regular' | 'bold';
 
 type Props = TextProps & {
-  fontType: FontType;
-  children: ReactNode;
+  fontType?: FontType;
+  children: string | number;
+  color: string;
+  fontSize?: number;
 };
 
 const Typography: FC<Props> = ({
@@ -16,10 +18,9 @@ const Typography: FC<Props> = ({
   ...restProps
 }) => {
   const fontFamily = 'Inter-' + capitalizeFirstLetter(fontType);
-
   return (
     <View>
-      <Text style={[styles.text, {fontFamily: fontFamily}]} {...restProps}>
+      <Text style={[styles.text, {fontFamily}, {...restProps}]}>
         {children}
       </Text>
     </View>
@@ -28,7 +29,7 @@ const Typography: FC<Props> = ({
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 34,
+    fontSize: 28,
   },
 });
 

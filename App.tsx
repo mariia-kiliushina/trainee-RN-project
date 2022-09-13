@@ -1,12 +1,11 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import Typography from './src/components/Typography';
+import Home from './src/components/Home';
 
 const App = () => {
   return (
     <View style={styles.main}>
-      <Typography fontType="regular"> Hello world</Typography>
-      <Typography fontType="bold"> Hello world</Typography>
+      <Home />
     </View>
   );
 };
