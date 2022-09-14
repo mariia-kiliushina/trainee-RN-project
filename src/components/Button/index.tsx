@@ -1,66 +1,62 @@
 import React from 'react';
-import {StyleSheet, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import Typography from '../Typography';
-import Cross from '../../../assets/svg/cross.svg';
+import Cross from '../../assets/svg/cross.svg';
 import COLORS from '../../COLORS';
 
 type ButtonType = 'primary' | 'secondary' | 'link';
-type ButtonSize = 'large' | 'small' | 'pills';
 type SvgTypes = 'cross';
 
-type Props = {
+type Props = PressableProps & {
   type: ButtonType;
   children: string;
+  style?: StyleProp<ViewStyle>;
   svg?: SvgTypes;
-  size: ButtonSize;
   onPress: () => void;
 };
 
-const textColorMap = {
-  primary: COLORS.baseLight80,
-  secondary: COLORS.violet100,
-  link: COLORS.baseDark50,
-};
+const Button = ({children, type, style, svg, onPress, ...restProps}: Props) => {
+  const styleButton = styles[type];
 
-const textFontSizeMap = {
-  large: 18,
-  small: 18,
-  pills: 14,
-};
+  let textColor = '';
 
-const buttonColorMap = {
-  primary: COLORS.violet100,
-  secondary: COLORS.violet20,
-  link: 'transparent',
-};
+  switch (type) {
+    case 'primary':
+      textColor = COLORS.baseLight80;
+      break;
+    case 'secondary':
+      textColor = COLORS.violet100;
+      break;
+    default:
+      textColor = COLORS.baseDark50;
+      break;
+  }
 
-const Button = ({children, onPress, size, svg, type, ...restProps}: Props) => {
-  const textColor = textColorMap[type];
-  const textFontSize = textFontSizeMap[size];
-  const buttonColor = buttonColorMap[type];
-  //@ts-ignore
-  //TODO: find appropriate type for pressed
-  const getButtonColor = pressed => {
-    if (pressed && buttonColor === COLORS.violet20) {
-      return COLORS.violet100;
-    } else if (pressed && buttonColor !== COLORS.violet20) {
-      return COLORS.violet20;
-    }
-    return buttonColor;
-  };
   return (
     <Pressable
       style={({pressed}) => [
         styles.button,
-        styles[size],
-        {
-          backgroundColor: getButtonColor(pressed),
-        },
+        styleButton,
+        style,
+        pressed && styles.pressed,
       ]}
       onPress={onPress}
       {...restProps}>
-      {svg && <Cross width={22} height={22} style={{marginRight: 15}} />}
-      <Typography style={{fontSize: textFontSize, color: textColor}}>
+      {svg && (
+        <Cross
+          color={textColor}
+          width={22}
+          height={22}
+          style={{marginRight: 15}}
+        />
+      )}
+      <Typography color={textColor} variant="18">
         {children}
       </Typography>
     </Pressable>
@@ -69,29 +65,27 @@ const Button = ({children, onPress, size, svg, type, ...restProps}: Props) => {
 
 const styles = StyleSheet.create({
   button: {
-    marginVertical: 10,
     borderRadius: 16,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: 10,
   },
-  large: {
-    height: 56,
-    width: '100%',
-    padding: 8,
+  primary: {
+    paddingVertical: 17,
+    backgroundColor: COLORS.violet100,
   },
-  small: {
-    height: 56,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    width: '50%',
+  secondary: {
+    paddingVertical: 17,
+    backgroundColor: COLORS.violet20,
   },
-  pills: {
-    height: 32,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    width: '20%',
-    borderRadius: 40,
+  link: {
+    paddingVertical: 7,
+    borderWidth: 1,
+    alignSelf: 'center',
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });
 
