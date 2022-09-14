@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {COLORS} from '../../constants/colors';
 import {Button} from '../Button';
 import {Typography} from '../Typography';
 
@@ -8,6 +9,14 @@ export const Home = () => {
   const [timesPressedSecondary, setTimesPressedSecondary] = useState(0);
   const [timesPressedLink, setTimesPressedLink] = useState(0);
 
+  const primaryPressHanler = () =>
+    setTimesPressedPrimary(current => current + 1);
+
+  const secondaryPressHandler = () =>
+    setTimesPressedSecondary(current => current + 1);
+
+  const linkPressHandler = () => setTimesPressedLink(current => current + 1);
+
   return (
     <View style={styles.main}>
       <Typography variant="18" fontType="bold">
@@ -15,14 +24,14 @@ export const Home = () => {
       </Typography>
       <View style={styles.buttonsContainer}>
         <Button
-          onPress={() => setTimesPressedPrimary(current => current + 1)}
+          onPress={primaryPressHanler}
           iconName="add"
           type="primary"
           style={styles.buttonLeft}>
           Press me
         </Button>
         <Button
-          onPress={() => setTimesPressedPrimary(current => current + 1)}
+          onPress={primaryPressHanler}
           type="primary"
           style={styles.buttonRight}>
           Press me
@@ -31,35 +40,23 @@ export const Home = () => {
       <Typography variant="18" fontType="bold">
         {timesPressedSecondary}
       </Typography>
-      <Button
-        onPress={() => setTimesPressedSecondary(current => current + 1)}
-        iconName="cross"
-        type="primary">
+      <Button onPress={secondaryPressHandler} iconName="cross" type="primary">
         Press me
       </Button>
-      <Button
-        onPress={() => setTimesPressedSecondary(current => current + 1)}
-        type="primary">
+      <Button onPress={secondaryPressHandler} type="primary">
         Press me
       </Button>
-      <Button
-        onPress={() => setTimesPressedSecondary(current => current + 1)}
-        iconName="pen"
-        type="secondary">
+      <Button onPress={secondaryPressHandler} iconName="pen" type="secondary">
         Press me
       </Button>
-      <Button
-        onPress={() => setTimesPressedSecondary(current => current + 1)}
-        type="secondary">
+      <Button onPress={secondaryPressHandler} type="secondary">
         Press me
       </Button>
       <Typography variant="18" fontType="bold">
         {timesPressedLink}
       </Typography>
 
-      <Button
-        onPress={() => setTimesPressedLink(current => current + 1)}
-        type="link">
+      <Button onPress={linkPressHandler} type="link">
         Press
       </Button>
     </View>
@@ -69,7 +66,7 @@ export const Home = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: COLORS.baseLight80,
     paddingHorizontal: 20,
     paddingTop: 60,
   },

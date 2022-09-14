@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {
   StyleSheet,
   Pressable,
@@ -18,11 +18,13 @@ const icons = {
   cross: Cross,
 };
 
+type IconTypes = keyof typeof icons;
+
 type Props = PressableProps & {
   type: TButtonType;
-  children: string;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
-  iconName?: keyof typeof icons;
+  iconName?: IconTypes;
   iconHeight?: number;
   iconWidth?: number;
   onPress: () => void;

@@ -28,7 +28,7 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
 
 type Props = TextProps & {
   children: ReactNode;
-  variant: keyof typeof fontVariants;
+  variant: TFontVariant;
   color?: ColorValue;
   fontType?: FontType;
   style?: StyleProp<TextStyle>;
@@ -43,6 +43,7 @@ export const Typography = ({
   ...restProps
 }: Props) => {
   const fontFamily = `Inter-${capitalizeFirstLetter(fontType)}`;
+
   const fontVariant = fontVariants[variant];
 
   return (
