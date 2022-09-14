@@ -34,7 +34,7 @@ type Props = TextProps & {
   style?: StyleProp<TextStyle>;
 };
 
-const Typography = ({
+export const Typography = ({
   children,
   variant,
   color = COLORS.baseDark50,
@@ -53,5 +53,3 @@ const Typography = ({
     </View>
   );
 };
-
-export default Typography;

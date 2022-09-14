@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import Button from '../Button';
-import Typography from '../Typography';
+import {Button} from '../Button';
+import {Typography} from '../Typography';
 
-const Home = () => {
+export const Home = () => {
   const [timesPressedPrimary, setTimesPressedPrimary] = useState(0);
   const [timesPressedSecondary, setTimesPressedSecondary] = useState(0);
   const [timesPressedLink, setTimesPressedLink] = useState(0);
@@ -17,7 +17,6 @@ const Home = () => {
         <Button
           onPress={() => setTimesPressedPrimary(current => current + 1)}
           iconName="add"
-          iconStyle={{marginRight: 15}}
           type="primary"
           style={styles.buttonLeft}>
           Press me
@@ -35,7 +34,6 @@ const Home = () => {
       <Button
         onPress={() => setTimesPressedSecondary(current => current + 1)}
         iconName="cross"
-        iconStyle={{marginRight: 15}}
         type="primary">
         Press me
       </Button>
@@ -47,7 +45,6 @@ const Home = () => {
       <Button
         onPress={() => setTimesPressedSecondary(current => current + 1)}
         iconName="pen"
-        iconStyle={{marginRight: 15}}
         type="secondary">
         Press me
       </Button>
@@ -88,4 +85,3 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
 });
-export default Home;

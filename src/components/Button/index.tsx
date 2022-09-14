@@ -6,7 +6,7 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import Typography from '../Typography';
+import {Typography} from '../Typography';
 import {COLORS} from '../../constants/colors';
 import {Add, Cross, Pen} from '../../assets/svg';
 
@@ -23,17 +23,15 @@ type Props = PressableProps & {
   children: string;
   style?: StyleProp<ViewStyle>;
   iconName?: keyof typeof icons;
-  iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;
   onPress: () => void;
 };
 
-const Button = ({
+export const Button = ({
   children,
   type,
   style,
-  iconStyle,
   iconName,
   iconHeight = 22,
   iconWidth = 22,
@@ -73,7 +71,7 @@ const Button = ({
           color={textColor}
           height={iconHeight}
           width={iconWidth}
-          style={iconStyle}
+          style={styles.icon}
         />
       )}
       <Typography color={textColor} variant="18">
@@ -107,6 +105,7 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  icon: {
+    marginRight: 15,
+  },
 });
-
-export default Button;
