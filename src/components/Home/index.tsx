@@ -16,7 +16,8 @@ const Home = () => {
       <View style={styles.buttonsContainer}>
         <Button
           onPress={() => setTimesPressedPrimary(current => current + 1)}
-          svg="cross"
+          iconName="add"
+          iconStyle={{marginRight: 15}}
           type="primary"
           style={styles.buttonLeft}>
           Press me
@@ -33,7 +34,8 @@ const Home = () => {
       </Typography>
       <Button
         onPress={() => setTimesPressedSecondary(current => current + 1)}
-        svg="cross"
+        iconName="cross"
+        iconStyle={{marginRight: 15}}
         type="primary">
         Press me
       </Button>
@@ -44,7 +46,8 @@ const Home = () => {
       </Button>
       <Button
         onPress={() => setTimesPressedSecondary(current => current + 1)}
-        svg="cross"
+        iconName="pen"
+        iconStyle={{marginRight: 15}}
         type="secondary">
         Press me
       </Button>

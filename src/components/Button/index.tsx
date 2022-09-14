@@ -7,21 +7,33 @@ import {
   ViewStyle,
 } from 'react-native';
 import Typography from '../Typography';
-import Cross from '../../assets/svg/cross.svg';
 import COLORS from '../../COLORS';
+import Icon, {TIconTypes} from '../Icon';
 
-type ButtonType = 'primary' | 'secondary' | 'link';
-type SvgTypes = 'cross';
+type TButtonType = 'primary' | 'secondary' | 'link';
 
 type Props = PressableProps & {
-  type: ButtonType;
+  type: TButtonType;
   children: string;
   style?: StyleProp<ViewStyle>;
-  svg?: SvgTypes;
+  iconName?: TIconTypes;
+  iconStyle?: StyleProp<ViewStyle>;
+  iconHeight?: number;
+  iconWidth?: number;
   onPress: () => void;
 };
 
-const Button = ({children, type, style, svg, onPress, ...restProps}: Props) => {
+const Button = ({
+  children,
+  type,
+  style,
+  iconStyle,
+  iconName,
+  iconHeight = 22,
+  iconWidth = 22,
+  onPress,
+  ...restProps
+}: Props) => {
   const styleButton = styles[type];
 
   let textColor = '';
@@ -48,12 +60,13 @@ const Button = ({children, type, style, svg, onPress, ...restProps}: Props) => {
       ]}
       onPress={onPress}
       {...restProps}>
-      {svg && (
-        <Cross
+      {iconName && (
+        <Icon
+          name={iconName}
           color={textColor}
-          width={22}
-          height={22}
-          style={{marginRight: 15}}
+          height={iconHeight}
+          width={iconWidth}
+          style={iconStyle}
         />
       )}
       <Typography color={textColor} variant="18">
