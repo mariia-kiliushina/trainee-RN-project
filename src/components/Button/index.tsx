@@ -7,16 +7,22 @@ import {
   ViewStyle,
 } from 'react-native';
 import Typography from '../Typography';
-import COLORS from '../../COLORS';
-import Icon, {TIconTypes} from '../Icon';
+import {COLORS} from '../../constants/colors';
+import {Add, Cross, Pen} from '../../assets/svg';
 
 type TButtonType = 'primary' | 'secondary' | 'link';
+
+const icons = {
+  add: Add,
+  pen: Pen,
+  cross: Cross,
+};
 
 type Props = PressableProps & {
   type: TButtonType;
   children: string;
   style?: StyleProp<ViewStyle>;
-  iconName?: TIconTypes;
+  iconName?: keyof typeof icons;
   iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;
@@ -35,6 +41,8 @@ const Button = ({
   ...restProps
 }: Props) => {
   const styleButton = styles[type];
+
+  const Icon = iconName ? icons[iconName] : null;
 
   let textColor = '';
 
@@ -60,9 +68,8 @@ const Button = ({
       ]}
       onPress={onPress}
       {...restProps}>
-      {iconName && (
+      {Icon && (
         <Icon
-          name={iconName}
           color={textColor}
           height={iconHeight}
           width={iconWidth}
