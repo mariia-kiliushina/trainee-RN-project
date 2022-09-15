@@ -4,12 +4,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'components/Typography';
 import {Home} from 'components/Home';
-import {PieChart, HomeIcon, User, Transaction} from 'assets/svg';
+import {icons} from 'assets/svg';
 
-const Transactions = () => {
+const Transaction = () => {
   return (
     <View style={styles.main}>
-      <Typography variant="18">Transactions</Typography>
+      <Typography variant="18">Transaction</Typography>
     </View>
   );
 };
@@ -35,25 +35,16 @@ export const Main = () => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
-        tabBarIcon: ({color, size}) => {
-          let Icon;
-          if (route.name === 'Home') {
-            Icon = HomeIcon;
-          } else if (route.name === 'Transactions') {
-            Icon = Transaction;
-          } else if (route.name === 'Budget') {
-            Icon = PieChart;
-          } else if (route.name === 'Profile') {
-            Icon = User;
-          }
-          //@ts-ignore
-          return <Icon size={size} color={color} />;
+        tabBarIcon: ({color}) => {
+          let name = route.name.toLowerCase();
+          let Icon = icons[name];
+          return <Icon color={color} />;
         },
         tabBarActiveTintColor: COLORS.violet100,
         tabBarInactiveTintColor: '#C6C6C6',
       })}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Transactions" component={Transactions} />
+      <Tab.Screen name="Transaction" component={Transaction} />
       <Tab.Screen name="Budget" component={Budget} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>

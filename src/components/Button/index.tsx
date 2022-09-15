@@ -8,16 +8,9 @@ import {
 } from 'react-native';
 import {Typography} from 'components/Typography';
 import {COLORS} from 'constants/colors';
-import {Add, Cross, Pen, Arrow} from 'assets/svg';
+import {icons} from 'assets/svg';
 
 type TButtonType = 'primary' | 'secondary' | 'link';
-
-const icons = {
-  add: Add,
-  pen: Pen,
-  cross: Cross,
-  arrow: Arrow,
-};
 
 export type IconTypes = keyof typeof icons;
 
