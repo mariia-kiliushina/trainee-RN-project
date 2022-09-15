@@ -9,17 +9,23 @@ import {RootStackParamList} from 'src/App';
 import {IconTypes} from 'components/Button';
 
 type Props = {
-  path: string;
-  iconName: IconTypes;
+  toPath: string;
+  iconName?: IconTypes;
   children: ReactNode;
 };
 
-export const TopNavigation = ({path, iconName, children}: Props) => {
+export const TopNavigation = ({
+  toPath,
+  iconName = 'arrow',
+  children,
+}: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  let pathObj = {
+    name: toPath,
+    key: '',
+  };
   const onNavigate = () => {
-    //@ts-ignore
-    navigation.navigate(path);
+    navigation.navigate(pathObj);
   };
   return (
     <View style={styles.main}>
