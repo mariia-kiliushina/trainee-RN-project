@@ -21,7 +21,7 @@ export const Home = () => {
   return (
     <View style={styles.main}>
       <View style={styles.mainContainer}>
-        <TopNavigation path="AddRecord" iconName="add">
+        <TopNavigation toPath="AddRecord" iconName="add">
           Home page
         </TopNavigation>
         <Typography variant="18" fontType="bold">
