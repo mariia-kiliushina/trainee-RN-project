@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Typography} from 'components/Typography';
 import {COLORS} from 'constants/colors';
-import {Add, Cross, Pen} from 'assets/svg';
+import {Add, Cross, Pen, Arrow} from 'assets/svg';
 
 type TButtonType = 'primary' | 'secondary' | 'link';
 
@@ -16,15 +16,17 @@ const icons = {
   add: Add,
   pen: Pen,
   cross: Cross,
+  arrow: Arrow,
 };
 
-type IconTypes = keyof typeof icons;
+export type IconTypes = keyof typeof icons;
 
 type Props = PressableProps & {
   type: TButtonType;
-  children: ReactNode;
+  children?: ReactNode;
   style?: StyleProp<ViewStyle>;
   iconName?: IconTypes;
+  iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;
   onPress: () => void;
@@ -35,6 +37,7 @@ export const Button = ({
   type,
   style,
   iconName,
+  iconStyle,
   iconHeight = 22,
   iconWidth = 22,
   onPress,
@@ -73,7 +76,7 @@ export const Button = ({
           color={textColor}
           height={iconHeight}
           width={iconWidth}
-          style={styles.icon}
+          style={[styles.icon, iconStyle]}
         />
       )}
       <Typography color={textColor} variant="18">
@@ -89,7 +92,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10,
   },
   primary: {
     paddingVertical: 17,
@@ -101,13 +103,12 @@ const styles = StyleSheet.create({
   },
   link: {
     paddingVertical: 7,
-    borderWidth: 1,
     alignSelf: 'center',
   },
   pressed: {
     opacity: 0.7,
   },
   icon: {
-    marginRight: 15,
+    marginRight: 16,
   },
 });

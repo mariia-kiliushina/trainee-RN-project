@@ -1,3 +1,9 @@
 export {default as Add} from './add.svg';
 export {default as Pen} from './pen.svg';
 export {default as Cross} from './cross.svg';
+export {default as Arrow} from './arrow.svg';
+export {default as User} from './user.svg';
+export {default as HomeIcon} from './home.svg';
+export {default as PieChart} from './pie-chart.svg';
+export {default as Settings} from './settings.svg';
+export {default as Transaction} from './transaction.svg';
