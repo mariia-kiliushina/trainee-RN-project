@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Button} from 'components/Button';
 import {Typography} from 'components/Typography';
-import {TopNavigation} from 'components/TopNavigation';
+import {TopNavigation} from '../TopNavigation';
 
 export const Home = () => {
   const [timesPressedPrimary, setTimesPressedPrimary] = useState(0);
@@ -20,17 +20,17 @@ export const Home = () => {
 
   return (
     <View style={styles.main}>
+      <TopNavigation toPath="Home" type="titleOnly">
+        Home
+      </TopNavigation>
       <View style={styles.mainContainer}>
-        <TopNavigation toPath="AddRecord" iconName="add">
-          Home page
-        </TopNavigation>
         <Typography variant="18" fontType="bold">
           {timesPressedPrimary}
         </Typography>
         <View style={styles.buttonsContainer}>
           <Button
             onPress={firstGroupPressHanler}
-            iconName="add"
+            iconName="plus"
             type="primary"
             style={styles.buttonLeft}>
             Press me
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   mainContainer: {
-    flex: 1,
+    flex: 0.8,
     flexDirection: 'column',
     justifyContent: 'space-between',
   },

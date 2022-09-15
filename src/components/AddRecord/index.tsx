@@ -6,7 +6,7 @@ import {COLORS} from 'constants/colors';
 export const AddRecord = () => {
   return (
     <View style={styles.main}>
-      <TopNavigation toPath="Home" iconName="arrow">
+      <TopNavigation toPath="Home" type="full">
         AddRecord
       </TopNavigation>
     </View>

@@ -7,6 +7,9 @@ import {AddRecord} from 'components/AddRecord';
 export type RootStackParamList = {
   AddRecord: undefined;
   Main: undefined;
+  Home: undefined;
+  Budget: undefined;
+  Transaction: undefined;
 };
 
 const App = () => {

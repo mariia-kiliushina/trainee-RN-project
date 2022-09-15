@@ -5,24 +5,23 @@ import {
   PressableProps,
   StyleProp,
   ViewStyle,
+  GestureResponderEvent,
 } from 'react-native';
 import {Typography} from 'components/Typography';
 import {COLORS} from 'constants/colors';
-import {icons} from 'assets/svg';
+import {icons, IconsType} from 'assets/svg';
 
 type TButtonType = 'primary' | 'secondary' | 'link';
-
-export type IconTypes = keyof typeof icons;
 
 type Props = PressableProps & {
   type: TButtonType;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  iconName?: IconTypes;
+  iconName?: keyof IconsType;
   iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;
-  onPress: () => void;
+  onPress: (event: GestureResponderEvent) => void;
 };
 
 export const Button = ({

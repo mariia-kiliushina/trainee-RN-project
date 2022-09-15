@@ -6,19 +6,16 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Button} from 'components/Button';
 import {RootStackParamList} from 'src/App';
-import {IconTypes} from 'components/Button';
+
+type TopNavigationType = 'full' | 'half' | 'titleOnly';
 
 type Props = {
-  toPath: string;
-  iconName?: IconTypes;
+  type: TopNavigationType;
+  toPath: keyof RootStackParamList;
   children: ReactNode;
 };
 
-export const TopNavigation = ({
-  toPath,
-  iconName = 'arrow',
-  children,
-}: Props) => {
+export const TopNavigation = ({type, toPath, children}: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   let pathObj = {
     name: toPath,
@@ -29,27 +26,43 @@ export const TopNavigation = ({
   };
   return (
     <View style={styles.main}>
-      {iconName && (
+      {type !== 'titleOnly' && (
         <Button
           onPress={onNavigate}
           iconStyle={{marginRight: 0}}
           style={{
             position: 'absolute',
-            top: 18,
+            top: 16,
             left: 10,
             height: 50,
             width: 50,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.violet20,
           }}
-          iconName={iconName}
+          iconName="arrow"
           type="link"
         />
       )}
       <Typography variant="18" fontType="bold">
         {children}
       </Typography>
+      {type === 'full' && (
+        <Button
+          onPress={() => {}}
+          iconStyle={{marginRight: 0}}
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 10,
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          iconName="dots"
+          type="link"
+        />
+      )}
     </View>
   );
 };
@@ -59,7 +72,6 @@ const styles = StyleSheet.create({
     height: '10%',
     width: '100%',
     backgroundColor: COLORS.baseLight80,
-    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
