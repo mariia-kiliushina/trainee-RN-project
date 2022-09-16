@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Main} from 'src/navigation/tabs/MainTabs';
+import {MainScreen} from 'screens/Main';
 import {AddRecord} from 'screens/AddRecord';
 
 export type RootStackParamList = {
@@ -16,7 +16,7 @@ export const ScreenNavigation = () => {
         headerShown: true,
       }}
       initialRouteName="Main">
-      <Stack.Screen name="Main" component={Main} />
+      <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="AddRecord" component={AddRecord} />
     </Stack.Navigator>
   );

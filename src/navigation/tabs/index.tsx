@@ -15,7 +15,7 @@ export type HomeTabsParamList = {
   Profile: undefined;
 };
 
-export const Main = () => {
+export const Tabs = () => {
   const Tab = createBottomTabNavigator<HomeTabsParamList>();
   useEffect(() => {
     const backAction = () => {
