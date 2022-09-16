@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "export ANDROID_HOME=~/Library/Android/sdk && react-native run-android",
+    "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "react": "18.1.0",
-    "react-native": "0.70.0"
+    "react-native": "0.70.0",
+    "react-native-svg": "^13.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -26,10 +27,14 @@
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.72.1",
+    "react-native-svg-transformer": "^1.0.0",
     "react-test-renderer": "18.1.0",
     "typescript": "^4.8.3"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "resolutions": {
+    "react-native-svg": "12.3.0"
   }
 }
