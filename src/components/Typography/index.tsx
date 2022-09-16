@@ -8,8 +8,8 @@ import {
   StyleSheet,
   ColorValue,
 } from 'react-native';
-import {COLORS} from '../../constants/colors';
-import {capitalizeFirstLetter} from '../../utils/formatters';
+import {COLORS} from 'constants/colors';
+import {capitalizeFirstLetter} from 'utils/formatters';
 
 type TFontVariant = '14' | '18';
 type FontType = 'regular' | 'bold';

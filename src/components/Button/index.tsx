@@ -6,9 +6,9 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import {Typography} from '../Typography';
-import {COLORS} from '../../constants/colors';
-import {Add, Cross, Pen} from '../../assets/svg';
+import {Typography} from 'components/Typography';
+import {COLORS} from 'constants/colors';
+import {Add, Cross, Pen} from 'assets/svg';
 
 type TButtonType = 'primary' | 'secondary' | 'link';
 

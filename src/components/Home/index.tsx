@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {COLORS} from '../../constants/colors';
-import {Button} from '../Button';
-import {Typography} from '../Typography';
+import {COLORS} from 'constants/colors';
+import {Button} from 'components/Button';
+import {Typography} from 'components/Typography';
 
 export const Home = () => {
   const [timesPressedPrimary, setTimesPressedPrimary] = useState(0);
