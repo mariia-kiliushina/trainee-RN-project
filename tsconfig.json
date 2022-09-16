@@ -20,10 +20,18 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "skipLibCheck": true // to skip checking node_modules
+  },
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "fallbackPolling": "dynamicPriority",
+    "synchronousWatchDirectory": true,
+    "excludeDirectories": ["*/node_modules", "_build"]
   },
   "exclude": [
-    "node_modules",
+    "*/node_modules",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"
