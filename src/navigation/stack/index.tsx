@@ -14,7 +14,6 @@ export const ScreenNavigation = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        gestureEnabled: false,
       }}
       initialRouteName="Main">
       <Stack.Screen name="Main" component={Main} />
