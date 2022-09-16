@@ -1,17 +1,16 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
-import {Typography} from '../Typography';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from 'src/App';
+import {Typography} from 'components/Typography';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from 'src/navigation/screens/RootScreens';
 import {Button} from 'components/Button';
 
-export const AddRecord = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+export const AddRecord = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList>) => {
   const onNavigate = () => {
-    navigation.navigate('Home');
+    navigation.goBack();
   };
   return (
     <View style={styles.main}>

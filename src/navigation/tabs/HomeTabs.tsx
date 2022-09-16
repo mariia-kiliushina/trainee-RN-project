@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'components/Typography';
-import {Home} from 'components/Home';
+import {Main} from 'src/screens/Main';
 import {
   Arrow,
   UserIcon,
@@ -16,7 +16,7 @@ import {
 const icons: IconsType = {
   arrow: Arrow,
   profile: UserIcon,
-  home: HomeIcon,
+  main: HomeIcon,
   budget: BudgetIcon,
   transaction: TransactionIcon,
 };
@@ -43,8 +43,15 @@ const Profile = () => {
   );
 };
 
-export const Main = () => {
-  const Tab = createBottomTabNavigator();
+export type HomeTabsParamList = {
+  Main: undefined;
+  Transaction: undefined;
+  Budget: undefined;
+  Profile: undefined;
+};
+
+export const Home = () => {
+  const Tab = createBottomTabNavigator<HomeTabsParamList>();
 
   return (
     <Tab.Navigator
@@ -58,7 +65,7 @@ export const Main = () => {
         tabBarActiveTintColor: COLORS.violet100,
         tabBarInactiveTintColor: COLORS.supportingGrey,
       })}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Main" component={Main} />
       <Tab.Screen name="Transaction" component={Transaction} />
       <Tab.Screen name="Budget" component={Budget} />
       <Tab.Screen name="Profile" component={Profile} />

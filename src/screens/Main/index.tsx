@@ -2,16 +2,20 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'components/Typography';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from 'src/App';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button} from 'components/Button';
+import {RootStackParamList} from 'src/navigation/screens/RootScreens';
 
-export const Home = () => {
+export const Main = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList>) => {
   const [timesPressedPrimary, setTimesPressedPrimary] = useState(0);
   const [timesPressedSecondary, setTimesPressedSecondary] = useState(0);
   const [timesPressedLink, setTimesPressedLink] = useState(0);
 
+  const onNavigate = () => {
+    navigation.navigate('AddRecord');
+  };
   const firstGroupPressHanler = () =>
     setTimesPressedPrimary(current => current + 1);
 
@@ -19,12 +23,6 @@ export const Home = () => {
     setTimesPressedSecondary(current => current + 1);
 
   const linkPressHandler = () => setTimesPressedLink(current => current + 1);
-
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-  const onNavigate = () => {
-    navigation.navigate('AddRecord');
-  };
 
   return (
     <View style={styles.main}>
