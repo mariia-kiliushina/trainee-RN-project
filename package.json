@@ -8,12 +8,21 @@
     "start": "react-native start",
     "test": "jest",
     "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "ts": "npx tsc",
+    "ts-watch": "tsc --watch"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.3.3",
+    "@react-navigation/native": "^6.0.12",
+    "@react-navigation/native-stack": "^6.8.0",
+    "@react-navigation/stack": "^6.2.3",
     "react": "18.1.0",
     "react-native": "0.70.0",
-    "react-native-svg": "^13.1.0"
+    "react-native-safe-area-context": "^4.3.3",
+    "react-native-screens": "^3.17.0",
+    "react-native-svg": "^13.1.0",
+    "tsc-watch": "^5.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -1,12 +1,12 @@
 import React, {ReactNode} from 'react';
 import {
-  View,
   Text,
   TextProps,
   StyleProp,
   TextStyle,
   StyleSheet,
   ColorValue,
+  View,
 } from 'react-native';
 import {COLORS} from 'constants/colors';
 import {capitalizeFirstLetter} from 'utils/formatters';
