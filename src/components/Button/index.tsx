@@ -23,7 +23,7 @@ type Props = PressableProps & {
   type: TButtonType;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  iconName?: keyof typeof icons;
+  iconName?: 'pen' | 'cross' | 'plusSquared';
   iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;

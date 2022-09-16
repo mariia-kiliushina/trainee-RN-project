@@ -22,12 +22,8 @@ export const Home = () => {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const onNavigate = (path: string) => {
-    let pathObj = {
-      name: path,
-      key: '',
-    };
-    navigation.navigate(pathObj);
+  const onNavigate = () => {
+    navigation.navigate('AddRecord');
   };
 
   return (
@@ -54,10 +50,7 @@ export const Home = () => {
         <Typography variant="18" fontType="bold">
           {timesPressedSecondary}
         </Typography>
-        <Button
-          onPress={secondGroupPressHandler}
-          iconName="arrow"
-          type="primary">
+        <Button onPress={secondGroupPressHandler} iconName="pen" type="primary">
           Press me
         </Button>
         <Button onPress={secondGroupPressHandler} type="primary">
@@ -81,14 +74,10 @@ export const Home = () => {
         </Button>
       </View>
       <Button
-        onPress={() => onNavigate('AddRecord')}
-        iconStyle={{marginRight: 0}}
-        style={{
-          position: 'relative',
-          top: -16,
-          left: 0,
-        }}
-        type="link">
+        onPress={onNavigate}
+        iconStyle={styles.iconStyle}
+        style={styles.navigationButton}
+        type="secondary">
         Go to another screen
       </Button>
     </View>
@@ -117,5 +106,14 @@ const styles = StyleSheet.create({
   buttonRight: {
     flex: 1,
     marginLeft: 16,
+  },
+  navigationButton: {
+    position: 'absolute',
+    top: '95%',
+    right: '5%',
+    width: '60%',
+  },
+  iconStyle: {
+    marginRight: 0,
   },
 });
