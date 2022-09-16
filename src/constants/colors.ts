@@ -4,4 +4,5 @@ export const COLORS = {
   baseLight80: '#FCFCFC',
   baseDark50: '#212325',
   violet100: '#7F3DFF',
+  supportingGrey: '#C6C6C6',
 };

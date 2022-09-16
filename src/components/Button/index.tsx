@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import {Typography} from 'components/Typography';
 import {COLORS} from 'constants/colors';
-import {icons, IconsType} from 'assets/svg';
+import {Pen, Cross, PlusSquared, IconsType} from 'assets/svg';
+
+const icons: IconsType = {
+  pen: Pen,
+  cross: Cross,
+  plusSquared: PlusSquared,
+};
 
 type TButtonType = 'primary' | 'secondary' | 'link';
 
@@ -17,7 +23,7 @@ type Props = PressableProps & {
   type: TButtonType;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  iconName?: keyof IconsType;
+  iconName?: keyof typeof icons;
   iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;

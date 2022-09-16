@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
-import {Button} from 'components/Button';
 import {Typography} from 'components/Typography';
-import {TopNavigation} from '../TopNavigation';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from 'src/App';
+import {Button} from 'components/Button';
 
 export const Home = () => {
   const [timesPressedPrimary, setTimesPressedPrimary] = useState(0);
@@ -18,11 +20,18 @@ export const Home = () => {
 
   const linkPressHandler = () => setTimesPressedLink(current => current + 1);
 
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const onNavigate = (path: string) => {
+    let pathObj = {
+      name: path,
+      key: '',
+    };
+    navigation.navigate(pathObj);
+  };
+
   return (
     <View style={styles.main}>
-      <TopNavigation toPath="Home" type="titleOnly">
-        Home
-      </TopNavigation>
       <View style={styles.mainContainer}>
         <Typography variant="18" fontType="bold">
           {timesPressedPrimary}
@@ -30,7 +39,7 @@ export const Home = () => {
         <View style={styles.buttonsContainer}>
           <Button
             onPress={firstGroupPressHanler}
-            iconName="plus"
+            iconName="plusSquared"
             type="primary"
             style={styles.buttonLeft}>
             Press me
@@ -47,7 +56,7 @@ export const Home = () => {
         </Typography>
         <Button
           onPress={secondGroupPressHandler}
-          iconName="cross"
+          iconName="arrow"
           type="primary">
           Press me
         </Button>
@@ -71,6 +80,17 @@ export const Home = () => {
           Press
         </Button>
       </View>
+      <Button
+        onPress={() => onNavigate('AddRecord')}
+        iconStyle={{marginRight: 0}}
+        style={{
+          position: 'relative',
+          top: -16,
+          left: 0,
+        }}
+        type="link">
+        Go to another screen
+      </Button>
     </View>
   );
 };

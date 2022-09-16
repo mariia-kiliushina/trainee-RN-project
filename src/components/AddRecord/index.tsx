@@ -1,16 +1,9 @@
 import React from 'react';
-import {TopNavigation} from 'components/TopNavigation';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 
 export const AddRecord = () => {
-  return (
-    <View style={styles.main}>
-      <TopNavigation toPath="Home" type="full">
-        AddRecord
-      </TopNavigation>
-    </View>
-  );
+  return <View style={styles.main}>Add record screen</View>;
 };
 
 const styles = StyleSheet.create({
