@@ -1,11 +1,11 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Home} from 'src/navigation/tabs/HomeTabs';
+import {Main} from 'src/navigation/tabs/MainTabs';
 import {AddRecord} from 'screens/AddRecord';
 
 export type RootStackParamList = {
   AddRecord: undefined;
-  Home: undefined;
+  Main: undefined;
 };
 
 export const ScreenNavigation = () => {
@@ -14,9 +14,10 @@ export const ScreenNavigation = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
+        gestureEnabled: false,
       }}
-      initialRouteName="Home">
-      <Stack.Screen name="Home" component={Home} />
+      initialRouteName="Main">
+      <Stack.Screen name="Main" component={Main} />
       <Stack.Screen name="AddRecord" component={AddRecord} />
     </Stack.Navigator>
   );

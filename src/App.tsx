@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {ScreenNavigation} from 'src/navigation/screens/RootScreens';
+import {ScreenNavigation} from 'src/navigation/stack';
 
 const App = () => {
   return (

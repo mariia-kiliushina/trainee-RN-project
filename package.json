@@ -9,7 +9,7 @@
     "test": "jest",
     "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
     "lint": "eslint .",
-    "ts-check": "npx tsc",
+    "ts": "npx tsc",
     "ts-watch": "tsc --watch"
   },
   "dependencies": {

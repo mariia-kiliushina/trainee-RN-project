@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'components/Typography';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/navigation/screens/RootScreens';
+import {RootStackParamList} from 'src/navigation/stack';
 import {Button} from 'components/Button';
 
 export const AddRecord = ({
