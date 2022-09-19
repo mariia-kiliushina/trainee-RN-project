@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {COLORS} from 'constants/colors';
 import {Typography} from 'components/Typography';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button} from 'components/Button';
 import {RootStackParamList} from 'src/navigation/stack';
+import {Container} from 'src/components/Container';
+import {COLORS} from 'constants/colors';
 
 export const Home = ({
   navigation,
@@ -25,52 +26,47 @@ export const Home = ({
   const linkPressHandler = () => setTimesPressedLink(current => current + 1);
 
   return (
-    <View style={styles.main}>
-      <View style={styles.mainContainer}>
-        <Typography variant="18" fontType="bold">
-          {timesPressedPrimary}
-        </Typography>
-        <View style={styles.buttonsContainer}>
-          <Button
-            onPress={firstGroupPressHanler}
-            iconName="plusSquared"
-            type="primary"
-            style={styles.buttonLeft}>
-            Press me
-          </Button>
-          <Button
-            onPress={firstGroupPressHanler}
-            type="primary"
-            style={styles.buttonRight}>
-            Press me
-          </Button>
-        </View>
-        <Typography variant="18" fontType="bold">
-          {timesPressedSecondary}
-        </Typography>
-        <Button onPress={secondGroupPressHandler} iconName="pen" type="primary">
-          Press me
-        </Button>
-        <Button onPress={secondGroupPressHandler} type="primary">
+    <Container style={styles.main}>
+      <Typography variant="18" fontType="bold">
+        {timesPressedPrimary}
+      </Typography>
+      <View style={styles.buttonsContainer}>
+        <Button
+          onPress={firstGroupPressHanler}
+          iconName="plusSquared"
+          type="primary"
+          style={styles.buttonLeft}>
           Press me
         </Button>
         <Button
-          onPress={secondGroupPressHandler}
-          iconName="pen"
-          type="secondary">
+          onPress={firstGroupPressHanler}
+          type="primary"
+          style={styles.buttonRight}>
           Press me
-        </Button>
-        <Button onPress={secondGroupPressHandler} type="secondary">
-          Press me
-        </Button>
-        <Typography variant="18" fontType="bold">
-          {timesPressedLink}
-        </Typography>
-
-        <Button onPress={linkPressHandler} type="link">
-          Press
         </Button>
       </View>
+      <Typography variant="18" fontType="bold">
+        {timesPressedSecondary}
+      </Typography>
+      <Button onPress={secondGroupPressHandler} iconName="pen" type="primary">
+        Press me
+      </Button>
+      <Button onPress={secondGroupPressHandler} type="primary">
+        Press me
+      </Button>
+      <Button onPress={secondGroupPressHandler} iconName="pen" type="secondary">
+        Press me
+      </Button>
+      <Button onPress={secondGroupPressHandler} type="secondary">
+        Press me
+      </Button>
+      <Typography variant="18" fontType="bold">
+        {timesPressedLink}
+      </Typography>
+
+      <Button onPress={linkPressHandler} type="link">
+        Press
+      </Button>
       <Button
         onPress={onNavigate}
         iconStyle={styles.iconStyle}
@@ -78,7 +74,7 @@ export const Home = ({
         type="secondary">
         Go to another screen
       </Button>
-    </View>
+    </Container>
   );
 };
 
@@ -86,13 +82,6 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: COLORS.baseLight80,
-    paddingHorizontal: 20,
-    paddingTop: 60,
-  },
-  mainContainer: {
-    flex: 0.8,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -106,10 +95,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   navigationButton: {
-    position: 'absolute',
-    top: '95%',
-    right: '5%',
-    width: '60%',
+    marginTop: 'auto',
+    width: '50%',
+    alignSelf: 'flex-end',
   },
   iconStyle: {
     marginRight: 0,

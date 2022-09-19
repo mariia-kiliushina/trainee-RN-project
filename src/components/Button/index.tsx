@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 10,
   },
   primary: {
     paddingVertical: 17,

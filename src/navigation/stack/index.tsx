@@ -16,7 +16,11 @@ export const ScreenNavigation = () => {
         headerShown: true,
       }}
       initialRouteName="Main">
-      <Stack.Screen name="Main" component={Main} />
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{headerShown: false}}
+      />
       <Stack.Screen name="AddRecord" component={AddRecord} />
     </Stack.Navigator>
   );
