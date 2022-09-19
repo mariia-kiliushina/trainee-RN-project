@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ColorValue,
   View,
+  ViewStyle,
 } from 'react-native';
 import {COLORS} from 'constants/colors';
 import {capitalizeFirstLetter} from 'utils/formatters';
@@ -28,17 +29,19 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
 
 type Props = TextProps & {
   children: ReactNode;
-  variant: TFontVariant;
+  variant?: TFontVariant;
   color?: ColorValue;
   fontType?: FontType;
-  style?: StyleProp<TextStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const Typography = ({
   children,
-  variant,
+  variant = '14',
   color = COLORS.baseDark50,
   fontType = 'regular',
+  textStyle,
   style,
   ...restProps
 }: Props) => {
@@ -47,8 +50,10 @@ export const Typography = ({
   const fontVariant = fontVariants[variant];
 
   return (
-    <View>
-      <Text style={[fontVariant, {fontFamily, color}, style]} {...restProps}>
+    <View style={style}>
+      <Text
+        style={[fontVariant, {fontFamily, color}, textStyle]}
+        {...restProps}>
         {children}
       </Text>
     </View>
