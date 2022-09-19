@@ -1,16 +1,14 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
-import {Layout} from 'components/Layout';
+import {Container} from 'src/components/Container';
 
 export const Transaction = () => {
   return (
-    <View style={styles.main}>
-      <Layout>
-        <Typography variant="18">Transaction</Typography>
-      </Layout>
-    </View>
+    <Container style={styles.main}>
+      <Typography variant="18">Transaction</Typography>
+    </Container>
   );
 };
 
@@ -18,6 +16,5 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: COLORS.blue100,
-    paddingHorizontal: 20,
   },
 });

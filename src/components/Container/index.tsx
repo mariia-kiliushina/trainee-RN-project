@@ -1,9 +1,10 @@
 import React, {ReactNode} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   children: ReactNode;
+  style?: StyleProp<ViewStyle>;
 };
 
 type styledProps = {
@@ -13,9 +14,9 @@ type styledProps = {
   top: number;
 };
 
-export const Layout = ({children}: Props) => {
+export const Container = ({children, style}: Props) => {
   const insets = useSafeAreaInsets();
-  return <View style={styles(insets).layout}>{children}</View>;
+  return <View style={[styles(insets).layout, style]}>{children}</View>;
 };
 
 const styles = (insets: styledProps) =>
@@ -23,5 +24,6 @@ const styles = (insets: styledProps) =>
     layout: {
       paddingTop: insets.top,
       flex: 1,
+      paddingHorizontal: 20,
     },
   });
