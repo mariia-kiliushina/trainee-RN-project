@@ -2,11 +2,14 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
+import {Layout} from 'components/Layout';
 
 export const Budget = () => {
   return (
     <View style={styles.main}>
-      <Typography variant="18">Budget</Typography>
+      <Layout>
+        <Typography variant="18">Budget</Typography>
+      </Layout>
     </View>
   );
 };
@@ -16,6 +19,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.baseLight80,
     paddingHorizontal: 20,
-    paddingTop: 60,
   },
 });
