@@ -27,7 +27,7 @@ type Props = PressableProps & {
   iconStyle?: StyleProp<ViewStyle>;
   iconHeight?: number;
   iconWidth?: number;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
 };
 
 export const Button = ({
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   primary: {
     paddingVertical: 17,

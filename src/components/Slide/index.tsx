@@ -1,4 +1,5 @@
 import React from 'react';
+import {useWindowDimensions} from 'react-native';
 import {
   Image,
   View,
@@ -18,9 +19,10 @@ type Props = {
 };
 
 export const Slide = ({imageSrc, largeText, smallText}: Props) => {
+  const {width} = useWindowDimensions();
   return (
-    <View style={styles.container}>
-      <Image source={imageSrc} />
+    <View style={[styles.container, {width}]}>
+      <Image source={imageSrc} style={styles.imageStyle} />
       <View style={styles.textContainer}>
         <Typography
           fontType="bold"
@@ -36,10 +38,13 @@ export const Slide = ({imageSrc, largeText, smallText}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    width: '33%',
+    justifyContent: 'center',
   },
+  imageStyle: {
+    aspectRatio: 1,
+  },
+
   textContainer: {
     width: '80%',
     marginTop: 40,

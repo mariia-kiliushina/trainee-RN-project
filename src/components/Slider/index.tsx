@@ -1,9 +1,8 @@
 import React from 'react';
-import {ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {ScrollView, StyleProp, ViewStyle} from 'react-native';
 import {Slide} from 'components/Slide';
 
 type Props = {
-  // children: ReactNode;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -25,7 +24,7 @@ const slidesMapping = [
   },
 ];
 
-export const Slider = ({style}: Props) => {
+export const Slider = ({}: Props) => {
   const slides = slidesMapping.map(({imageSrc, largeText, smallText}) => {
     return (
       <Slide
@@ -37,19 +36,8 @@ export const Slider = ({style}: Props) => {
     );
   });
   return (
-    <View style={style}>
-      <ScrollView
-        horizontal={true}
-        pagingEnabled={true}
-        contentContainerStyle={styles.main}>
-        {slides}
-      </ScrollView>
-    </View>
+    <ScrollView horizontal={true} pagingEnabled={true}>
+      {slides}
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  main: {
-    width: '300%',
-  },
-});
