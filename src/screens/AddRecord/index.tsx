@@ -1,30 +1,24 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
-import {Typography} from 'components/Typography';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/navigation/stack';
-import {Button} from 'components/Button';
+import {FlatListItem} from 'components/FlatListItem';
 
-export const AddRecord = ({
-  navigation,
-}: NativeStackScreenProps<RootStackParamList>) => {
-  const onNavigate = () => {
-    navigation.goBack();
-  };
+export const AddRecord = () => {
+  const [records, setRecords] = useState([]);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(parsedRecords => setRecords(parsedRecords));
+  });
+
   return (
     <View style={styles.main}>
-      <Typography variant="18" fontType="bold" textStyle={styles.textStyle}>
-        Add record
-      </Typography>
-
-      <Button
-        onPress={onNavigate}
-        iconStyle={styles.iconStyle}
-        style={styles.navigationButton}
-        type="secondary">
-        Go back
-      </Button>
+      <FlatList
+        data={records}
+        renderItem={FlatListItem}
+        keyExtractor={item => item.id.toString()}
+      />
     </View>
   );
 };
