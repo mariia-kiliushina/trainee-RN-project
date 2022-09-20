@@ -1,24 +1,63 @@
 import React from 'react';
-import {Image, View, StyleProp, StyleSheet, ViewStyle} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  Image,
+  View,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+  ImageSourcePropType,
+} from 'react-native';
+import {Typography} from '../Typography';
+import {COLORS} from 'constants/colors';
 
 type Props = {
+  imageSrc: ImageSourcePropType;
+  smallText: string;
+  largeText: string;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Slide = ({style}: Props) => {
-  const insets = useSafeAreaInsets();
+export const Slide = ({imageSrc, largeText, smallText}: Props) => {
   return (
-    <View style={[styles.layout, style]}>
-      <Image source={require('./img/holding-money.png')} />
-      <Image source={require('./img/rolled-paper.png')} />
-      <Image source={require('./img/plan.png')} />
+    <View style={styles.container}>
+      <Image source={imageSrc} />
+      <View style={styles.textContainer}>
+        <Typography
+          fontType="bold"
+          textStyle={styles.textLarge}
+          style={styles.typographyView}>
+          {largeText}
+        </Typography>
+        <Typography textStyle={styles.textSmall}>{smallText}</Typography>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  layout: {
+  container: {
     flex: 1,
+    alignItems: 'center',
+    width: '33%',
+  },
+  textContainer: {
+    width: '80%',
+    marginTop: 40,
+  },
+  textLarge: {
+    fontSize: 32,
+    lineHeight: 39,
+    color: COLORS.baseDark50,
+    textAlign: 'center',
+  },
+  textSmall: {
+    fontSize: 16,
+    lineHeight: 19,
+    color: COLORS.baseLight20,
+    textAlign: 'center',
+  },
+
+  typographyView: {
+    marginBottom: 16,
   },
 });

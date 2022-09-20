@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
-import {Typography} from '../Typography';
-import {COLORS} from 'constants/colors';
+import {ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Slide} from 'components/Slide';
 
 type Props = {
   // children: ReactNode;
@@ -36,18 +28,12 @@ const slidesMapping = [
 export const Slider = ({style}: Props) => {
   const slides = slidesMapping.map(({imageSrc, largeText, smallText}) => {
     return (
-      <View key={imageSrc} style={styles.container}>
-        <Image source={imageSrc} />
-        <View style={styles.textContainer}>
-          <Typography
-            fontType="bold"
-            textStyle={styles.textLarge}
-            style={styles.typographyView}>
-            {largeText}
-          </Typography>
-          <Typography textStyle={styles.textSmall}>{smallText}</Typography>
-        </View>
-      </View>
+      <Slide
+        key={largeText}
+        imageSrc={imageSrc}
+        largeText={largeText}
+        smallText={smallText}
+      />
     );
   });
   return (
@@ -65,30 +51,5 @@ export const Slider = ({style}: Props) => {
 const styles = StyleSheet.create({
   main: {
     width: '300%',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    width: '33%',
-  },
-  textContainer: {
-    width: '80%',
-    marginTop: 40,
-  },
-  textLarge: {
-    fontSize: 32,
-    lineHeight: 39,
-    color: COLORS.baseDark50,
-    textAlign: 'center',
-  },
-  textSmall: {
-    fontSize: 16,
-    lineHeight: 19,
-    color: COLORS.baseLight20,
-    textAlign: 'center',
-  },
-
-  typographyView: {
-    marginBottom: 16,
   },
 });
