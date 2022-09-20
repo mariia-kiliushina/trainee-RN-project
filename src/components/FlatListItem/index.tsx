@@ -15,7 +15,7 @@ type Props = {
 export const FlatListItem = ({item}: Props) => {
   const {title, body} = item;
   return (
-    <Pressable style={styles.main}>
+    <Pressable style={({pressed}) => [styles.main, pressed && styles.pressed]}>
       <Typography fontType="bold" variant="18">
         {title}
       </Typography>
@@ -33,5 +33,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
     borderRadius: 16,
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });
