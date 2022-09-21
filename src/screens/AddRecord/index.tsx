@@ -98,6 +98,7 @@ export const AddRecord = () => {
       </ModalWindow>
       <Button
         type="primary"
+        hitSlop={30}
         iconName="plusSquared"
         style={[styles.button, {height: 0.17 * width, width: 0.17 * width}]}
         iconStyle={styles.iconStyle}

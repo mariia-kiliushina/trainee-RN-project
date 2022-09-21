@@ -28,6 +28,14 @@ type Props = PressableProps & {
   iconHeight?: number;
   iconWidth?: number;
   onPress?: (event: GestureResponderEvent) => void;
+  hitSlop?:
+    | number
+    | {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      };
 };
 
 export const Button = ({
@@ -39,6 +47,7 @@ export const Button = ({
   iconHeight = 22,
   iconWidth = 22,
   onPress,
+  hitSlop,
   ...restProps
 }: Props) => {
   const styleButton = styles[type];
@@ -68,6 +77,7 @@ export const Button = ({
         pressed && styles.pressed,
       ]}
       onPress={onPress}
+      hitSlop={hitSlop}
       {...restProps}>
       {Icon && (
         <Icon
