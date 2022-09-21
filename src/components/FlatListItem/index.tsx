@@ -4,16 +4,11 @@ import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 
 type Props = {
-  item: {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-  };
+  title: string;
+  body: string;
 };
 
-export const FlatListItem = ({item}: Props) => {
-  const {title, body} = item;
+export const FlatListItem = ({title, body}: Props) => {
   return (
     <Pressable style={({pressed}) => [styles.main, pressed && styles.pressed]}>
       <Typography fontType="bold" variant="18">

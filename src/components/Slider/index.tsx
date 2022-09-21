@@ -1,24 +1,34 @@
 import React from 'react';
 import {ScrollView, StyleProp, ViewStyle} from 'react-native';
 import {Slide} from 'components/Slide';
+import {ImageSourcePropType} from 'react-native';
 
+type TSlide = {
+  id: number;
+  imageSrc: ImageSourcePropType;
+  largeText: string;
+  smallText: string;
+};
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-const slidesMapping = [
+const slidesMapping: TSlide[] = [
   {
-    imageSrc: require('./img/holding-money.png'),
+    id: 1,
+    imageSrc: require('assets/img/holding-money.png'),
     largeText: 'Gain total control of your money',
     smallText: 'Become your own money manager and make every cent count',
   },
   {
-    imageSrc: require('./img/rolled-paper.png'),
+    id: 2,
+    imageSrc: require('assets/img/rolled-paper.png'),
     largeText: 'Know where your money goes',
     smallText: `Track your transaction easily, ${'\n'} with categories and financial report `,
   },
   {
-    imageSrc: require('./img/plan.png'),
+    id: 3,
+    imageSrc: require('assets/img/plan.png'),
     largeText: 'Planning ahead',
     smallText: 'Setup your budget for each category so you in control',
   },

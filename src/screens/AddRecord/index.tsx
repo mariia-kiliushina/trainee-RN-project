@@ -2,21 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {FlatListItem} from 'components/FlatListItem';
+import {Post} from 'src/types';
 
 export const AddRecord = () => {
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState<Array<Post>>([]);
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => response.json())
       .then(parsedRecords => setRecords(parsedRecords));
-  });
+  }, []);
+  const _renderItem = (item: Post) => {
+    <FlatListItem title={item.title} body={item.body} />;
+  };
 
   return (
     <View style={styles.main}>
       <FlatList
         data={records}
-        renderItem={FlatListItem}
+        renderItem={_renderItem}
         keyExtractor={item => item.id.toString()}
       />
     </View>
