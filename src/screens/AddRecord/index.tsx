@@ -35,6 +35,7 @@ export const AddRecord = () => {
 
   const onSave = () => {
     setIsModalOpen(!isModalOpen);
+
     fetch('https://jsonplaceholder.typicode.com/posts', {
       method: 'POST',
       body: JSON.stringify({
@@ -49,6 +50,8 @@ export const AddRecord = () => {
       .then(response => response.json())
       .then(json => console.log(json))
       .catch(error => console.log(error.message));
+    setTitleText('');
+    setBodyText('');
   };
   return (
     <View style={styles.main}>
