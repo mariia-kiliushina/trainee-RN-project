@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {FlatListItem} from 'components/FlatListItem';
 import {Post} from 'src/types';
@@ -12,8 +12,8 @@ export const AddRecord = () => {
       .then(response => response.json())
       .then(parsedRecords => setRecords(parsedRecords));
   }, []);
-  const _renderItem = (item: Post) => {
-    <FlatListItem title={item.title} body={item.body} />;
+  const _renderItem: ListRenderItem<Post> = ({item}) => {
+    return <FlatListItem title={item.title} body={item.body} />;
   };
 
   return (
