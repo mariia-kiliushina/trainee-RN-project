@@ -14,7 +14,7 @@ export const AddRecord = ({
   };
   return (
     <View style={styles.main}>
-      <Typography variant="18" fontType="bold" style={styles.textStyle}>
+      <Typography variant="18" fontType="bold" textStyle={styles.textStyle}>
         Add record
       </Typography>
 

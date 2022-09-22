@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
@@ -7,23 +7,18 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-type styledProps = {
-  bottom: number;
-  left: number;
-  right: number;
-  top: number;
-};
-
 export const Container = ({children, style}: Props) => {
   const insets = useSafeAreaInsets();
-  return <View style={[styles(insets).layout, style]}>{children}</View>;
+  return (
+    <View style={[styles.layout, {paddingTop: insets.top}, style]}>
+      <ScrollView>{children}</ScrollView>
+    </View>
+  );
 };
 
-const styles = (insets: styledProps) =>
-  StyleSheet.create({
-    layout: {
-      paddingTop: insets.top,
-      flex: 1,
-      paddingHorizontal: 20,
-    },
-  });
+const styles = StyleSheet.create({
+  layout: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+});
