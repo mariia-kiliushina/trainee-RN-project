@@ -24,7 +24,7 @@ export const AddRecord = () => {
       .then(parsedRecords => setRecords(parsedRecords))
       .catch(error => console.log(error.message));
   }, []);
-  const _renderItem: ListRenderItem<Post> = ({item}) => {
+  const renderItem: ListRenderItem<Post> = ({item}) => {
     return <FlatListItem title={item.title} body={item.body} />;
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,7 +57,7 @@ export const AddRecord = () => {
     <View style={styles.main}>
       <FlatList
         data={records}
-        renderItem={_renderItem}
+        renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
       <ModalWindow isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>

@@ -45,22 +45,16 @@ const styles = StyleSheet.create({
   },
   image: {
     aspectRatio: 1,
-    borderColor: 'red',
-    borderWidth: 1,
     width: '80%',
   },
   imageContainer: {
     flexDirection: 'row',
-    borderColor: 'black',
-    borderWidth: 1,
     paddingHorizontal: '10%',
   },
 
   textContainer: {
     width: '80%',
     marginTop: 40,
-    borderColor: 'blue',
-    borderWidth: 1,
     justifyContent: 'center',
   },
   textLarge: {
