@@ -1,7 +1,10 @@
 import React, {SetStateAction, useState} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, TextInput, View} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
+import {HideEye} from 'assets/svg';
+import {Clocks} from 'assets/svg';
+import {useToggle} from 'src/hooks';
 
 type Props = {
   label: string;
@@ -12,6 +15,7 @@ type Props = {
 export const InputPassword = ({type, label, errorText}: Props) => {
   const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [isPasswordVisible, togglePasswordVisibility] = useToggle(false);
 
   const onChange = (inputValue: SetStateAction<string>) => {
     setText(inputValue);
@@ -51,6 +55,25 @@ export const InputPassword = ({type, label, errorText}: Props) => {
           editable={type !== 'disabled'}
           selectTextOnFocus={type !== 'disabled'}
         />
+        <Pressable
+          style={styles.buttonHide}
+          hitSlop={10}
+          onPress={togglePasswordVisibility}>
+          {isPasswordVisible && (
+            <Clocks
+              style={styles.iconHide}
+              width={14}
+              color={COLORS.neutral500}
+            />
+          )}
+          {!isPasswordVisible && (
+            <HideEye
+              style={styles.iconHide}
+              width={14}
+              color={COLORS.neutral500}
+            />
+          )}
+        </Pressable>
       </View>
       {errorText && (
         <Typography textStyle={{color: COLORS.desctructive500}}>
@@ -72,7 +95,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: COLORS.primary100,
   },
-
+  buttonHide: {
+    position: 'absolute',
+    top: 13,
+    right: 12,
+    height: 14,
+    width: 14,
+    justifyContent: 'center',
+  },
+  iconHide: {},
   textInput: {
     height: 40,
     borderWidth: 1,

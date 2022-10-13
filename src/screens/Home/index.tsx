@@ -22,6 +22,7 @@ export const Home = ({
         <View>
           <InputAccount label={ACCOUNT} />
           <InputAccount label={ACCOUNT} type="disabled" />
+          <InputAccount label={ACCOUNT} type="error" />
           <InputAccount
             label={ACCOUNT}
             type="error"
@@ -31,6 +32,7 @@ export const Home = ({
         <View>
           <InputPassword label={PASSWORD} />
           <InputPassword label={PASSWORD} type="disabled" />
+          <InputPassword label={PASSWORD} type="error" />
           <InputPassword
             label={PASSWORD}
             type="error"

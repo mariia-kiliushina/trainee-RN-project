@@ -14,3 +14,6 @@ export {default as Settings} from './settings.svg';
 export {default as TransactionIcon} from './transaction.svg';
 export {default as Plus} from './plus-filled.svg';
 export {default as Dots} from './dots.svg';
+export {default as HideEye} from './hide_eye.svg';
+export {default as Eye} from './eye.svg';
+export {default as Clocks} from './clocks.svg';
