@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {COLORS} from 'constants/colors';
+import {StyleSheet} from 'react-native';
 import {Container} from 'src/components/Container';
+import {Typography} from 'src/components/Typography';
 
 export const Budget = () => {
   return (
     <Container style={styles.main}>
-      <View>Budget</View>
+      <Typography>Budget</Typography>
     </Container>
   );
 };
@@ -14,7 +14,6 @@ export const Budget = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: COLORS.baseLight80,
     paddingHorizontal: 0,
   },
 });

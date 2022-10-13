@@ -10,8 +10,8 @@ type Props = {
 export const Container = ({children, style}: Props) => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.layout, {paddingTop: insets.top}, style]}>
-      <ScrollView>{children}</ScrollView>
+    <View style={[{paddingTop: insets.top}, style]}>
+      <ScrollView contentContainerStyle={styles.layout}>{children}</ScrollView>
     </View>
   );
 };
@@ -19,6 +19,7 @@ export const Container = ({children, style}: Props) => {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
+    overflow: 'visible',
   },
 });
