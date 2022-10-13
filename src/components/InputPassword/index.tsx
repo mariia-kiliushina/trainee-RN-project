@@ -17,14 +17,13 @@ export const InputPassword = ({type, label, errorText}: Props) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false);
 
+  const isDisabled = type === 'disabled';
+  const labelTextColor = isDisabled ? COLORS.neutral300 : COLORS.neutral900;
+  const style = type ? styles[type] : undefined;
+
   const onChange = (inputValue: SetStateAction<string>) => {
     setText(inputValue);
   };
-
-  const labelTextColor =
-    type === 'disabled' ? COLORS.neutral300 : COLORS.neutral900;
-
-  const style = type ? styles[type] : undefined;
 
   return (
     <View style={[styles.main]}>
@@ -36,6 +35,8 @@ export const InputPassword = ({type, label, errorText}: Props) => {
         ]}>
         <TextInput
           autoFocus={true}
+          textContentType="password"
+          secureTextEntry={isPasswordVisible}
           style={[
             styles.textInput,
             styles.shadow,
@@ -56,8 +57,9 @@ export const InputPassword = ({type, label, errorText}: Props) => {
           selectTextOnFocus={type !== 'disabled'}
         />
         <Pressable
+          disabled={isDisabled}
           style={styles.buttonHide}
-          hitSlop={10}
+          hitSlop={30}
           onPress={togglePasswordVisibility}>
           {isPasswordVisible && (
             <Clocks
@@ -109,7 +111,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: COLORS.neutral100,
-    paddingHorizontal: 12,
+    paddingLeft: 12,
+    paddingRight: 27,
     paddingVertical: 10,
   },
   focused: {

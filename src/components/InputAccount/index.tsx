@@ -11,15 +11,16 @@ type Props = {
 
 export const InputAccount = ({type, label, errorText}: Props) => {
   const [text, setText] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+
+  const isDisabled = type === 'disabled';
+  const labelTextColor = isDisabled ? COLORS.neutral300 : COLORS.neutral900;
+  const style = type ? styles[type] : undefined;
 
   const onChange = (inputValue: SetStateAction<string>) => {
     setText(inputValue);
   };
 
-  const labelTextColor =
-    type === 'disabled' ? COLORS.neutral300 : COLORS.neutral900;
-  const style = type ? styles[type] : undefined;
-  const [isFocused, setIsFocused] = useState(false);
   return (
     <View style={styles.main}>
       <Typography textStyle={{color: labelTextColor}}>{label}</Typography>
@@ -41,8 +42,8 @@ export const InputAccount = ({type, label, errorText}: Props) => {
         onBlur={() => {
           setIsFocused(false);
         }}
-        editable={type !== 'disabled'}
-        selectTextOnFocus={type !== 'disabled'}
+        editable={!isDisabled}
+        selectTextOnFocus={!isDisabled}
       />
       {errorText && (
         <Typography textStyle={{color: COLORS.desctructive500}}>
