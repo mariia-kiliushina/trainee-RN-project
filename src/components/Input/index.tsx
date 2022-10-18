@@ -1,40 +1,62 @@
-import React, {SetStateAction, useState} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  TextStyle,
+  TextInput,
+  StyleProp,
+  TextInputProps,
+  View,
+} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 
-type Props = {
+type Props = TextInputProps & {
   label: string;
   type?: 'disabled' | 'error';
   errorText?: string;
+  children?: React.ReactNode;
+  placeholder?: string;
+  validation?: RegExp;
+  inputStyle?: StyleProp<TextStyle>;
 };
 
-export const InputAccount = ({type, label, errorText}: Props) => {
+export const Input = ({
+  type,
+  label,
+  errorText,
+  inputStyle,
+  placeholder,
+  children,
+  validation,
+  ...props
+}: Props) => {
   const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
   const isDisabled = type === 'disabled';
   const labelTextColor = isDisabled ? COLORS.neutral300 : COLORS.neutral900;
-  const style = type ? styles[type] : undefined;
 
-  const onChange = (inputValue: SetStateAction<string>) => {
-    setText(inputValue);
+  const onChange = (inputValue: string) => {
+    validation
+      ? setText(inputValue.replace(validation, ''))
+      : setText(inputValue);
   };
 
   return (
     <View style={styles.main}>
       <Typography textStyle={{color: labelTextColor}}>{label}</Typography>
       <TextInput
-        autoFocus={true}
+        {...props}
         style={[
           styles.textInput,
           styles.shadow,
-          style,
+          inputStyle,
+          type ? styles[type] : undefined,
           isFocused && styles.focused,
         ]}
         onChangeText={onChange}
         value={text}
-        placeholder="Enter your account no"
+        placeholder={placeholder}
         placeholderTextColor={COLORS.neutral300}
         onFocus={() => {
           setIsFocused(true);
@@ -45,17 +67,16 @@ export const InputAccount = ({type, label, errorText}: Props) => {
         editable={!isDisabled}
         selectTextOnFocus={!isDisabled}
       />
-      {errorText && (
-        <Typography textStyle={{color: COLORS.desctructive500}}>
-          {errorText}
-        </Typography>
-      )}
+      {children}
+      <Typography textStyle={{color: COLORS.desctructive500}}>
+        {errorText}
+      </Typography>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {height: 96},
+  main: {marginBottom: 10},
   textInput: {
     height: 40,
     borderWidth: 1,
@@ -81,16 +102,14 @@ const styles = StyleSheet.create({
   shadow: {
     shadowOffset: {
       width: 2,
-      height: 6,
+      height: 4,
     },
     shadowColor: COLORS.shadow,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     backgroundColor: 'white',
-    elevation: 12,
+    elevation: 6,
   },
-  labelText: {},
-
   error: {
     borderColor: COLORS.desctructive600,
     shadowOffset: {
@@ -100,4 +119,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     elevation: 2,
   },
+  // focusedInputShadow: {
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 0,
+  //   },
+  //   shadowOpacity: 1,
+  //   shadowColor: COLORS.warning300,
+  //   shadowRadius: 4,
+  //   backgroundColor: 'white',
+  //   elevation: 4,
+  //   // marginTop: 4,
+  //   // marginBottom: 8,
+  // },
 });
