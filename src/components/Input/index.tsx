@@ -6,6 +6,7 @@ import {
   StyleProp,
   TextInputProps,
   View,
+  Platform,
 } from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
@@ -24,7 +25,6 @@ export const Input = ({
   type,
   label,
   errorText,
-  inputStyle,
   placeholder,
   children,
   validation,
@@ -45,28 +45,29 @@ export const Input = ({
   return (
     <View style={styles.main}>
       <Typography textStyle={{color: labelTextColor}}>{label}</Typography>
-      <TextInput
-        {...props}
-        style={[
-          styles.textInput,
-          styles.shadow,
-          inputStyle,
-          type ? styles[type] : undefined,
-          isFocused && styles.focused,
-        ]}
-        onChangeText={onChange}
-        value={text}
-        placeholder={placeholder}
-        placeholderTextColor={COLORS.neutral300}
-        onFocus={() => {
-          setIsFocused(true);
-        }}
-        onBlur={() => {
-          setIsFocused(false);
-        }}
-        editable={!isDisabled}
-        selectTextOnFocus={!isDisabled}
-      />
+      <View style={styles.shadowAndroid}>
+        <TextInput
+          {...props}
+          style={[
+            styles.textInput,
+            styles.shadow,
+            type ? styles[type] : null,
+            isFocused && styles.focused,
+          ]}
+          onChangeText={onChange}
+          value={text}
+          placeholder={placeholder}
+          placeholderTextColor={COLORS.neutral300}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+          editable={!isDisabled}
+          selectTextOnFocus={!isDisabled}
+        />
+      </View>
       {children}
       <Typography textStyle={{color: COLORS.desctructive500}}>
         {errorText}
@@ -76,7 +77,10 @@ export const Input = ({
 };
 
 const styles = StyleSheet.create({
-  main: {marginBottom: 10},
+  main: {
+    // marginTop: 4,
+    // marginBottom: 10,
+  },
   textInput: {
     height: 40,
     borderWidth: 1,
@@ -84,52 +88,39 @@ const styles = StyleSheet.create({
     borderColor: COLORS.neutral100,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    marginTop: 4,
-    marginBottom: 8,
+    backgroundColor: 'white',
   },
   focused: {
     borderColor: COLORS.warning100,
   },
   disabled: {
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
     borderColor: COLORS.neutral300,
-    shadowOpacity: 0.05,
-    elevation: 2,
+  },
+  shadowAndroid: {
+    ...Platform.select({
+      android: {
+        elevation: 6,
+        shadowColor: 'red',
+        borderWidth: 3,
+        borderColor: 'transparent',
+        borderRadius: 9,
+      },
+    }),
   },
   shadow: {
-    shadowOffset: {
-      width: 2,
-      height: 4,
-    },
-    shadowColor: COLORS.shadow,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    backgroundColor: 'white',
-    elevation: 6,
+    ...Platform.select({
+      ios: {
+        shadowColor: COLORS.shadow,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 9,
+      },
+    }),
   },
   error: {
     borderColor: COLORS.desctructive600,
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    elevation: 2,
   },
-  // focusedInputShadow: {
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 0,
-  //   },
-  //   shadowOpacity: 1,
-  //   shadowColor: COLORS.warning300,
-  //   shadowRadius: 4,
-  //   backgroundColor: 'white',
-  //   elevation: 4,
-  //   // marginTop: 4,
-  //   // marginBottom: 8,
-  // },
 });

@@ -20,6 +20,5 @@ const styles = StyleSheet.create({
   layout: {
     flex: 1,
     paddingHorizontal: 16,
-    overflow: 'visible',
   },
 });

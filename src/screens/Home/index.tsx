@@ -22,11 +22,10 @@ export const Home = ({
   };
   return (
     <Container style={styles.main}>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView style={styles.keyboardAware}>
         <View>
           <Input label={INPUT} placeholder="Input" />
           <Input label={INPUT} type="disabled" placeholder="Input" />
-          {/* <Input label={INPUT} type="error" placeholder="Input" /> */}
           <Input
             label={INPUT}
             type="error"
@@ -37,7 +36,6 @@ export const Home = ({
         <View>
           <InputPassword label={PASSWORD} />
           <InputPassword label={PASSWORD} type="disabled" />
-          {/* <InputPassword label={PASSWORD} type="error" /> */}
           <InputPassword
             label={PASSWORD}
             type="error"
@@ -54,11 +52,7 @@ export const Home = ({
             type="disabled"
             placeholder="Enter your account number"
           />
-          {/* <InputNumeric
-            label={ACCOUNT}
-            type="error"
-            placeholder="Enter your account number"
-          /> */}
+
           <InputNumeric
             label={PASSWORD}
             type="error"
@@ -80,6 +74,9 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  keyboardAware: {
+    overflow: 'visible',
   },
   columnsLayout: {flexDirection: 'row'},
   button: {
