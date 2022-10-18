@@ -14,7 +14,7 @@ export const AddRecord = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: COLORS.baseLight80,
+    backgroundColor: COLORS.primary100,
     paddingHorizontal: 20,
   },
 });

@@ -33,15 +33,24 @@ export const InputPassword = ({type, label, errorText}: Props) => {
       secureTextEntry={areSymbolsVisible}
       placeholder="Enter your password"
       errorText={errorText}
-      autoCapitalize="none"
-      inputStyle={[styles.textInput, styles.shadow]}>
+      autoCapitalize="none">
       <Pressable
         disabled={isDisabled}
         style={styles.buttonHide}
         hitSlop={30}
         onPress={toggleSymbolsVisibility}>
-        {areSymbolsVisible && <Clocks width={14} color={COLORS.neutral500} />}
-        {!areSymbolsVisible && <HideEye width={14} color={COLORS.neutral500} />}
+        {areSymbolsVisible && (
+          <Clocks
+            width={14}
+            color={isDisabled ? COLORS.neutral300 : COLORS.neutral500}
+          />
+        )}
+        {!areSymbolsVisible && (
+          <HideEye
+            width={14}
+            color={isDisabled ? COLORS.neutral300 : COLORS.neutral500}
+          />
+        )}
       </Pressable>
     </Input>
   );
@@ -55,24 +64,5 @@ const styles = StyleSheet.create({
     height: 14,
     width: 14,
     justifyContent: 'center',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderRadius: 6,
-    borderColor: COLORS.neutral100,
-    paddingLeft: 12,
-    paddingRight: 27,
-    paddingVertical: 10,
-  },
-  shadow: {
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    shadowColor: COLORS.shadow,
-    shadowRadius: 4,
-    backgroundColor: 'white',
-    elevation: 2,
   },
 });

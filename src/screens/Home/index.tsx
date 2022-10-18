@@ -8,6 +8,7 @@ import {InputPassword} from 'src/components/InputPassword';
 import {InputNumeric} from 'src/components/InputNumeric';
 import {Typography} from 'src/components/Typography';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLORS} from 'src/constants/colors';
 
 const ACCOUNT = 'Account Number';
 const PASSWORD = 'Password';
@@ -25,7 +26,7 @@ export const Home = ({
         <View>
           <Input label={INPUT} placeholder="Input" />
           <Input label={INPUT} type="disabled" placeholder="Input" />
-          <Input label={INPUT} type="error" placeholder="Input" />
+          {/* <Input label={INPUT} type="error" placeholder="Input" /> */}
           <Input
             label={INPUT}
             type="error"
@@ -36,7 +37,7 @@ export const Home = ({
         <View>
           <InputPassword label={PASSWORD} />
           <InputPassword label={PASSWORD} type="disabled" />
-          <InputPassword label={PASSWORD} type="error" />
+          {/* <InputPassword label={PASSWORD} type="error" /> */}
           <InputPassword
             label={PASSWORD}
             type="error"
@@ -53,11 +54,11 @@ export const Home = ({
             type="disabled"
             placeholder="Enter your account number"
           />
-          <InputNumeric
+          {/* <InputNumeric
             label={ACCOUNT}
             type="error"
             placeholder="Enter your account number"
-          />
+          /> */}
           <InputNumeric
             label={PASSWORD}
             type="error"
@@ -83,9 +84,12 @@ const styles = StyleSheet.create({
   columnsLayout: {flexDirection: 'row'},
   button: {
     marginTop: 'auto',
-    width: '50%',
+    paddingVertical: 12,
+    paddingHorizontal: 'auto',
+    height: 44,
+    width: '70%',
     alignSelf: 'flex-end',
-    backgroundColor: 'blue',
+    backgroundColor: COLORS.warning500,
     borderRadius: 6,
     alignItems: 'center',
   },
