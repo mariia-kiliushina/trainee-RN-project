@@ -19,6 +19,7 @@ type Props = TextInputProps & {
   placeholder?: string;
   validation?: RegExp;
   containerStyle?: StyleProp<TextStyle>;
+  inputStyle?: StyleProp<TextStyle>;
 };
 
 export const Input = ({
@@ -29,6 +30,7 @@ export const Input = ({
   children,
   validation,
   containerStyle,
+  inputStyle,
   ...props
 }: Props) => {
   const [text, setText] = useState('');
@@ -36,14 +38,12 @@ export const Input = ({
 
   const isDisabled = type === 'disabled';
 
-  const labelTextStyle = [
-    {color: isDisabled ? COLORS.neutral300 : COLORS.neutral900},
-    styles.labelText,
-  ];
+  const labelTextStyle = [styles.label, isDisabled && styles.labelDisabled];
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
     type ? styles[type] : null,
+    inputStyle,
     isFocused && styles.focused,
   ]);
 
@@ -58,7 +58,6 @@ export const Input = ({
       <Typography textStyle={labelTextStyle}>{label}</Typography>
       <View style={!isDisabled && styles.shadow}>
         <TextInput
-          {...props}
           style={flattenStyle}
           onChangeText={onChange}
           value={text}
@@ -72,6 +71,7 @@ export const Input = ({
           }}
           editable={!isDisabled}
           selectTextOnFocus={!isDisabled}
+          {...props}
         />
       </View>
       {children}
@@ -91,13 +91,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.neutral100,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.base000,
   },
   focused: {
     borderColor: COLORS.warning100,
   },
-  labelText: {
+  label: {
     marginVertical: 8,
+  },
+  labelDisabled: {
+    color: COLORS.neutral300,
   },
   shadow: {
     ...Platform.select({
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.shadow,
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 9,
+        borderRadius: 6,
       },
       ios: {
         shadowColor: COLORS.shadow,

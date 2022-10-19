@@ -70,7 +70,7 @@ export const Home = ({
         />
       </View>
       <Pressable onPress={onNavigate} style={styles.button}>
-        <Typography variant="18" fontType="regular" color={'white'}>
+        <Typography variant="18" fontType="regular" color={COLORS.base000}>
           Go to another screen
         </Typography>
       </Pressable>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   row: {flexDirection: 'row'},
   main: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.base000,
   },
   button: {
     marginTop: 'auto',

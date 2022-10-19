@@ -2,6 +2,7 @@ import React, {ReactNode} from 'react';
 import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLORS} from 'constants/colors';
 
 type Props = {
   children: ReactNode;
@@ -24,5 +25,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  background: {backgroundColor: 'white'},
+  background: {backgroundColor: COLORS.base000},
 });

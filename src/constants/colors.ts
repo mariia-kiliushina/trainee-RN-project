@@ -10,4 +10,5 @@ export const COLORS = {
   warning300: '#FCD34D',
   warning500: '#F59E0B',
   shadow: 'rgb(16, 24, 40)',
+  base000: '#FFFFFF',
 };

@@ -1,6 +1,7 @@
 import React, {ReactNode} from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLORS} from 'constants/colors';
 
 type Props = {
   isModalOpen: boolean;
@@ -37,9 +38,6 @@ export const ModalWindow = ({isModalOpen, setIsModalOpen, children}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  main: {
-    paddingHorizontal: 20,
-  },
   modalBackground: {
     backgroundColor: 'rgba(239, 239, 240, 0.7)',
     flex: 1,
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.base000,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',

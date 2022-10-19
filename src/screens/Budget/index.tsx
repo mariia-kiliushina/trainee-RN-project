@@ -24,38 +24,3 @@ export const Budget = () => {
     </Container>
   );
 };
-
-// const styles = StyleSheet.create({
-//   layout: {
-//     flex: 1,
-//     paddingHorizontal: 16,
-//   },
-//   shadow: {
-//     marginVertical: 20,
-//     ...Platform.select({
-//       ios: {
-//         shadowColor: COLORS.shadow,
-//         shadowOffset: {
-//           width: 0,
-//           height: 2,
-//         },
-//         shadowOpacity: 1,
-//         shadowRadius: 9,
-//       },
-//     }),
-//     ...Platform.select({
-//       android: {
-//         elevation: 6,
-//         shadowColor: 'red',
-//         borderWidth: 3,
-//         borderColor: 'transparent',
-//         borderRadius: 6,
-//       },
-//     }),
-//   },
-//   base: {
-//     height: 40,
-//     backgroundColor: 'white',
-//     borderRadius: 6,
-//   },
-// });
