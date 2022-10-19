@@ -69,10 +69,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: 'white',
-    overflow: 'visible',
   },
-
-  // contentContainerStyle: {overflow: 'visible'},
   columnsLayout: {flexDirection: 'row'},
   button: {
     marginTop: 'auto',

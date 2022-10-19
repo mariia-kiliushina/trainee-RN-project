@@ -43,14 +43,16 @@ export const Input = ({
   };
 
   return (
-    <View style={styles.main}>
-      <Typography textStyle={{color: labelTextColor}}>{label}</Typography>
-      <View style={styles.shadowAndroid}>
+    <View>
+      <Typography textStyle={[{color: labelTextColor}, styles.labelText]}>
+        {label}
+      </Typography>
+      <View style={!isDisabled && styles.shadowAndroid}>
         <TextInput
           {...props}
           style={[
             styles.textInput,
-            styles.shadow,
+            !isDisabled && styles.shadowIos,
             type ? styles[type] : null,
             isFocused && styles.focused,
           ]}
@@ -69,18 +71,12 @@ export const Input = ({
         />
       </View>
       {children}
-      <Typography textStyle={{color: COLORS.desctructive500}}>
-        {errorText}
-      </Typography>
+      <Typography textStyle={styles.errorText}>{errorText}</Typography>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
-    // marginTop: 4,
-    // marginBottom: 10,
-  },
   textInput: {
     height: 40,
     borderWidth: 1,
@@ -96,18 +92,19 @@ const styles = StyleSheet.create({
   disabled: {
     borderColor: COLORS.neutral300,
   },
-  shadowAndroid: {
+  labelText: {marginVertical: 4},
+  shadowPasswordAndroid: {
     ...Platform.select({
       android: {
-        elevation: 6,
-        shadowColor: 'red',
-        borderWidth: 3,
+        elevation: 4,
+        shadowColor: COLORS.shadow,
+        borderWidth: 1,
         borderColor: 'transparent',
         borderRadius: 9,
       },
     }),
   },
-  shadow: {
+  shadowPasswordIos: {
     ...Platform.select({
       ios: {
         shadowColor: COLORS.shadow,
@@ -115,12 +112,40 @@ const styles = StyleSheet.create({
           width: 0,
           height: 2,
         },
-        shadowOpacity: 1,
-        shadowRadius: 9,
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+      },
+    }),
+  },
+  shadowAndroid: {
+    ...Platform.select({
+      android: {
+        elevation: 4,
+        shadowColor: COLORS.shadow,
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 9,
+      },
+    }),
+  },
+  shadowIos: {
+    ...Platform.select({
+      ios: {
+        shadowColor: COLORS.shadow,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
       },
     }),
   },
   error: {
     borderColor: COLORS.desctructive600,
+  },
+  errorText: {
+    color: COLORS.desctructive500,
+    marginVertical: 8,
   },
 });

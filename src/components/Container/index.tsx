@@ -11,11 +11,11 @@ type Props = {
 export const Container = ({children, style}: Props) => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[{paddingTop: insets.top}, style]}>
-      <KeyboardAwareScrollView enableOnAndroid style={styles.layout}>
+    <KeyboardAwareScrollView enableOnAndroid>
+      <View style={[{paddingTop: insets.top}, styles.layout, style]}>
         {children}
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 
