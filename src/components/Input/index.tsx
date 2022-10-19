@@ -56,7 +56,7 @@ export const Input = ({
   return (
     <View style={[styles.containerStyle, containerStyle]}>
       <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={!isDisabled && styles.shadow}>
+      <View style={[!isDisabled && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
@@ -82,7 +82,11 @@ export const Input = ({
 
 const styles = StyleSheet.create({
   containerStyle: {
-    justifyContent: 'space-between',
+    flex: 1,
+  },
+  wrapper: {
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   textInput: {
     height: 40,
@@ -107,8 +111,6 @@ const styles = StyleSheet.create({
       android: {
         elevation: 4,
         shadowColor: COLORS.shadow,
-        borderWidth: 1,
-        borderColor: 'transparent',
         borderRadius: 6,
       },
       ios: {

@@ -27,14 +27,9 @@ export const Home = ({
           <Input
             label={INPUT}
             placeholder="Input"
-            containerStyle={{flex: 0.5, marginRight: 10}}
+            containerStyle={{marginRight: 10}}
           />
-          <Input
-            label={INPUT}
-            type="disabled"
-            placeholder="Input"
-            containerStyle={{flex: 0.5}}
-          />
+          <Input label={INPUT} type="disabled" placeholder="Input" />
         </View>
         <Input label={INPUT} placeholder="Input" />
         <Input label={INPUT} type="disabled" placeholder="Input" />
