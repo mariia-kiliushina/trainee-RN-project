@@ -7,7 +7,7 @@ import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
 import {InputNumeric} from 'src/components/InputNumeric';
 import {Typography} from 'src/components/Typography';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import {COLORS} from 'src/constants/colors';
 
 const ACCOUNT = 'Account Number';
@@ -22,50 +22,45 @@ export const Home = ({
   };
   return (
     <Container style={styles.main}>
-      <KeyboardAwareScrollView style={styles.keyboardAware}>
-        <View>
-          <Input label={INPUT} placeholder="Input" />
-          <Input label={INPUT} type="disabled" placeholder="Input" />
-          <Input
-            label={INPUT}
-            type="error"
-            errorText="Value does not exist"
-            placeholder="Input"
-          />
-        </View>
-        <View>
-          <InputPassword label={PASSWORD} />
-          <InputPassword label={PASSWORD} type="disabled" />
-          <InputPassword
-            label={PASSWORD}
-            type="error"
-            errorText="Password is incorrect"
-          />
-        </View>
-        <View>
-          <InputNumeric
-            label={ACCOUNT}
-            placeholder="Enter your account number"
-          />
-          <InputNumeric
-            label={ACCOUNT}
-            type="disabled"
-            placeholder="Enter your account number"
-          />
+      <View>
+        <Input label={INPUT} placeholder="Input" />
+        <Input label={INPUT} type="disabled" placeholder="Input" />
+        <Input
+          label={INPUT}
+          type="error"
+          errorText="Value does not exist"
+          placeholder="Input"
+        />
+      </View>
+      <View>
+        <InputPassword label={PASSWORD} />
+        <InputPassword label={PASSWORD} type="disabled" />
+        <InputPassword
+          label={PASSWORD}
+          type="error"
+          errorText="Password is incorrect"
+        />
+      </View>
+      <View>
+        <InputNumeric label={ACCOUNT} placeholder="Enter your account number" />
+        <InputNumeric
+          label={ACCOUNT}
+          type="disabled"
+          placeholder="Enter your account number"
+        />
 
-          <InputNumeric
-            label={PASSWORD}
-            type="error"
-            errorText="Account number is incorrect"
-            placeholder="Enter your account number"
-          />
-        </View>
-        <Pressable onPress={onNavigate} style={styles.button}>
-          <Typography variant="18" fontType="regular" color={'white'}>
-            Go to another screen
-          </Typography>
-        </Pressable>
-      </KeyboardAwareScrollView>
+        <InputNumeric
+          label={PASSWORD}
+          type="error"
+          errorText="Account number is incorrect"
+          placeholder="Enter your account number"
+        />
+      </View>
+      <Pressable onPress={onNavigate} style={styles.button}>
+        <Typography variant="18" fontType="regular" color={'white'}>
+          Go to another screen
+        </Typography>
+      </Pressable>
     </Container>
   );
 };
@@ -74,10 +69,10 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  keyboardAware: {
     overflow: 'visible',
   },
+
+  // contentContainerStyle: {overflow: 'visible'},
   columnsLayout: {flexDirection: 'row'},
   button: {
     marginTop: 'auto',
