@@ -23,6 +23,19 @@ export const Home = ({
   return (
     <Container style={styles.main}>
       <View>
+        <View style={styles.row}>
+          <Input
+            label={INPUT}
+            placeholder="Input"
+            containerStyle={{flex: 0.5, marginRight: 10}}
+          />
+          <Input
+            label={INPUT}
+            type="disabled"
+            placeholder="Input"
+            containerStyle={{flex: 0.5}}
+          />
+        </View>
         <Input label={INPUT} placeholder="Input" />
         <Input label={INPUT} type="disabled" placeholder="Input" />
         <Input
@@ -66,11 +79,11 @@ export const Home = ({
 };
 
 const styles = StyleSheet.create({
+  row: {flexDirection: 'row'},
   main: {
     flex: 1,
     backgroundColor: 'white',
   },
-  columnsLayout: {flexDirection: 'row'},
   button: {
     marginTop: 'auto',
     paddingVertical: 12,

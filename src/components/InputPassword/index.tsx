@@ -22,15 +22,17 @@ const useToggle = (initialState: any): [boolean, () => void] => {
 };
 
 export const InputPassword = ({type, label, errorText}: Props) => {
-  const [areSymbolsVisible, toggleSymbolsVisibility] = useToggle(false);
+  const [areSymbolsHidden, toggleSymbolsVisibility] = useToggle(true);
   const isDisabled = type === 'disabled';
+
+  const iconColor = isDisabled ? COLORS.neutral300 : COLORS.neutral500;
 
   return (
     <Input
       type={type}
       textContentType="password"
       label={label}
-      secureTextEntry={areSymbolsVisible}
+      secureTextEntry={areSymbolsHidden}
       placeholder="Enter your password"
       errorText={errorText}
       autoCapitalize="none">
@@ -39,18 +41,8 @@ export const InputPassword = ({type, label, errorText}: Props) => {
         style={styles.buttonHide}
         hitSlop={30}
         onPress={toggleSymbolsVisibility}>
-        {areSymbolsVisible && (
-          <Clocks
-            width={14}
-            color={isDisabled ? COLORS.neutral300 : COLORS.neutral500}
-          />
-        )}
-        {!areSymbolsVisible && (
-          <HideEye
-            width={14}
-            color={isDisabled ? COLORS.neutral300 : COLORS.neutral500}
-          />
-        )}
+        {areSymbolsHidden && <HideEye width={14} color={iconColor} />}
+        {!areSymbolsHidden && <Clocks width={14} color={iconColor} />}
       </Pressable>
     </Input>
   );
@@ -59,10 +51,10 @@ export const InputPassword = ({type, label, errorText}: Props) => {
 const styles = StyleSheet.create({
   buttonHide: {
     position: 'absolute',
-    top: 35,
     right: 12,
     height: 14,
     width: 14,
     justifyContent: 'center',
+    top: 47,
   },
 });
