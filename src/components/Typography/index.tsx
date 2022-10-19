@@ -39,7 +39,7 @@ type Props = TextProps & {
 export const Typography = ({
   children,
   variant = '14',
-  color = COLORS.baseDark50,
+  color = COLORS.neutral500,
   fontType = 'regular',
   textStyle,
   style,
