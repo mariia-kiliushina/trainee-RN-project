@@ -7,44 +7,50 @@ import {
   TextInputProps,
   View,
   Platform,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 
 type Props = TextInputProps & {
   label: string;
-  type?: 'disabled' | 'error';
-  errorText?: string;
+  errorText?: string | false;
+  disabled?: boolean;
   children?: React.ReactNode;
   placeholder?: string;
   validation?: RegExp;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
+  onBlur?:
+    | (((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) &
+        (() => void))
+    | ((e: any) => void);
 };
 
 export const Input = ({
-  type,
   label,
   errorText,
+  disabled = false,
   placeholder,
   children,
   validation,
   containerStyle,
   inputStyle,
+  onBlur,
   ...props
 }: Props) => {
   const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
-  const isDisabled = type === 'disabled';
-
-  const labelTextStyle = [styles.label, isDisabled && styles.labelDisabled];
+  const labelTextStyle = [styles.label, disabled && styles.labelDisabled];
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
-    type ? styles[type] : null,
     inputStyle,
     isFocused && styles.focused,
+    !disabled && Boolean(errorText) && styles.error,
+    disabled && styles.disabled,
   ]);
 
   const onChange = (inputValue: string) => {
@@ -56,7 +62,7 @@ export const Input = ({
   return (
     <View style={[styles.containerStyle, containerStyle]}>
       <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={[!isDisabled && styles.shadow, styles.wrapper]}>
+      <View style={[!disabled && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
@@ -66,16 +72,21 @@ export const Input = ({
           onFocus={() => {
             setIsFocused(true);
           }}
-          onBlur={() => {
+          onBlur={e => {
             setIsFocused(false);
+            if (onBlur) {
+              onBlur(e);
+            }
           }}
-          editable={!isDisabled}
-          selectTextOnFocus={!isDisabled}
+          editable={!disabled}
+          selectTextOnFocus={!disabled}
           {...props}
         />
       </View>
       {children}
-      <Typography textStyle={styles.errorText}>{errorText}</Typography>
+      <Typography textStyle={styles.errorText}>
+        {!disabled && errorText}
+      </Typography>
     </View>
   );
 };
@@ -102,6 +113,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginVertical: 8,
+    color: COLORS.neutral900,
   },
   labelDisabled: {
     color: COLORS.neutral300,
@@ -133,6 +145,7 @@ const styles = StyleSheet.create({
   },
   /*eslint-enable react-native/no-unused-styles */
   errorText: {
+    height: 20,
     color: COLORS.desctructive500,
     marginVertical: 8,
   },

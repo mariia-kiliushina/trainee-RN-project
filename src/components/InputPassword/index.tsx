@@ -1,17 +1,29 @@
 import React, {useState} from 'react';
-import {Pressable, StyleProp, StyleSheet, TextStyle} from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TextInputFocusEventData,
+  TextInputProps,
+  TextStyle,
+} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {HideEye} from 'assets/svg';
 import {Clocks} from 'assets/svg';
 import {Input} from 'components/Input';
-type Props = {
+type Props = TextInputProps & {
   label: string;
-  type?: 'disabled' | 'error';
-  errorText?: string;
+  errorText?: string | false;
+  disabled?: boolean;
   children?: React.ReactNode;
   placeholder?: string;
   areSymbolsVisible?: boolean;
   inputStyle?: StyleProp<TextStyle>;
+  onBlur?:
+    | (((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) &
+        (() => void))
+    | ((e: any) => void);
 };
 
 const useToggle = (initialState: any): [boolean, () => void] => {
@@ -21,24 +33,31 @@ const useToggle = (initialState: any): [boolean, () => void] => {
   return [state, toggle];
 };
 
-export const InputPassword = ({type, label, errorText}: Props) => {
+export const InputPassword = ({
+  label,
+  errorText,
+  disabled = false,
+  onBlur,
+  ...props
+}: Props) => {
   const [areSymbolsHidden, toggleSymbolsVisibility] = useToggle(true);
-  const isDisabled = type === 'disabled';
 
-  const iconColor = isDisabled ? COLORS.neutral300 : COLORS.neutral500;
+  const iconColor = disabled ? COLORS.neutral300 : COLORS.neutral500;
 
   return (
     <Input
-      type={type}
       textContentType="password"
       label={label}
       secureTextEntry={areSymbolsHidden}
       placeholder="Enter your password"
       errorText={errorText}
       autoCapitalize="none"
-      inputStyle={styles.inputStyle}>
+      inputStyle={styles.inputStyle}
+      disabled={disabled}
+      onBlur={onBlur}
+      {...props}>
       <Pressable
-        disabled={isDisabled}
+        disabled={disabled}
         style={styles.buttonHide}
         hitSlop={30}
         onPress={toggleSymbolsVisibility}>
