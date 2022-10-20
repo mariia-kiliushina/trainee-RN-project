@@ -1,22 +1,12 @@
 import React from 'react';
-import {StyleProp, TextStyle} from 'react-native';
-import {Input} from 'components/Input';
-type Props = {
-  label: string;
-  errorText?: string;
-  disabled?: boolean;
-  children?: React.ReactNode;
-  placeholder?: string;
-  areSymbolsVisible?: boolean;
-  inputStyle?: StyleProp<TextStyle>;
-};
+import {Input, InputProps} from 'components/Input';
 
 export const InputNumeric = ({
   label,
   placeholder,
-  disabled,
+  editable,
   errorText,
-}: Props) => {
+}: InputProps) => {
   const validation = /\D+/;
   return (
     <Input
@@ -26,9 +16,7 @@ export const InputNumeric = ({
       label={label}
       errorText={errorText}
       placeholder={placeholder}
-      disabled={disabled}
+      editable={editable}
     />
   );
 };
-
-// const styles = StyleSheet.create({});

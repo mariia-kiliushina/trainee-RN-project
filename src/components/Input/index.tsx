@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {COLORS} from 'src/constants/colors';
+import {Typography} from '../Typography';
 import {
   StyleSheet,
   TextStyle,
@@ -7,67 +9,58 @@ import {
   TextInputProps,
   View,
   Platform,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
 } from 'react-native';
-import {COLORS} from 'src/constants/colors';
-import {Typography} from '../Typography';
 
-type Props = TextInputProps & {
+export type InputProps = TextInputProps & {
   label: string;
   errorText?: string | false;
-  disabled?: boolean;
   children?: React.ReactNode;
-  placeholder?: string;
   validation?: RegExp;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
-  onBlur?:
-    | (((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) &
-        (() => void))
-    | ((e: any) => void);
 };
 
 export const Input = ({
   label,
   errorText,
-  disabled = false,
-  placeholder,
   children,
   validation,
   containerStyle,
   inputStyle,
   onBlur,
+  onChangeText,
+  editable,
   ...props
-}: Props) => {
-  const [text, setText] = useState('');
+}: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const labelTextStyle = [styles.label, disabled && styles.labelDisabled];
+  const labelTextStyle = [styles.label, !editable && styles.labelDisabled];
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
-    inputStyle,
     isFocused && styles.focused,
-    !disabled && Boolean(errorText) && styles.error,
-    disabled && styles.disabled,
+    inputStyle,
+    editable && Boolean(errorText) && styles.error,
+    !editable && styles.disabled,
   ]);
 
   const onChange = (inputValue: string) => {
-    validation
-      ? setText(inputValue.replace(validation, ''))
-      : setText(inputValue);
+    if (onChangeText) {
+      validation
+        ? onChangeText(inputValue.replace(validation, ''))
+        : onChangeText(inputValue);
+    } else {
+      return;
+    }
   };
 
   return (
     <View style={[styles.containerStyle, containerStyle]}>
       <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={[!disabled && styles.shadow, styles.wrapper]}>
+      <View style={[editable && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
-          value={text}
-          placeholder={placeholder}
           placeholderTextColor={COLORS.neutral300}
           onFocus={() => {
             setIsFocused(true);
@@ -78,14 +71,13 @@ export const Input = ({
               onBlur(e);
             }
           }}
-          editable={!disabled}
-          selectTextOnFocus={!disabled}
+          editable={editable}
           {...props}
         />
       </View>
       {children}
       <Typography textStyle={styles.errorText}>
-        {!disabled && errorText}
+        {editable && errorText}
       </Typography>
     </View>
   );
@@ -109,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.base000,
   },
   focused: {
-    borderColor: COLORS.warning100,
+    borderColor: COLORS.warning300,
   },
   label: {
     marginVertical: 8,

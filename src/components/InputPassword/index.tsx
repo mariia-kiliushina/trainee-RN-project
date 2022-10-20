@@ -1,48 +1,26 @@
 import React, {useState} from 'react';
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TextInputFocusEventData,
-  TextInputProps,
-  TextStyle,
-} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {HideEye} from 'assets/svg';
 import {Clocks} from 'assets/svg';
-import {Input} from 'components/Input';
-type Props = TextInputProps & {
-  label: string;
-  errorText?: string | false;
-  disabled?: boolean;
-  children?: React.ReactNode;
-  placeholder?: string;
+import {Input, InputProps} from 'components/Input';
+
+type PasswordInputProps = InputProps & {
   areSymbolsVisible?: boolean;
-  inputStyle?: StyleProp<TextStyle>;
-  onBlur?:
-    | (((e: NativeSyntheticEvent<TextInputFocusEventData>) => void) &
-        (() => void))
-    | ((e: any) => void);
-};
-
-const useToggle = (initialState: any): [boolean, () => void] => {
-  const [state, setState] = useState<boolean>(initialState);
-  const toggle = () => setState(prevState => !prevState);
-
-  return [state, toggle];
 };
 
 export const InputPassword = ({
   label,
   errorText,
-  disabled = false,
+  editable,
   onBlur,
   ...props
-}: Props) => {
-  const [areSymbolsHidden, toggleSymbolsVisibility] = useToggle(true);
+}: PasswordInputProps) => {
+  const [areSymbolsHidden, toggleSymbolsVisibility] = useState(true);
+  const changeSymbolsVisibility = () =>
+    toggleSymbolsVisibility(prevState => !prevState);
 
-  const iconColor = disabled ? COLORS.neutral300 : COLORS.neutral500;
+  const iconColor = editable ? COLORS.neutral500 : COLORS.neutral300;
 
   return (
     <Input
@@ -53,14 +31,14 @@ export const InputPassword = ({
       errorText={errorText}
       autoCapitalize="none"
       inputStyle={styles.inputStyle}
-      disabled={disabled}
+      editable={editable}
       onBlur={onBlur}
       {...props}>
       <Pressable
-        disabled={disabled}
+        disabled={!editable}
         style={styles.buttonHide}
         hitSlop={30}
-        onPress={toggleSymbolsVisibility}>
+        onPress={changeSymbolsVisibility}>
         {areSymbolsHidden ? (
           <HideEye width={14} color={iconColor} />
         ) : (
