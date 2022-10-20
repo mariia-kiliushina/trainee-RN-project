@@ -8,6 +8,8 @@ import {InputPassword} from 'src/components/InputPassword';
 
 import {COLORS} from 'src/constants/colors';
 
+import {passwordValidationSchema} from 'src/helpers/validation';
+
 const PASSWORD = 'Password';
 const LOGIN = 'Login';
 
@@ -28,11 +30,12 @@ export const Home = () => {
         initialValues={initialValues}
         validateOnChange={false}
         validateOnBlur={true}
+        validationSchema={passwordValidationSchema}
         onSubmit={values => {
           console.log(values);
           Keyboard.dismiss();
         }}>
-        {({handleChange, handleSubmit, values, handleBlur}) => (
+        {({handleChange, handleSubmit, values, errors, handleBlur}) => (
           <View style={styles.main}>
             <Input
               label={LOGIN}
@@ -41,6 +44,7 @@ export const Home = () => {
               onBlur={handleBlur('login')}
               value={values.login}
               editable={true}
+              errorText={errors.login}
             />
             <InputPassword
               label={PASSWORD}
@@ -49,11 +53,7 @@ export const Home = () => {
               onBlur={handleBlur('password')}
               value={values.password}
               editable={true}
-            />
-            <InputPassword
-              label={PASSWORD}
-              placeholder="passwordDisabled"
-              editable={false}
+              errorText={errors.password}
             />
             <Button onPress={handleSubmit} title="Submit" />
           </View>

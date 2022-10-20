@@ -25,7 +25,8 @@
     "react-native-safe-area-context": "^4.3.3",
     "react-native-screens": "^3.17.0",
     "react-native-svg": "^13.1.0",
-    "tsc-watch": "^5.0.3"
+    "tsc-watch": "^5.0.3",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
