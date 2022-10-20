@@ -13,7 +13,6 @@ export const InputPassword = ({
   label,
   errorText,
   editable,
-  onBlur,
   ...props
 }: PasswordInputProps) => {
   const [areSymbolsHidden, toggleSymbolsVisibility] = useState(true);
@@ -32,7 +31,6 @@ export const InputPassword = ({
       autoCapitalize="none"
       inputStyle={styles.inputStyle}
       editable={editable}
-      onBlur={onBlur}
       {...props}>
       <Pressable
         disabled={!editable}
