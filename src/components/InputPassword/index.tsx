@@ -1,47 +1,44 @@
 import React, {useState} from 'react';
-import {Pressable, StyleProp, StyleSheet, TextStyle} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {HideEye} from 'assets/svg';
 import {Clocks} from 'assets/svg';
-import {Input} from 'components/Input';
-type Props = {
-  label: string;
-  type?: 'disabled' | 'error';
-  errorText?: string;
-  children?: React.ReactNode;
-  placeholder?: string;
+import {Input, InputProps} from 'components/Input';
+
+type PasswordInputProps = InputProps & {
   areSymbolsVisible?: boolean;
-  inputStyle?: StyleProp<TextStyle>;
 };
 
-const useToggle = (initialState: any): [boolean, () => void] => {
-  const [state, setState] = useState<boolean>(initialState);
-  const toggle = () => setState(prevState => !prevState);
+export const InputPassword = ({
+  label,
+  errorText,
+  editable,
+  onBlur,
+  ...props
+}: PasswordInputProps) => {
+  const [areSymbolsHidden, toggleSymbolsVisibility] = useState(true);
+  const changeSymbolsVisibility = () =>
+    toggleSymbolsVisibility(prevState => !prevState);
 
-  return [state, toggle];
-};
-
-export const InputPassword = ({type, label, errorText}: Props) => {
-  const [areSymbolsHidden, toggleSymbolsVisibility] = useToggle(true);
-  const isDisabled = type === 'disabled';
-
-  const iconColor = isDisabled ? COLORS.neutral300 : COLORS.neutral500;
+  const iconColor = editable ? COLORS.neutral500 : COLORS.neutral300;
 
   return (
     <Input
-      type={type}
       textContentType="password"
       label={label}
       secureTextEntry={areSymbolsHidden}
       placeholder="Enter your password"
       errorText={errorText}
       autoCapitalize="none"
-      inputStyle={styles.inputStyle}>
+      inputStyle={styles.inputStyle}
+      editable={editable}
+      onBlur={onBlur}
+      {...props}>
       <Pressable
-        disabled={isDisabled}
+        disabled={!editable}
         style={styles.buttonHide}
         hitSlop={30}
-        onPress={toggleSymbolsVisibility}>
+        onPress={changeSymbolsVisibility}>
         {areSymbolsHidden ? (
           <HideEye width={14} color={iconColor} />
         ) : (

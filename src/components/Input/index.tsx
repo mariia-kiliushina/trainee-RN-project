@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {COLORS} from 'src/constants/colors';
+import {Typography} from '../Typography';
 import {
   StyleSheet,
   TextStyle,
@@ -8,74 +10,75 @@ import {
   View,
   Platform,
 } from 'react-native';
-import {COLORS} from 'src/constants/colors';
-import {Typography} from '../Typography';
 
-type Props = TextInputProps & {
+export type InputProps = TextInputProps & {
   label: string;
-  type?: 'disabled' | 'error';
-  errorText?: string;
+  errorText?: string | false;
   children?: React.ReactNode;
-  placeholder?: string;
   validation?: RegExp;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
 };
 
 export const Input = ({
-  type,
   label,
   errorText,
-  placeholder,
   children,
   validation,
   containerStyle,
   inputStyle,
+  onBlur,
+  onChangeText,
+  editable,
   ...props
-}: Props) => {
-  const [text, setText] = useState('');
+}: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const isDisabled = type === 'disabled';
-
-  const labelTextStyle = [styles.label, isDisabled && styles.labelDisabled];
+  const labelTextStyle = [styles.label, !editable && styles.labelDisabled];
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
-    type ? styles[type] : null,
-    inputStyle,
     isFocused && styles.focused,
+    inputStyle,
+    editable && Boolean(errorText) && styles.error,
+    !editable && styles.disabled,
   ]);
 
   const onChange = (inputValue: string) => {
-    validation
-      ? setText(inputValue.replace(validation, ''))
-      : setText(inputValue);
+    if (onChangeText) {
+      validation
+        ? onChangeText(inputValue.replace(validation, ''))
+        : onChangeText(inputValue);
+    } else {
+      return;
+    }
   };
 
   return (
     <View style={[styles.containerStyle, containerStyle]}>
       <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={[!isDisabled && styles.shadow, styles.wrapper]}>
+      <View style={[editable && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
-          value={text}
-          placeholder={placeholder}
           placeholderTextColor={COLORS.neutral300}
           onFocus={() => {
             setIsFocused(true);
           }}
-          onBlur={() => {
+          onBlur={e => {
             setIsFocused(false);
+            if (onBlur) {
+              onBlur(e);
+            }
           }}
-          editable={!isDisabled}
-          selectTextOnFocus={!isDisabled}
+          editable={editable}
           {...props}
         />
       </View>
       {children}
-      <Typography textStyle={styles.errorText}>{errorText}</Typography>
+      <Typography textStyle={styles.errorText}>
+        {editable && errorText}
+      </Typography>
     </View>
   );
 };
@@ -98,10 +101,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.base000,
   },
   focused: {
-    borderColor: COLORS.warning100,
+    borderColor: COLORS.warning300,
   },
   label: {
     marginVertical: 8,
+    color: COLORS.neutral900,
   },
   labelDisabled: {
     color: COLORS.neutral300,
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
   },
   /*eslint-enable react-native/no-unused-styles */
   errorText: {
+    height: 20,
     color: COLORS.desctructive500,
     marginVertical: 8,
   },
