@@ -9,7 +9,7 @@ export const validationSchema = yup.object().shape({
     .min(6, 'Password should consts of at least 6 chars')
     .matches(validation, 'Password includes chars that are not allowed')
     .required('Password is a required field'),
-  passwordVerification: yup
+  confirmPassword: yup
     .string()
     .min(6, 'Password should consts of at least 6 chars')
     .matches(validation, 'Password includes chars that are not allowed')

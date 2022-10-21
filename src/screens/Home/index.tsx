@@ -16,13 +16,13 @@ const LOGIN = 'Login';
 type InitialValues = {
   login: string;
   password: string;
-  passwordVerification: string;
+  confirmPassword: string;
 };
 
 const initialValues: InitialValues = {
   login: '',
   password: '',
-  passwordVerification: '',
+  confirmPassword: '',
 };
 
 export const Home = () => {
@@ -45,7 +45,6 @@ export const Home = () => {
               onChangeText={handleChange('login')}
               onBlur={handleBlur('login')}
               value={values.login}
-              editable={true}
               errorText={errors.login}
             />
             <InputPassword
@@ -54,18 +53,16 @@ export const Home = () => {
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
-              editable={true}
               errorText={errors.password}
             />
 
             <InputPassword
               label={PASSWORD}
               placeholder="Password"
-              onChangeText={handleChange('passwordVerification')}
-              onBlur={handleBlur('passwordVerification')}
-              value={values.passwordVerification}
-              editable={true}
-              errorText={errors.passwordVerification}
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur('confirmPassword')}
+              value={values.confirmPassword}
+              errorText={errors.confirmPassword}
             />
             <Button onPress={handleSubmit} title="Submit" />
           </View>
