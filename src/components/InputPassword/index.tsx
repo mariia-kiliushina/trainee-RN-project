@@ -30,7 +30,6 @@ export const InputPassword = ({
       errorText={errorText}
       autoCapitalize="none"
       inputStyle={styles.inputStyle}
-      editable={editable}
       {...props}>
       <Pressable
         disabled={!editable}

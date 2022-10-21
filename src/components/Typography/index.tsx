@@ -17,6 +17,7 @@ type FontType = 'regular' | 'bold';
 
 const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
   StyleSheet.create({
+    /*eslint-disable react-native/no-unused-styles */
     14: {
       fontSize: 14,
       lineHeight: 18,
@@ -25,6 +26,7 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
       fontSize: 18,
       lineHeight: 22,
     },
+    /*eslint-enable react-native/no-unused-styles */
   });
 
 type Props = TextProps & {

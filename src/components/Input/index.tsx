@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
-  label: string;
+  label?: string;
   errorText?: string | false;
   children?: React.ReactNode;
   validation?: RegExp;
@@ -20,6 +20,8 @@ export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   value: string;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
+  labelStyle?: StyleProp<TextStyle>;
+  shadow?: boolean;
 };
 
 export const Input = ({
@@ -30,13 +32,19 @@ export const Input = ({
   containerStyle,
   inputStyle,
   onBlur,
+  labelStyle,
   onChangeText,
   editable = true,
+  shadow = true,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const labelTextStyle = [styles.label, !editable && styles.labelDisabled];
+  const labelTextStyle = [
+    styles.label,
+    labelStyle,
+    !editable && styles.labelDisabled,
+  ];
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
@@ -47,6 +55,10 @@ export const Input = ({
   ]);
 
   const onChange = (inputValue: string) => {
+    console.log('flattenStyle');
+    console.log('flattenStyle');
+    console.log('flattenStyle');
+    console.log(flattenStyle);
     validation
       ? onChangeText(inputValue.replace(validation, ''))
       : onChangeText(inputValue);
@@ -54,8 +66,8 @@ export const Input = ({
 
   return (
     <View style={[styles.containerStyle, containerStyle]}>
-      <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={[editable && styles.shadow, styles.wrapper]}>
+      {label && <Typography textStyle={labelTextStyle}>{label}</Typography>}
+      <View style={[editable && shadow && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
@@ -84,6 +96,8 @@ export const Input = ({
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   wrapper: {
     borderWidth: 1,
@@ -94,8 +108,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: COLORS.neutral100,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: COLORS.base000,
   },
   focused: {
@@ -137,6 +153,6 @@ const styles = StyleSheet.create({
   errorText: {
     height: 20,
     color: COLORS.desctructive500,
-    marginVertical: 8,
+    marginTop: 8,
   },
 });

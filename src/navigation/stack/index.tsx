@@ -1,11 +1,14 @@
+//@ts-nocheck
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
+import {BottomSheetModal} from 'screens/BottomSheetModal';
 
 export type RootStackParamList = {
   AddRecord: undefined;
   Main: undefined;
+  BottomSheetModal: undefined;
 };
 
 export const ScreenNavigation = () => {
@@ -13,15 +16,25 @@ export const ScreenNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
       }}
-      initialRouteName="Main">
+      initialRouteName="Main"
+    >
+      <Stack.Screen name="Main" component={Main} />
       <Stack.Screen
-        name="Main"
-        component={Main}
-        options={{headerShown: false}}
+        options={{headerShown: true}}
+        name="AddRecord"
+        component={AddRecord}
       />
-      <Stack.Screen name="AddRecord" component={AddRecord} />
+      <Stack.Group
+        screenOptions={{
+          animation: 'fade',
+          presentation: 'transparentModal',
+          gestureEnabled: false,
+        }}
+      >
+        <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

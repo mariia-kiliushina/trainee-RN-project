@@ -8,7 +8,7 @@ import {InputPassword} from 'src/components/InputPassword';
 
 import {COLORS} from 'src/constants/colors';
 
-import {validationSchema} from 'src/helpers/validation';
+import {loginValidationSchema} from 'src/helpers/validation';
 
 const PASSWORD = 'Password';
 const LOGIN = 'Login';
@@ -32,11 +32,12 @@ export const Home = () => {
         initialValues={initialValues}
         validateOnChange={false}
         validateOnBlur={true}
-        validationSchema={validationSchema}
+        validationSchema={loginValidationSchema}
         onSubmit={values => {
           console.log(values);
           Keyboard.dismiss();
-        }}>
+        }}
+      >
         {({handleChange, handleSubmit, values, errors, handleBlur}) => (
           <View style={styles.main}>
             <Input

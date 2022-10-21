@@ -1,12 +1,7 @@
 import React from 'react';
 import {Input, InputProps} from 'components/Input';
 
-export const InputNumeric = ({
-  label,
-  placeholder,
-  editable,
-  errorText,
-}: InputProps) => {
+export const InputNumeric = ({label, errorText, ...props}: InputProps) => {
   const validation = /\D+/;
   return (
     <Input
@@ -14,9 +9,10 @@ export const InputNumeric = ({
       keyboardType="number-pad"
       textContentType="password"
       label={label}
+      placeholder="Enter your password"
       errorText={errorText}
-      placeholder={placeholder}
-      editable={editable}
+      autoCapitalize="none"
+      {...props}
     />
   );
 };
