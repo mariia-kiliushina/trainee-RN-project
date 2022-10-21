@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 import {
@@ -11,11 +11,13 @@ import {
   Platform,
 } from 'react-native';
 
-export type InputProps = TextInputProps & {
+export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   label: string;
   errorText?: string | false;
   children?: React.ReactNode;
   validation?: RegExp;
+  onChangeText: (e: string | ChangeEvent<any>) => void;
+  value: string;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
 };
@@ -29,7 +31,7 @@ export const Input = ({
   inputStyle,
   onBlur,
   onChangeText,
-  editable,
+  editable = true,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -45,13 +47,9 @@ export const Input = ({
   ]);
 
   const onChange = (inputValue: string) => {
-    if (onChangeText) {
-      validation
-        ? onChangeText(inputValue.replace(validation, ''))
-        : onChangeText(inputValue);
-    } else {
-      return;
-    }
+    validation
+      ? onChangeText(inputValue.replace(validation, ''))
+      : onChangeText(inputValue);
   };
 
   return (
