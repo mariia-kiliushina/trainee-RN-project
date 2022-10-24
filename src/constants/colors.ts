@@ -4,6 +4,7 @@ export const COLORS = {
   neutral300: '#D1D5DB',
   neutral400: '#9CA3AF',
   neutral500: '#6B7280',
+  neutral500opaque: 'rgba(107, 114, 128, 0.8)',
   neutral900: '#111827',
   primary100: '#FFF2DB',
   desctructive500: '#EF4444',
@@ -13,5 +14,4 @@ export const COLORS = {
   warning500: '#F59E0B',
   shadow: 'rgb(16, 24, 40)',
   base000: '#FFFFFF',
-  linear01: '#FFC371',
 };

@@ -12,7 +12,7 @@ import {
 import {COLORS} from 'constants/colors';
 import {capitalizeFirstLetter} from 'utils/formatters';
 
-type TFontVariant = '14' | '18';
+type TFontVariant = '14' | '16' | '18';
 type FontType = 'regular' | 'bold';
 
 const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
@@ -21,6 +21,10 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
     14: {
       fontSize: 14,
       lineHeight: 18,
+    },
+    16: {
+      fontSize: 16,
+      lineHeight: 20,
     },
     18: {
       fontSize: 18,
@@ -55,7 +59,8 @@ export const Typography = ({
     <View style={style}>
       <Text
         style={[fontVariant, {fontFamily, color}, textStyle]}
-        {...restProps}>
+        {...restProps}
+      >
         {children}
       </Text>
     </View>

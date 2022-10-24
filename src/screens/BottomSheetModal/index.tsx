@@ -1,19 +1,83 @@
-import React, {ReactNode} from 'react';
-import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {COLORS} from 'constants/colors';
-import {Container} from 'src/components/Container';
 import {RootStackParamList} from 'src/navigation/stack';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Typography} from 'src/components/Typography';
+import {Rectangle} from 'src/assets/svg';
+import {Input} from 'src/components/Input';
+import {SelectItem} from 'src/components/SelectItem';
 
-type Props = NativeStackScreenProps<RootStackParamList> & {
-  isModalOpen: boolean;
-  children: ReactNode;
-};
+type Props = NativeStackScreenProps<RootStackParamList> & {};
 
-export const BottomSheetModal = ({navigation, children}: Props) => {
+export const BottomSheetModal = ({navigation}: Props) => {
+  const {width} = useWindowDimensions();
+
+  const ownAccountData = [
+    {
+      name: 'Account1',
+      accountNumber: '301090',
+    },
+    {
+      name: 'Account2',
+      accountNumber: '3018998',
+    },
+    {
+      name: 'Account3',
+      accountNumber: '30187987',
+    },
+    {
+      name: 'Account4',
+      accountNumber: '301023490',
+    },
+    {
+      name: 'Account5',
+      accountNumber: '3018928911078',
+    },
+    {
+      name: 'Account6',
+      accountNumber: '301872341987',
+    },
+    {
+      name: 'Account7',
+      accountNumber: '301023467890',
+    },
+    {
+      name: 'Account8',
+      accountNumber: '30183249678798',
+    },
+    {
+      name: 'Account9',
+      accountNumber: '30187876787',
+    },
+  ];
+
+  const ownAccountDataItems = ownAccountData.map(item => {
+    return (
+      <SelectItem
+        key={item.accountNumber}
+        fieldName="fromAccount"
+        iconName="bank"
+        name={item.name}
+        accountNumber={item.accountNumber}
+      />
+    );
+  });
+
+  const [searchText, setSearchText] = useState('');
+  const onChangeSearchText: (e: string) => void = (e: string) => {
+    setSearchText(e);
+  };
   return (
-    <Container style={styles.main}>
+    <View>
       <Modal animationType="slide" transparent={true} visible={true}>
         <TouchableOpacity
           onPress={() => {
@@ -22,45 +86,84 @@ export const BottomSheetModal = ({navigation, children}: Props) => {
           style={styles.modalBackground}
         >
           <KeyboardAwareScrollView contentContainerStyle={styles.centeredView}>
-            <View
-              onStartShouldSetResponder={_ => true}
-              onTouchEnd={e => {
-                e.stopPropagation();
-              }}
-              style={styles.modalView}
-            >
-              {children}
+            <View style={styles.modalView}>
+              <View style={{alignItems: 'center'}}>
+                <Rectangle />
+                <Typography variant="16" textStyle={styles.text}>
+                  Select
+                </Typography>
+              </View>
+              <View style={[styles.bottomLine, {width}]} />
+              <View style={styles.contentWrapper}>
+                <View style={{height: 55}}>
+                  <Input
+                    value={searchText}
+                    placeholder="Search account"
+                    onChangeText={onChangeSearchText}
+                  />
+                </View>
+                <ScrollView
+                  style={styles.itemsWrapper}
+                  onTouchEnd={e => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {ownAccountDataItems}
+                </ScrollView>
+              </View>
             </View>
           </KeyboardAwareScrollView>
         </TouchableOpacity>
       </Modal>
-    </Container>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-  },
-  modalBackground: {
-    backgroundColor: 'rgba(239, 239, 240, 0.6)',
-    flex: 1,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalView: {
-    backgroundColor: COLORS.base000,
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    flex: 1,
+    height: '85%',
+    borderRadius: 30,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    paddingVertical: 10,
+    paddingHorizontal: 0,
+    width: '100%',
+    backgroundColor: 'white',
+    opacity: 1,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    width: '90%',
+  },
+  modalBackground: {
+    backgroundColor: COLORS.neutral500opaque,
+    flex: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  itemsWrapper: {},
+  contentWrapper: {
+    flex: 1,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+  },
+  text: {
+    fontWeight: '100',
+    color: COLORS.warning500,
+    marginTop: 27,
+  },
+  bottomLine: {
+    borderBottomWidth: 1,
+    borderColor: COLORS.neutral200,
+    alignItems: 'center',
+    paddingTop: 15,
   },
 });

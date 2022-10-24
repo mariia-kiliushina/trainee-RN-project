@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {useState} from 'react';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 import {
@@ -16,7 +16,7 @@ export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   errorText?: string | false;
   children?: React.ReactNode;
   validation?: RegExp;
-  onChangeText: (e: string | ChangeEvent<any>) => void;
+  onChangeText: (e: string) => void;
   value: string;
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
@@ -55,10 +55,6 @@ export const Input = ({
   ]);
 
   const onChange = (inputValue: string) => {
-    console.log('flattenStyle');
-    console.log('flattenStyle');
-    console.log('flattenStyle');
-    console.log(flattenStyle);
     validation
       ? onChangeText(inputValue.replace(validation, ''))
       : onChangeText(inputValue);
@@ -96,8 +92,6 @@ export const Input = ({
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: 'black',
   },
   wrapper: {
     borderWidth: 1,
