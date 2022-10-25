@@ -6,7 +6,6 @@ import {Input, InputProps} from 'components/Input';
 
 type ClickableInputProps = InputProps & {
   onPress: () => void;
-  selected?: boolean;
 };
 
 export const InputClickable = ({
@@ -16,7 +15,6 @@ export const InputClickable = ({
   labelStyle,
   children,
   onPress,
-  selected,
   ...props
 }: ClickableInputProps) => {
   return (
@@ -27,16 +25,9 @@ export const InputClickable = ({
       <View pointerEvents="none" style={styles.main}>
         <Input
           shadow={false}
-          keyboardType="number-pad"
-          textContentType="password"
           label={label}
           errorText={errorText}
-          autoCapitalize="none"
-          inputStyle={[
-            styles.inputStyle,
-            inputStyle,
-            selected && styles.inputSelectedStyle,
-          ]}
+          inputStyle={[styles.inputStyle, inputStyle]}
           labelStyle={[styles.labelStyle, labelStyle]}
           {...props}
         >
@@ -56,13 +47,9 @@ const styles = StyleSheet.create({
   },
 
   inputStyle: {
-    height: 85,
     color: COLORS.neutral900,
   },
-  inputSelectedStyle: {
-    backgroundColor: COLORS.warning500,
-    color: COLORS.base000,
-  },
+
   labelStyle: {
     color: COLORS.neutral400,
   },

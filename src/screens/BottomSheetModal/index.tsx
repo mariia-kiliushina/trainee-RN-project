@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import {
-  Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
   View,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {COLORS} from 'constants/colors';
 import {RootStackParamList} from 'src/navigation/stack';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Typography} from 'src/components/Typography';
 import {Rectangle} from 'src/assets/svg';
 import {Input} from 'src/components/Input';
@@ -73,97 +74,87 @@ export const BottomSheetModal = ({navigation}: Props) => {
   });
 
   const [searchText, setSearchText] = useState('');
+
   const onChangeSearchText: (e: string) => void = (e: string) => {
     setSearchText(e);
   };
   return (
-    <View>
-      <Modal animationType="slide" transparent={true} visible={true}>
-        <TouchableOpacity
+    <TouchableOpacity style={[styles.flex, styles.background]}>
+      <TouchableOpacity style={styles.flex}>
+        <Pressable
           onPress={() => {
             navigation.navigate('Main');
           }}
-          style={styles.modalBackground}
+          style={styles.flex}
         >
-          <KeyboardAwareScrollView contentContainerStyle={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={{alignItems: 'center'}}>
+          <View onStartShouldSetResponder={_ => true} style={styles.modalView}>
+            <KeyboardAvoidingView style={styles.flex}>
+              <View style={styles.alignCenter}>
                 <Rectangle />
                 <Typography variant="16" textStyle={styles.text}>
                   Select
                 </Typography>
               </View>
               <View style={[styles.bottomLine, {width}]} />
-              <View style={styles.contentWrapper}>
-                <View style={{height: 55}}>
+              <View style={[styles.flex, styles.contentWrapper]}>
+                <View style={styles.inputRestrictionWrapper}>
                   <Input
                     value={searchText}
                     placeholder="Search account"
                     onChangeText={onChangeSearchText}
                   />
                 </View>
-                <ScrollView
-                  style={styles.itemsWrapper}
-                  onTouchEnd={e => {
-                    e.stopPropagation();
-                  }}
-                >
-                  {ownAccountDataItems}
-                </ScrollView>
+                <ScrollView>{ownAccountDataItems}</ScrollView>
               </View>
-            </View>
-          </KeyboardAwareScrollView>
-        </TouchableOpacity>
-      </Modal>
-    </View>
+            </KeyboardAvoidingView>
+          </View>
+        </Pressable>
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  modalView: {
+  flex: {
     flex: 1,
-    height: '85%',
-    borderRadius: 30,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+  },
+  alignCenter: {
+    alignItems: 'center',
+  },
+
+  modalView: {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    paddingVertical: 10,
-    paddingHorizontal: 0,
-    width: '100%',
     backgroundColor: 'white',
-    opacity: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    borderRadius: 30,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    height: '85%',
+    paddingTop: 10,
+    width: '100%',
   },
-  modalBackground: {
+  background: {
     backgroundColor: COLORS.neutral500opaque,
-    flex: 1,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  itemsWrapper: {},
+
   contentWrapper: {
-    flex: 1,
-    paddingVertical: 24,
     paddingHorizontal: 16,
+    paddingVertical: 24,
+  },
+
+  inputRestrictionWrapper: {
+    height: 55,
   },
   text: {
-    fontWeight: '100',
     color: COLORS.warning500,
+    fontWeight: '100',
     marginTop: 27,
   },
   bottomLine: {
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: COLORS.neutral200,
-    alignItems: 'center',
     paddingTop: 15,
   },
 });

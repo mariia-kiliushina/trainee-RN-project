@@ -26,7 +26,6 @@ export const InputSearch = ({
       placeholder="Search"
       placeholderTextColor={COLORS.neutral100}
       inputStyle={styles.inputStyle}
-      selected
       {...props}
     >
       <Pressable disabled={!editable} hitSlop={30}>

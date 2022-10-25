@@ -1,10 +1,8 @@
-import {useFormikContext} from 'formik';
 import React from 'react';
 
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Bank, IconsType, User} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
-import {InitialValues} from 'src/screens/Transaction';
 import {Typography} from '../Typography';
 
 export type SelectItemProps = {
@@ -15,7 +13,6 @@ export type SelectItemProps = {
 };
 
 export const SelectItem = ({
-  fieldName,
   iconName,
   name,
   accountNumber,
@@ -25,14 +22,8 @@ export const SelectItem = ({
     bank: Bank,
   };
 
-  // let setFieldValue = (fieldname: string, accountnumber: string) => {
-  //   `${fieldname} was changed to ${accountnumber}`;
-  // };
-
-  const {setFieldValue} = useFormikContext<InitialValues>();
-
   const onPress = () => {
-    setFieldValue(fieldName, accountNumber);
+    return;
   };
   const Icon = iconName ? icons[iconName] : null;
   return (
