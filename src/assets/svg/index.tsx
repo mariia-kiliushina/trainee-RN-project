@@ -8,6 +8,7 @@ export {default as Rectangle} from './rectangle.svg';
 export {default as Pen} from './pen.svg';
 export {default as Cross} from './cross.svg';
 export {default as Arrow} from './arrow.svg';
+export {default as ArrowDown} from './arrow-down.svg';
 export {default as UserIcon} from './user.svg';
 export {default as HomeIcon} from './home.svg';
 export {default as BudgetIcon} from './pie-chart.svg';

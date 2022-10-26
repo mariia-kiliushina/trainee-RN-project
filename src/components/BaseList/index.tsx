@@ -12,7 +12,7 @@ export function BaseList<Option>({options, renderItem}: BaseListProps<Option>) {
       style={styles.content}
       data={options}
       renderItem={renderItem}
-      keyExtractor={item => item.accountNumber}
+      keyExtractor={(item, index) => index.toString()}
     />
   );
 }
