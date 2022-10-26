@@ -1,42 +1,46 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
-import {COLORS} from 'src/constants/colors';
+import {ListRenderItem, Pressable, StyleSheet, View} from 'react-native';
 import {Input, InputProps} from 'components/Input';
-// import {InputProps} from 'components/Input';
+import {useNavigation} from '@react-navigation/native';
+import {BaseList} from 'components/BaseList';
+import {RootStackParamList} from 'src/navigation/stack';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import {ArrowDown} from 'assets/svg/index';
 
-type ClickableInputProps = InputProps & {
-  onPress: () => void;
+type ClickableInputProps<Option> = InputProps & {
+  options: Option[];
+  renderItem: ListRenderItem<Option>;
 };
 
-export const InputClickable = ({
+export type BottomModalScreenNavigationProp =
+  StackNavigationProp<RootStackParamList>;
+
+export function InputClickable<Option>({
   label,
-  errorText,
-  inputStyle,
-  labelStyle,
-  children,
-  onPress,
+  options,
+  renderItem,
   ...props
-}: ClickableInputProps) => {
+}: ClickableInputProps<Option>) {
+  const navigation = useNavigation<BottomModalScreenNavigationProp>();
+
+  const onPress = () => {
+    navigation.navigate('BottomSheetModal', {
+      children: <BaseList options={options} renderItem={renderItem} />,
+    });
+  };
+
   return (
     <Pressable
       style={({pressed}) => [pressed && styles.pressed]}
       onPress={onPress}
     >
       <View pointerEvents="none" style={styles.main}>
-        <Input
-          shadow={false}
-          label={label}
-          errorText={errorText}
-          inputStyle={[styles.inputStyle, inputStyle]}
-          labelStyle={[styles.labelStyle, labelStyle]}
-          {...props}
-        >
-          {children}
-        </Input>
+        <Input label={label} {...props} />
+        <ArrowDown style={styles.arrowButon} />
       </View>
     </Pressable>
   );
-};
+}
 
 const styles = StyleSheet.create({
   main: {
@@ -45,12 +49,11 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
-
-  inputStyle: {
-    color: COLORS.neutral900,
-  },
-
-  labelStyle: {
-    color: COLORS.neutral400,
+  arrowButon: {
+    position: 'absolute',
+    top: 47,
+    right: 12,
+    height: 20,
+    width: 20,
   },
 });

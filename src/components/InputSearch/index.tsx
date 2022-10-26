@@ -2,8 +2,7 @@ import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Clocks} from 'assets/svg';
-import {InputProps} from 'components/Input';
-import {InputClickable} from '../InputClickable';
+import {Input, InputProps} from 'components/Input';
 
 type PasswordInputProps = InputProps & {
   areSymbolsVisible?: boolean;
@@ -18,8 +17,7 @@ export const InputSearch = ({
   const iconColor = editable ? COLORS.neutral500 : COLORS.neutral300;
 
   return (
-    <InputClickable
-      onPress={() => {}}
+    <Input
       onBlur={() => {}}
       value={value}
       errorText={errorText}
@@ -31,7 +29,7 @@ export const InputSearch = ({
       <Pressable disabled={!editable} hitSlop={30}>
         <Clocks height={14} width={14} color={iconColor} style={styles.icon} />
       </Pressable>
-    </InputClickable>
+    </Input>
   );
 };
 

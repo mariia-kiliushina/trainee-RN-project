@@ -30,12 +30,14 @@ export const InputPassword = ({
       errorText={errorText}
       autoCapitalize="none"
       inputStyle={styles.inputStyle}
-      {...props}>
+      {...props}
+    >
       <Pressable
         disabled={!editable}
         style={styles.buttonHide}
         hitSlop={30}
-        onPress={changeSymbolsVisibility}>
+        onPress={changeSymbolsVisibility}
+      >
         {areSymbolsHidden ? (
           <HideEye width={14} color={iconColor} />
         ) : (

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// import React, {ReactComponentElement} from 'react';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
@@ -8,7 +8,7 @@ import {BottomSheetModal} from 'screens/BottomSheetModal';
 export type RootStackParamList = {
   AddRecord: undefined;
   Main: undefined;
-  BottomSheetModal: undefined;
+  BottomSheetModal: {children: React.ReactNode};
 };
 
 export const ScreenNavigation = () => {
