@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
@@ -19,11 +20,11 @@ export const BottomSheetModal = ({navigation, route}: Props) => {
 
   return (
     <TouchableOpacity style={[styles.flex, styles.background]}>
-      <TouchableOpacity
+      <Pressable
+        style={styles.flex}
         onPress={() => {
           navigation.navigate('Main');
         }}
-        style={styles.flex}
       >
         <View onStartShouldSetResponder={_ => true} style={styles.modalView}>
           <View style={styles.alignCenter}>
@@ -36,7 +37,7 @@ export const BottomSheetModal = ({navigation, route}: Props) => {
             {children}
           </View>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </TouchableOpacity>
   );
 };

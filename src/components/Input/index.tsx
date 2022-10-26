@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 import {
   StyleSheet,
@@ -9,7 +8,10 @@ import {
   TextInputProps,
   View,
   Platform,
+  Pressable,
 } from 'react-native';
+import {ArrowDown, HideEye, Clocks, IconsType} from 'src/assets/svg';
+import {COLORS} from 'src/constants/colors';
 
 export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   label?: string;
@@ -21,21 +23,30 @@ export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   containerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
   labelStyle?: StyleProp<TextStyle>;
-  shadow?: boolean;
+  iconStyle?: StyleProp<TextStyle>;
+  iconName?: 'arrow-down' | 'clocks' | 'hide-eye';
+  iconColor?: string;
+  onIconPress?: () => void;
+  onPress?: () => void;
+  pressable?: boolean;
 };
 
 export const Input = ({
   label,
   errorText,
-  children,
   validation,
   containerStyle,
   inputStyle,
   onBlur,
   labelStyle,
   onChangeText,
+  onPress,
   editable = true,
-  shadow = true,
+  iconName,
+  onIconPress,
+  iconColor,
+  iconStyle,
+  pressable = false,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -60,10 +71,171 @@ export const Input = ({
       : onChangeText(inputValue);
   };
 
+  const icons: IconsType = {
+    'arrow-down': ArrowDown,
+    clocks: Clocks,
+    'hide-eye': HideEye,
+  };
+
+  const Icon = iconName ? icons[iconName] : null;
+
+  // const WrapperComponent = () => {
+  //   if (pressable) {
+  //     return (
+  //       <Pressable
+  //         style={({pressed}) => [pressed && styles.pressed]}
+  //         onPress={() => {
+  //           console.log('666666666');
+  //           onPress;
+  //         }}
+  //       >
+  //         <TextInput
+  //           style={flattenStyle}
+  //           onChangeText={onChange}
+  //           placeholderTextColor={COLORS.neutral300}
+  //           onFocus={() => {
+  //             setIsFocused(true);
+  //           }}
+  //           onBlur={e => {
+  //             setIsFocused(false);
+  //             if (onBlur) {
+  //               onBlur(e);
+  //             }
+  //           }}
+  //           {...props}
+  //         />
+  //         <Pressable
+  //           disabled={!editable}
+  //           style={styles.iconPressable}
+  //           hitSlop={30}
+  //           onPress={onIconPress}
+  //         >
+  //           {Icon && (
+  //             <Icon
+  //               color={iconColor}
+  //               style={iconStyle}
+  //               height={16}
+  //               width={16}
+  //             />
+  //           )}
+  //         </Pressable>
+  //       </Pressable>
+  //     );
+  //   } else {
+  //     return (
+  //       <View style={[editable && styles.shadow, styles.wrapper]}>
+  //         <TextInput
+  //           style={flattenStyle}
+  //           onChangeText={onChange}
+  //           placeholderTextColor={COLORS.neutral300}
+  //           onFocus={() => {
+  //             setIsFocused(true);
+  //           }}
+  //           onBlur={e => {
+  //             setIsFocused(false);
+  //             if (onBlur) {
+  //               onBlur(e);
+  //             }
+  //           }}
+  //           {...props}
+  //         />
+  //         <Pressable
+  //           disabled={!editable}
+  //           style={styles.iconPressable}
+  //           hitSlop={30}
+  //           onPress={onIconPress}
+  //         >
+  //           {Icon && (
+  //             <Icon
+  //               color={iconColor}
+  //               style={iconStyle}
+  //               height={16}
+  //               width={16}
+  //             />
+  //           )}
+  //         </Pressable>
+  //       </View>
+  //     );
+  //   }
+  // };
+
   return (
     <View style={[styles.containerStyle, containerStyle]}>
       {label && <Typography textStyle={labelTextStyle}>{label}</Typography>}
-      <View style={[editable && shadow && styles.shadow, styles.wrapper]}>
+      {!pressable && (
+        <View style={[editable && styles.shadow, styles.wrapper]}>
+          <TextInput
+            style={flattenStyle}
+            onChangeText={onChange}
+            placeholderTextColor={COLORS.neutral300}
+            onFocus={() => {
+              setIsFocused(true);
+            }}
+            onBlur={e => {
+              setIsFocused(false);
+              if (onBlur) {
+                onBlur(e);
+              }
+            }}
+            {...props}
+          />
+          <Pressable
+            disabled={!editable}
+            style={styles.iconPressable}
+            hitSlop={30}
+            onPress={onIconPress}
+          >
+            {Icon && (
+              <Icon
+                color={iconColor}
+                style={iconStyle}
+                height={16}
+                width={16}
+              />
+            )}
+          </Pressable>
+        </View>
+      )}
+      {pressable && (
+        <Pressable
+          style={({pressed}) => [pressed && styles.pressed]}
+          onPress={onPress}
+        >
+          <View pointerEvents="none" style={{flex: 1}}>
+            <TextInput
+              style={flattenStyle}
+              onChangeText={onChange}
+              placeholderTextColor={COLORS.neutral300}
+              onFocus={() => {
+                setIsFocused(true);
+              }}
+              onBlur={e => {
+                setIsFocused(false);
+                if (onBlur) {
+                  onBlur(e);
+                }
+              }}
+              {...props}
+            />
+          </View>
+          <Pressable
+            disabled={!editable}
+            style={styles.iconPressable}
+            hitSlop={30}
+            onPress={onIconPress}
+          >
+            {Icon && (
+              <Icon
+                color={iconColor}
+                style={iconStyle}
+                height={16}
+                width={16}
+              />
+            )}
+          </Pressable>
+        </Pressable>
+      )}
+      {/* <View style={[editable && styles.shadow, styles.wrapper]}>
         <TextInput
           style={flattenStyle}
           onChangeText={onChange}
@@ -77,11 +249,20 @@ export const Input = ({
               onBlur(e);
             }
           }}
-          editable={editable}
           {...props}
         />
-      </View>
-      {children}
+        <Pressable
+          disabled={!editable}
+          style={styles.iconPressable}
+          hitSlop={30}
+          onPress={onIconPress}
+        >
+          {Icon && (
+            <Icon color={iconColor} style={iconStyle} height={16} width={16} />
+          )}
+        </Pressable>
+      </View> */}
+
       <Typography textStyle={styles.errorText}>
         {editable && errorText}
       </Typography>
@@ -90,6 +271,17 @@ export const Input = ({
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.7,
+  },
+  iconPressable: {
+    position: 'absolute',
+    top: 13,
+    right: 13,
+    height: 14,
+    width: 14,
+    justifyContent: 'center',
+  },
   containerStyle: {
     flex: 1,
   },

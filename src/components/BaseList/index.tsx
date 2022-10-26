@@ -1,18 +1,30 @@
 import React from 'react';
-import {FlatList, ListRenderItem, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  FlatListProps,
+  ListRenderItem,
+  StyleSheet,
+} from 'react-native';
 
-export type BaseListProps<Option> = {
+export type BaseListProps<Option> = Omit<FlatListProps<Option>, 'data'> & {
   options: Option[];
   renderItem: ListRenderItem<Option>;
+  keyExtractor: (item: Option, index: number) => string;
 };
 
-export function BaseList<Option>({options, renderItem}: BaseListProps<Option>) {
+export function BaseList<Option>({
+  options,
+  renderItem,
+  keyExtractor,
+  ...props
+}: BaseListProps<Option>) {
   return (
     <FlatList<Option>
       style={styles.content}
       data={options}
       renderItem={renderItem}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={keyExtractor}
+      {...props}
     />
   );
 }

@@ -31,7 +31,7 @@ export const Home = () => {
       <Formik
         initialValues={initialValues}
         validateOnChange={false}
-        validateOnBlur={true}
+        validateOnBlur={false}
         validationSchema={loginValidationSchema}
         onSubmit={values => {
           console.log(values);
