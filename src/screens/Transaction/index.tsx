@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {Container} from 'src/components/Container';
-import {SelectItem} from 'src/components/SelectItem';
+import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
 import {ownAccountData, Account} from './mock';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
@@ -48,12 +48,11 @@ export const Transaction = ({
   const renderItem: ListRenderItem<Account> = ({
     item,
   }: ListRenderItemInfo<Account>) => (
-    <SelectItem
-      fieldName={item.name}
-      iconName="bank"
-      name={item.name}
-      accountNumber={item.accountNumber}
-      onPress={formik.setFieldValue}
+    <SelectAccount
+      value={item}
+      onPress={account => {
+        formik.setFieldValue('fromAccount', account);
+      }}
     />
   );
 
@@ -73,9 +72,7 @@ export const Transaction = ({
     <Container style={styles.flex}>
       <View>
         <Input
-          onChangeText={formik.handleChange('fromAccount')}
-          onBlur={formik.handleBlur('fromAccount')}
-          value={formik.values.fromAccount?.accountNumber || ''}
+          value={formik.values.fromAccount?.accountNumber}
           errorText={formik.errors.fromAccount?.accountNumber}
           placeholder="Select beneficiary"
           label="Label"

@@ -20,12 +20,7 @@ export const BottomSheetModal = ({
 
   return (
     <TouchableOpacity style={[styles.flex, styles.background]}>
-      <Pressable
-        style={styles.flex}
-        onPress={() => {
-          navigation.navigate('Main');
-        }}
-      >
+      <Pressable style={styles.flex} onPress={navigation.goBack}>
         <View onStartShouldSetResponder={_ => true} style={styles.modalView}>
           <View style={styles.alignCenter}>
             <Rectangle />

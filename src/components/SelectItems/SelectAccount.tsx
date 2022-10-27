@@ -1,54 +1,33 @@
-import {FormikErrors} from 'formik';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-
 import {Pressable, StyleSheet, View} from 'react-native';
-import {Bank, IconsType, User} from 'src/assets/svg';
+import {Bank} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
-import {InitialValues} from 'src/screens/Transaction';
 import {Typography} from '../Typography';
 
-export type SelectItemProps = {
-  fieldName: string;
-  iconName: 'user' | 'bank';
-  name: string;
-  accountNumber: string;
-  onPress: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined,
-  ) => Promise<void> | Promise<FormikErrors<InitialValues>>;
+export type SelectAccountProps = {
+  value: any;
+  onPress: (value: any) => void;
 };
 
-export const SelectItem = ({
-  iconName,
-  name,
-  accountNumber,
-  onPress,
-}: SelectItemProps) => {
-  const icons: IconsType = {
-    user: User,
-    bank: Bank,
-  };
-
-  const Icon = iconName ? icons[iconName] : null;
+export const SelectAccount = ({value, onPress}: SelectAccountProps) => {
+  const navigation = useNavigation();
 
   return (
     <Pressable
       onPress={() => {
-        onPress('fromAccount', {
-          name,
-          accountNumber,
-        });
+        navigation.goBack();
+        onPress(value);
       }}
       style={({pressed}) => [pressed && styles.pressed]}
     >
       <View style={styles.wrapper}>
-        {Icon && <Icon height={36} width={36} style={styles.icon} />}
+        <Bank height={36} width={36} style={styles.icon} />
         <Typography color={COLORS.neutral900} textStyle={styles.text}>
-          {name}
+          {value.name}
         </Typography>
         <Typography textStyle={styles.text} color={COLORS.neutral400}>
-          {accountNumber}
+          {value.accountNumber}
         </Typography>
       </View>
       <View style={[styles.bottomLine]} />

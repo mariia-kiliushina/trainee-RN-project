@@ -18,7 +18,7 @@ export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   iconName?: 'arrow-down' | 'clocks' | 'hide-eye';
   iconColor?: string;
   isPressable?: boolean;
-  onChangeText: (e: string) => void;
+  onChangeText?: (value: string) => void;
   onPress?: () => void;
   onIconPress?: () => void;
 };
@@ -48,6 +48,14 @@ export const Input = ({
   const [isFocused, setIsFocused] = useState(false);
 
   const Icon = iconName ? icons[iconName] : null;
+
+  const flattenStyle = StyleSheet.flatten([
+    styles.textInput,
+    Icon && styles.iconPadding,
+    isFocused && styles.focused,
+    editable && Boolean(errorText) && styles.error,
+    !editable && styles.disabled,
+  ]);
 
   const renderPressableInputWrapper = (children: JSX.Element) => {
     return (
@@ -84,14 +92,6 @@ export const Input = ({
       }
     }
   };
-
-  const flattenStyle = StyleSheet.flatten([
-    styles.textInput,
-    Icon && styles.iconPadding,
-    isFocused && styles.focused,
-    editable && Boolean(errorText) && styles.error,
-    !editable && styles.disabled,
-  ]);
 
   return (
     <View style={styles.flex}>
