@@ -5,7 +5,7 @@ import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
 import {SelectItemProps} from './types';
 
-export const SelectAccount = ({value, onPress}: SelectItemProps) => {
+export const SelectProvider = ({value, onPress}: SelectItemProps) => {
   const navigation = useNavigation();
 
   return (
@@ -13,16 +13,21 @@ export const SelectAccount = ({value, onPress}: SelectItemProps) => {
       onPress={() => {
         navigation.goBack();
         onPress(value);
+        console.log('value');
+        console.log(value);
       }}
       style={({pressed}) => [pressed && styles.pressed]}
     >
       <View style={styles.wrapper}>
         <Bank height={36} width={36} style={styles.icon} />
         <Typography color={COLORS.neutral900} textStyle={styles.text}>
-          {value.name}
+          {value.provider}
         </Typography>
         <Typography textStyle={styles.text} color={COLORS.neutral400}>
-          {value.accountNumber}
+          {value.currency}
+        </Typography>
+        <Typography textStyle={styles.text} color={COLORS.neutral400}>
+          {value.amount}
         </Typography>
       </View>
       <View style={[styles.bottomLine]} />

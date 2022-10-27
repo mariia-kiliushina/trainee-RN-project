@@ -55,7 +55,7 @@ export const Transaction = ({
     />
   );
 
-  const onPress = () => {
+  const onInputPress = () => {
     navigation.navigate('BottomSheetModal', {
       children: (
         <BaseList
@@ -75,7 +75,7 @@ export const Transaction = ({
           errorText={formik.errors.fromAccount?.accountNumber}
           placeholder="Select beneficiary"
           label="Label"
-          onPress={onPress}
+          onPress={onInputPress}
           isPressable
           iconName="arrow-down"
           iconColor={COLORS.neutral500}
