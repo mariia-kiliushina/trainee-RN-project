@@ -1,8 +1,10 @@
+import {FormikErrors} from 'formik';
 import React from 'react';
 
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Bank, IconsType, User} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
+import {InitialValues} from 'src/screens/Transaction';
 import {Typography} from '../Typography';
 
 export type SelectItemProps = {
@@ -10,25 +12,34 @@ export type SelectItemProps = {
   iconName: 'user' | 'bank';
   name: string;
   accountNumber: string;
+  onPress: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined,
+  ) => Promise<void> | Promise<FormikErrors<InitialValues>>;
 };
 
 export const SelectItem = ({
   iconName,
   name,
   accountNumber,
+  onPress,
 }: SelectItemProps) => {
   const icons: IconsType = {
     user: User,
     bank: Bank,
   };
 
-  const onPress = () => {
-    return;
-  };
   const Icon = iconName ? icons[iconName] : null;
+
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        onPress('fromAccount', {
+          name,
+          accountNumber,
+        });
+      }}
       style={({pressed}) => [pressed && styles.pressed]}
     >
       <View style={styles.wrapper}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Formik} from 'formik';
+import {useFormik} from 'formik';
 import {
   Button,
   Keyboard,
@@ -16,7 +16,7 @@ import {BaseList} from 'src/components/BaseList';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
 
-type InitialValues = {
+export type InitialValues = {
   fromAccount: Account;
 };
 
@@ -35,6 +35,14 @@ export type BaseListProps<Option> = {
 export const Transaction = ({
   navigation,
 }: HomeTabScreenProps<'Transaction'>) => {
+  const formik = useFormik({
+    initialValues,
+    onSubmit: values => {
+      console.log(JSON.stringify(values));
+      Keyboard.dismiss();
+    },
+  });
+
   const keyExtractor = (item: Account) => item.accountNumber;
 
   const renderItem: ListRenderItem<Account> = ({
@@ -45,6 +53,7 @@ export const Transaction = ({
       iconName="bank"
       name={item.name}
       accountNumber={item.accountNumber}
+      onPress={formik.setFieldValue}
     />
   );
 
@@ -59,43 +68,30 @@ export const Transaction = ({
       ),
     });
   };
+
   return (
-    <Container style={styles.main}>
-      <Formik
-        initialValues={initialValues}
-        validateOnChange={false}
-        validateOnBlur={true}
-        onSubmit={values => {
-          console.log(values);
-          Keyboard.dismiss();
-        }}
-      >
-        {({handleChange, handleSubmit, values, errors, handleBlur}) => (
-          <View>
-            <Input
-              onChangeText={handleChange('toAccount')}
-              onBlur={handleBlur('toAccount')}
-              value={
-                values.fromAccount ? values.fromAccount?.accountNumber : ''
-              }
-              errorText={String(errors.fromAccount)}
-              placeholder="Select beneficiary"
-              label="Label"
-              onPress={onPress}
-              isPressable
-              iconName="arrow-down"
-              iconColor={COLORS.neutral500}
-            />
-            <Button onPress={handleSubmit} title="Proceed" />
-          </View>
-        )}
-      </Formik>
+    <Container style={styles.flex}>
+      <View>
+        <Input
+          onChangeText={formik.handleChange('fromAccount')}
+          onBlur={formik.handleBlur('fromAccount')}
+          value={formik.values.fromAccount?.accountNumber || ''}
+          errorText={formik.errors.fromAccount?.accountNumber}
+          placeholder="Select beneficiary"
+          label="Label"
+          onPress={onPress}
+          isPressable
+          iconName="arrow-down"
+          iconColor={COLORS.neutral500}
+        />
+        <Button onPress={formik.handleSubmit} title="Proceed" />
+      </View>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
+  flex: {
     flex: 1,
   },
 });
