@@ -7,13 +7,7 @@ import {Transaction} from 'src/screens/Transaction';
 import {Home} from 'screens/Home';
 import {ProfileIcon, HomeIcon, BudgetIcon, TransactionIcon} from 'assets/svg';
 import {Alert, BackHandler} from 'react-native';
-
-export type HomeTabsParamList = {
-  Home: undefined;
-  Transaction: undefined;
-  Budget: undefined;
-  Profile: undefined;
-};
+import {HomeTabsParamList} from '../types';
 
 export const Main = () => {
   const Tab = createBottomTabNavigator<HomeTabsParamList>();

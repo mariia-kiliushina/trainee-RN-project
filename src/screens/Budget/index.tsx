@@ -1,15 +1,12 @@
 import React from 'react';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/navigation/stack';
 import {Container} from 'src/components/Container';
 
 import {COLORS} from 'src/constants/colors';
 import {Typography} from 'src/components/Typography';
 import {Pressable, StyleSheet} from 'react-native';
+import {HomeTabScreenProps} from 'src/navigation/types';
 
-export const Budget = ({
-  navigation,
-}: NativeStackScreenProps<RootStackParamList>) => {
+export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
   const onNavigate = () => {
     navigation.navigate('AddRecord');
   };

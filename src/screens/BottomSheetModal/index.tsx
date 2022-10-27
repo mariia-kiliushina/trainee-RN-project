@@ -7,14 +7,14 @@ import {
   View,
 } from 'react-native';
 import {COLORS} from 'constants/colors';
-import {RootStackParamList} from 'src/navigation/stack';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Typography} from 'src/components/Typography';
 import {Rectangle} from 'src/assets/svg';
+import {RootStackScreenProps} from 'src/navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'BottomSheetModal'>;
-
-export const BottomSheetModal = ({navigation, route}: Props) => {
+export const BottomSheetModal = ({
+  navigation,
+  route,
+}: RootStackScreenProps<'BottomSheetModal'>) => {
   const {children} = route.params;
   const {width} = useWindowDimensions();
 
