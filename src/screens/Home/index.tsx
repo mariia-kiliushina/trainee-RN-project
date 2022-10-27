@@ -8,10 +8,7 @@ import {InputPassword} from 'src/components/InputPassword';
 
 import {COLORS} from 'src/constants/colors';
 
-import {validationSchema} from 'src/helpers/validation';
-
-const PASSWORD = 'Password';
-const LOGIN = 'Login';
+import {loginValidationSchema} from 'src/helpers/validation';
 
 type InitialValues = {
   login: string;
@@ -31,16 +28,17 @@ export const Home = () => {
       <Formik
         initialValues={initialValues}
         validateOnChange={false}
-        validateOnBlur={true}
-        validationSchema={validationSchema}
+        validateOnBlur={false}
+        validationSchema={loginValidationSchema}
         onSubmit={values => {
           console.log(values);
           Keyboard.dismiss();
-        }}>
+        }}
+      >
         {({handleChange, handleSubmit, values, errors, handleBlur}) => (
           <View style={styles.main}>
             <Input
-              label={LOGIN}
+              label="Login"
               placeholder="Login"
               onChangeText={handleChange('login')}
               onBlur={handleBlur('login')}
@@ -48,7 +46,7 @@ export const Home = () => {
               errorText={errors.login}
             />
             <InputPassword
-              label={PASSWORD}
+              label="Password"
               placeholder="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
@@ -57,8 +55,8 @@ export const Home = () => {
             />
 
             <InputPassword
-              label={PASSWORD}
-              placeholder="Password"
+              label="Password Confirm"
+              placeholder="Password Confirm"
               onChangeText={handleChange('confirmPassword')}
               onBlur={handleBlur('confirmPassword')}
               value={values.confirmPassword}

@@ -3,9 +3,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from 'constants/colors';
 import {Profile} from 'screens/Profile';
 import {Budget} from 'screens/Budget';
-import {Transaction} from 'screens/Transaction';
+import {Transaction} from 'src/screens/Transaction';
 import {Home} from 'screens/Home';
-import {UserIcon, HomeIcon, BudgetIcon, TransactionIcon} from 'assets/svg';
+import {ProfileIcon, HomeIcon, BudgetIcon, TransactionIcon} from 'assets/svg';
 import {Alert, BackHandler} from 'react-native';
 
 export type HomeTabsParamList = {
@@ -43,7 +43,8 @@ export const Main = () => {
         headerShown: false,
         tabBarActiveTintColor: COLORS.warning500,
         tabBarInactiveTintColor: COLORS.neutral300,
-      }}>
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -62,7 +63,7 @@ export const Main = () => {
       <Tab.Screen
         name="Profile"
         component={Profile}
-        options={{tabBarIcon: UserIcon}}
+        options={{tabBarIcon: ProfileIcon}}
       />
     </Tab.Navigator>
   );

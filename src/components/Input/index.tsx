@@ -1,79 +1,126 @@
-import React, {ChangeEvent, useState} from 'react';
-import {COLORS} from 'src/constants/colors';
+import React, {useState} from 'react';
 import {Typography} from '../Typography';
 import {
   StyleSheet,
-  TextStyle,
   TextInput,
-  StyleProp,
   TextInputProps,
   View,
   Platform,
+  Pressable,
 } from 'react-native';
+import {ArrowDown, HideEye, Clocks, IconsType} from 'src/assets/svg';
+import {COLORS} from 'src/constants/colors';
+import {ConditionalWrapper} from 'src/helpers/conditionalWrapper';
 
 export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
-  label: string;
+  label?: string;
   errorText?: string | false;
-  children?: React.ReactNode;
-  validation?: RegExp;
-  onChangeText: (e: string | ChangeEvent<any>) => void;
-  value: string;
-  containerStyle?: StyleProp<TextStyle>;
-  inputStyle?: StyleProp<TextStyle>;
+  iconName?: 'arrow-down' | 'clocks' | 'hide-eye';
+  iconColor?: string;
+  isPressable?: boolean;
+  onChangeText: (e: string) => void;
+  onPress?: () => void;
+  onIconPress?: () => void;
 };
+
+const icons: IconsType = {
+  'arrow-down': ArrowDown,
+  clocks: Clocks,
+  'hide-eye': HideEye,
+};
+
+const ICON_SIZE = 16;
+const INPUT_PADDING = 12;
 
 export const Input = ({
   label,
   errorText,
-  children,
-  validation,
-  containerStyle,
-  inputStyle,
-  onBlur,
+  iconName,
+  iconColor,
+  isPressable,
   onChangeText,
+  onPress,
+  onIconPress,
+  onBlur,
   editable = true,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const labelTextStyle = [styles.label, !editable && styles.labelDisabled];
+  const Icon = iconName ? icons[iconName] : null;
+
+  const renderPressableInputWrapper = (children: JSX.Element) => {
+    return (
+      <Pressable
+        style={({pressed}) => [pressed && styles.pressed]}
+        onPress={onPress}
+      >
+        <View pointerEvents="none" style={styles.flex}>
+          {children}
+        </View>
+      </Pressable>
+    );
+  };
+
+  const renderIcon = () => {
+    if (Icon) {
+      if (!isPressable) {
+        return (
+          <Pressable
+            disabled={!editable}
+            style={styles.iconPressable}
+            hitSlop={30}
+            onPress={onIconPress}
+          >
+            <Icon color={iconColor} height={ICON_SIZE} width={ICON_SIZE} />
+          </Pressable>
+        );
+      } else {
+        return (
+          <View style={styles.iconPressable}>
+            <Icon color={iconColor} height={ICON_SIZE} width={ICON_SIZE} />
+          </View>
+        );
+      }
+    }
+  };
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
+    Icon && styles.iconPadding,
     isFocused && styles.focused,
-    inputStyle,
     editable && Boolean(errorText) && styles.error,
     !editable && styles.disabled,
   ]);
 
-  const onChange = (inputValue: string) => {
-    validation
-      ? onChangeText(inputValue.replace(validation, ''))
-      : onChangeText(inputValue);
-  };
-
   return (
-    <View style={[styles.containerStyle, containerStyle]}>
-      <Typography textStyle={labelTextStyle}>{label}</Typography>
-      <View style={[editable && styles.shadow, styles.wrapper]}>
-        <TextInput
-          style={flattenStyle}
-          onChangeText={onChange}
-          placeholderTextColor={COLORS.neutral300}
-          onFocus={() => {
-            setIsFocused(true);
-          }}
-          onBlur={e => {
-            setIsFocused(false);
-            if (onBlur) {
-              onBlur(e);
-            }
-          }}
-          editable={editable}
-          {...props}
-        />
+    <View style={styles.flex}>
+      {label && <Typography textStyle={styles.label}>{label}</Typography>}
+      <View style={[styles.wrapper, editable && styles.shadow]}>
+        <ConditionalWrapper
+          condition={isPressable}
+          wrapper={(children: JSX.Element) =>
+            renderPressableInputWrapper(children)
+          }
+        >
+          <>
+            <TextInput
+              style={flattenStyle}
+              placeholderTextColor={COLORS.neutral300}
+              onChangeText={onChangeText}
+              onFocus={() => {
+                setIsFocused(true);
+              }}
+              onBlur={e => {
+                setIsFocused(false);
+                onBlur?.(e);
+              }}
+              {...props}
+            />
+            {renderIcon()}
+          </>
+        </ConditionalWrapper>
       </View>
-      {children}
       <Typography textStyle={styles.errorText}>
         {editable && errorText}
       </Typography>
@@ -82,8 +129,15 @@ export const Input = ({
 };
 
 const styles = StyleSheet.create({
-  containerStyle: {
+  flex: {
     flex: 1,
+  },
+
+  iconPressable: {
+    position: 'absolute',
+    right: INPUT_PADDING,
+    height: '100%',
+    justifyContent: 'center',
   },
   wrapper: {
     borderWidth: 1,
@@ -94,9 +148,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: COLORS.neutral100,
-    paddingHorizontal: 12,
+    paddingHorizontal: INPUT_PADDING,
     paddingVertical: 10,
     backgroundColor: COLORS.base000,
+  },
+  iconPadding: {
+    paddingRight: ICON_SIZE + INPUT_PADDING + 5,
   },
   focused: {
     borderColor: COLORS.warning300,
@@ -104,9 +161,6 @@ const styles = StyleSheet.create({
   label: {
     marginVertical: 8,
     color: COLORS.neutral900,
-  },
-  labelDisabled: {
-    color: COLORS.neutral300,
   },
   shadow: {
     ...Platform.select({
@@ -126,17 +180,18 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  /*eslint-disable react-native/no-unused-styles */
   error: {
     borderColor: COLORS.desctructive600,
   },
   disabled: {
     borderColor: COLORS.neutral300,
   },
-  /*eslint-enable react-native/no-unused-styles */
   errorText: {
     height: 20,
     color: COLORS.desctructive500,
-    marginVertical: 8,
+    marginTop: 8,
+  },
+  pressed: {
+    opacity: 0.9,
   },
 });

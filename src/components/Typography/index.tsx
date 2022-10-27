@@ -12,19 +12,25 @@ import {
 import {COLORS} from 'constants/colors';
 import {capitalizeFirstLetter} from 'utils/formatters';
 
-type TFontVariant = '14' | '18';
+type TFontVariant = '14' | '16' | '18';
 type FontType = 'regular' | 'bold';
 
 const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
   StyleSheet.create({
+    /*eslint-disable react-native/no-unused-styles */
     14: {
       fontSize: 14,
       lineHeight: 18,
+    },
+    16: {
+      fontSize: 16,
+      lineHeight: 20,
     },
     18: {
       fontSize: 18,
       lineHeight: 22,
     },
+    /*eslint-enable react-native/no-unused-styles */
   });
 
 type Props = TextProps & {
@@ -53,7 +59,8 @@ export const Typography = ({
     <View style={style}>
       <Text
         style={[fontVariant, {fontFamily, color}, textStyle]}
-        {...restProps}>
+        {...restProps}
+      >
         {children}
       </Text>
     </View>
