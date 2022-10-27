@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
 import {Input, InputProps} from 'components/Input';
 import {COLORS} from 'src/constants/colors';
 
@@ -29,7 +28,6 @@ export const InputPassword = ({
       placeholder="Enter your password"
       errorText={errorText}
       autoCapitalize="none"
-      inputStyle={styles.inputStyle}
       onBlur={changeSymbolsVisibility}
       iconName={iconName}
       onIconPress={changeSymbolsVisibility}
@@ -38,9 +36,3 @@ export const InputPassword = ({
     />
   );
 };
-
-const styles = StyleSheet.create({
-  inputStyle: {
-    paddingRight: 30,
-  },
-});

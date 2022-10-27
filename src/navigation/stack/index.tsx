@@ -3,12 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
-
-export type RootStackParamList = {
-  AddRecord: undefined;
-  Main: undefined;
-  BottomSheetModal: {children: React.ReactNode};
-};
+import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();

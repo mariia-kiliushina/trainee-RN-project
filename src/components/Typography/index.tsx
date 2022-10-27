@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {
   Text,
   TextProps,
@@ -34,7 +34,7 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
   });
 
 type Props = TextProps & {
-  children: ReactNode;
+  children: any;
   variant?: TFontVariant;
   color?: ColorValue;
   fontType?: FontType;

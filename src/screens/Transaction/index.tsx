@@ -8,13 +8,13 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {Container} from 'src/components/Container';
 import {SelectItem} from 'src/components/SelectItem';
 import {ownAccountData, Account} from './mock';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {COLORS} from 'src/constants/colors';
+import {HomeTabScreenProps} from 'src/navigation/types';
 
 type InitialValues = {
   fromAccount: Account;
@@ -32,7 +32,11 @@ export type BaseListProps<Option> = {
   renderItem: ListRenderItem<Option>;
 };
 
-export const Transaction = () => {
+export const Transaction = ({
+  navigation,
+}: HomeTabScreenProps<'Transaction'>) => {
+  const keyExtractor = (item: Account) => item.accountNumber;
+
   const renderItem: ListRenderItem<Account> = ({
     item,
   }: ListRenderItemInfo<Account>) => (
@@ -43,8 +47,6 @@ export const Transaction = () => {
       accountNumber={item.accountNumber}
     />
   );
-
-  const navigation = useNavigation();
 
   const onPress = () => {
     navigation.navigate('BottomSheetModal', {
@@ -57,9 +59,6 @@ export const Transaction = () => {
       ),
     });
   };
-
-  const keyExtractor = (item: Account) => item.accountNumber;
-
   return (
     <Container style={styles.main}>
       <Formik
@@ -79,7 +78,7 @@ export const Transaction = () => {
               value={
                 values.fromAccount ? values.fromAccount?.accountNumber : ''
               }
-              errorText={errors.fromAccount}
+              errorText={String(errors.fromAccount)}
               placeholder="Select beneficiary"
               label="Label"
               onPress={onPress}
