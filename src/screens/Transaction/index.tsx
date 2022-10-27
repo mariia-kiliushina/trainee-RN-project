@@ -8,22 +8,17 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {Container} from 'src/components/Container';
 import {SelectItem} from 'src/components/SelectItem';
 import {ownAccountData, Account} from './mock';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
-import {RootStackParamList} from 'src/navigation/stack';
-import type {StackNavigationProp} from '@react-navigation/stack';
 import {COLORS} from 'src/constants/colors';
-import {useNavigation} from '@react-navigation/native';
 
 type InitialValues = {
-  fromAccount?: Account;
+  fromAccount: Account;
 };
-
-export type BottomModalScreenNavigationProp =
-  StackNavigationProp<RootStackParamList>;
 
 const initialValues: InitialValues = {
   fromAccount: {
@@ -49,7 +44,7 @@ export const Transaction = () => {
     />
   );
 
-  const navigation = useNavigation<BottomModalScreenNavigationProp>();
+  const navigation = useNavigation();
 
   const onPress = () => {
     navigation.navigate('BottomSheetModal', {
@@ -64,6 +59,7 @@ export const Transaction = () => {
   };
 
   const keyExtractor = (item: Account) => item.accountNumber;
+
   return (
     <Container style={styles.main}>
       <Formik
@@ -87,24 +83,10 @@ export const Transaction = () => {
               placeholder="Select beneficiary"
               label="Label"
               onPress={onPress}
-              onIconPress={onPress}
-              pressable={true}
+              isPressable
               iconName="arrow-down"
               iconColor={COLORS.neutral500}
             />
-            {/* <InputClickable
-              onChangeText={handleChange('toAccount')}
-              onBlur={handleBlur('toAccount')}
-              value={
-                values.fromAccount ? values.fromAccount?.accountNumber : ''
-              }
-              errorText={errors.fromAccount}
-              placeholder="Select beneficiary"
-              label="Label"
-              options={ownAccountData}
-              renderItem={renderItem}
-              keyExtractor={keyExtractor}
-            /> */}
             <Button onPress={handleSubmit} title="Proceed" />
           </View>
         )}

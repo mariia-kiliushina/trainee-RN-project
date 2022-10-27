@@ -2,9 +2,7 @@ import React, {useState} from 'react';
 import {Typography} from '../Typography';
 import {
   StyleSheet,
-  TextStyle,
   TextInput,
-  StyleProp,
   TextInputProps,
   View,
   Platform,
@@ -16,253 +14,95 @@ import {COLORS} from 'src/constants/colors';
 export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   label?: string;
   errorText?: string | false;
-  children?: React.ReactNode;
-  validation?: RegExp;
-  onChangeText: (e: string) => void;
-  value: string;
-  containerStyle?: StyleProp<TextStyle>;
-  inputStyle?: StyleProp<TextStyle>;
-  labelStyle?: StyleProp<TextStyle>;
-  iconStyle?: StyleProp<TextStyle>;
   iconName?: 'arrow-down' | 'clocks' | 'hide-eye';
   iconColor?: string;
-  onIconPress?: () => void;
+  isPressable?: boolean;
+  onChangeText: (e: string) => void;
   onPress?: () => void;
-  pressable?: boolean;
+  onIconPress?: () => void;
 };
+
+const icons: IconsType = {
+  'arrow-down': ArrowDown,
+  clocks: Clocks,
+  'hide-eye': HideEye,
+};
+
+const ICON_SIZE = 16;
+const INPUT_PADDING = 12;
 
 export const Input = ({
   label,
   errorText,
-  validation,
-  containerStyle,
-  inputStyle,
-  onBlur,
-  labelStyle,
+  iconName,
+  iconColor,
+  isPressable,
   onChangeText,
   onPress,
-  editable = true,
-  iconName,
   onIconPress,
-  iconColor,
-  iconStyle,
-  pressable = false,
+  onBlur,
+  editable = true,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const labelTextStyle = [
-    styles.label,
-    labelStyle,
-    !editable && styles.labelDisabled,
-  ];
+  const Icon = iconName ? icons[iconName] : null;
 
   const flattenStyle = StyleSheet.flatten([
     styles.textInput,
+    Icon && styles.iconPadding,
     isFocused && styles.focused,
-    inputStyle,
     editable && Boolean(errorText) && styles.error,
     !editable && styles.disabled,
   ]);
 
-  const onChange = (inputValue: string) => {
-    validation
-      ? onChangeText(inputValue.replace(validation, ''))
-      : onChangeText(inputValue);
+  const renderIcon = () => {
+    if (Icon) {
+      if (!isPressable) {
+        return (
+          <Pressable
+            disabled={!editable}
+            style={styles.iconPressable}
+            hitSlop={30}
+            onPress={onIconPress}
+          >
+            <Icon color={iconColor} height={ICON_SIZE} width={ICON_SIZE} />
+          </Pressable>
+        );
+      } else {
+        return (
+          <View style={styles.iconPressable}>
+            <Icon color={iconColor} height={ICON_SIZE} width={ICON_SIZE} />
+          </View>
+        );
+      }
+    }
   };
-
-  const icons: IconsType = {
-    'arrow-down': ArrowDown,
-    clocks: Clocks,
-    'hide-eye': HideEye,
-  };
-
-  const Icon = iconName ? icons[iconName] : null;
-
-  // const WrapperComponent = () => {
-  //   if (pressable) {
-  //     return (
-  //       <Pressable
-  //         style={({pressed}) => [pressed && styles.pressed]}
-  //         onPress={() => {
-  //           console.log('666666666');
-  //           onPress;
-  //         }}
-  //       >
-  //         <TextInput
-  //           style={flattenStyle}
-  //           onChangeText={onChange}
-  //           placeholderTextColor={COLORS.neutral300}
-  //           onFocus={() => {
-  //             setIsFocused(true);
-  //           }}
-  //           onBlur={e => {
-  //             setIsFocused(false);
-  //             if (onBlur) {
-  //               onBlur(e);
-  //             }
-  //           }}
-  //           {...props}
-  //         />
-  //         <Pressable
-  //           disabled={!editable}
-  //           style={styles.iconPressable}
-  //           hitSlop={30}
-  //           onPress={onIconPress}
-  //         >
-  //           {Icon && (
-  //             <Icon
-  //               color={iconColor}
-  //               style={iconStyle}
-  //               height={16}
-  //               width={16}
-  //             />
-  //           )}
-  //         </Pressable>
-  //       </Pressable>
-  //     );
-  //   } else {
-  //     return (
-  //       <View style={[editable && styles.shadow, styles.wrapper]}>
-  //         <TextInput
-  //           style={flattenStyle}
-  //           onChangeText={onChange}
-  //           placeholderTextColor={COLORS.neutral300}
-  //           onFocus={() => {
-  //             setIsFocused(true);
-  //           }}
-  //           onBlur={e => {
-  //             setIsFocused(false);
-  //             if (onBlur) {
-  //               onBlur(e);
-  //             }
-  //           }}
-  //           {...props}
-  //         />
-  //         <Pressable
-  //           disabled={!editable}
-  //           style={styles.iconPressable}
-  //           hitSlop={30}
-  //           onPress={onIconPress}
-  //         >
-  //           {Icon && (
-  //             <Icon
-  //               color={iconColor}
-  //               style={iconStyle}
-  //               height={16}
-  //               width={16}
-  //             />
-  //           )}
-  //         </Pressable>
-  //       </View>
-  //     );
-  //   }
-  // };
 
   return (
-    <View style={[styles.containerStyle, containerStyle]}>
-      {label && <Typography textStyle={labelTextStyle}>{label}</Typography>}
-      {!pressable && (
-        <View style={[editable && styles.shadow, styles.wrapper]}>
-          <TextInput
-            style={flattenStyle}
-            onChangeText={onChange}
-            placeholderTextColor={COLORS.neutral300}
-            onFocus={() => {
-              setIsFocused(true);
-            }}
-            onBlur={e => {
-              setIsFocused(false);
-              if (onBlur) {
-                onBlur(e);
-              }
-            }}
-            {...props}
-          />
-          <Pressable
-            disabled={!editable}
-            style={styles.iconPressable}
-            hitSlop={30}
-            onPress={onIconPress}
-          >
-            {Icon && (
-              <Icon
-                color={iconColor}
-                style={iconStyle}
-                height={16}
-                width={16}
-              />
-            )}
-          </Pressable>
-        </View>
-      )}
-      {pressable && (
-        <Pressable
-          style={({pressed}) => [pressed && styles.pressed]}
-          onPress={onPress}
-        >
-          <View pointerEvents="none" style={{flex: 1}}>
-            <TextInput
-              style={flattenStyle}
-              onChangeText={onChange}
-              placeholderTextColor={COLORS.neutral300}
-              onFocus={() => {
-                setIsFocused(true);
-              }}
-              onBlur={e => {
-                setIsFocused(false);
-                if (onBlur) {
-                  onBlur(e);
-                }
-              }}
-              {...props}
-            />
-          </View>
-          <Pressable
-            disabled={!editable}
-            style={styles.iconPressable}
-            hitSlop={30}
-            onPress={onIconPress}
-          >
-            {Icon && (
-              <Icon
-                color={iconColor}
-                style={iconStyle}
-                height={16}
-                width={16}
-              />
-            )}
-          </Pressable>
-        </Pressable>
-      )}
-      {/* <View style={[editable && styles.shadow, styles.wrapper]}>
+    <View style={styles.containerStyle}>
+      {label && <Typography textStyle={styles.label}>{label}</Typography>}
+      {isPressable?
+return(null)
+      :
+return(null)
+      }
+      <View style={[styles.wrapper, editable && styles.shadow]}>
         <TextInput
           style={flattenStyle}
-          onChangeText={onChange}
           placeholderTextColor={COLORS.neutral300}
+          onChangeText={onChangeText}
           onFocus={() => {
             setIsFocused(true);
           }}
           onBlur={e => {
             setIsFocused(false);
-            if (onBlur) {
-              onBlur(e);
-            }
+            onBlur?.(e);
           }}
           {...props}
         />
-        <Pressable
-          disabled={!editable}
-          style={styles.iconPressable}
-          hitSlop={30}
-          onPress={onIconPress}
-        >
-          {Icon && (
-            <Icon color={iconColor} style={iconStyle} height={16} width={16} />
-          )}
-        </Pressable>
-      </View> */}
-
+        {renderIcon()}
+      </View>
       <Typography textStyle={styles.errorText}>
         {editable && errorText}
       </Typography>
@@ -271,19 +111,14 @@ export const Input = ({
 };
 
 const styles = StyleSheet.create({
-  pressed: {
-    opacity: 0.7,
+  containerStyle: {
+    flex: 1,
   },
   iconPressable: {
     position: 'absolute',
-    top: 13,
-    right: 13,
-    height: 14,
-    width: 14,
     justifyContent: 'center',
-  },
-  containerStyle: {
-    flex: 1,
+    height: '100%',
+    right: INPUT_PADDING,
   },
   wrapper: {
     borderWidth: 1,
@@ -294,11 +129,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: COLORS.neutral100,
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: INPUT_PADDING,
+    paddingVertical: 10,
     backgroundColor: COLORS.base000,
+  },
+  iconPadding: {
+    paddingRight: ICON_SIZE + INPUT_PADDING + 5,
   },
   focused: {
     borderColor: COLORS.warning300,
@@ -306,9 +142,6 @@ const styles = StyleSheet.create({
   label: {
     marginVertical: 8,
     color: COLORS.neutral900,
-  },
-  labelDisabled: {
-    color: COLORS.neutral300,
   },
   shadow: {
     ...Platform.select({
@@ -328,14 +161,12 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  /*eslint-disable react-native/no-unused-styles */
   error: {
     borderColor: COLORS.desctructive600,
   },
   disabled: {
     borderColor: COLORS.neutral300,
   },
-  /*eslint-enable react-native/no-unused-styles */
   errorText: {
     height: 20,
     color: COLORS.desctructive500,

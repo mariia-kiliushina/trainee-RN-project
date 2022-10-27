@@ -10,9 +10,6 @@ import {COLORS} from 'src/constants/colors';
 
 import {loginValidationSchema} from 'src/helpers/validation';
 
-const PASSWORD = 'Password';
-const LOGIN = 'Login';
-
 type InitialValues = {
   login: string;
   password: string;
@@ -41,7 +38,7 @@ export const Home = () => {
         {({handleChange, handleSubmit, values, errors, handleBlur}) => (
           <View style={styles.main}>
             <Input
-              label={LOGIN}
+              label="Login"
               placeholder="Login"
               onChangeText={handleChange('login')}
               onBlur={handleBlur('login')}
@@ -49,7 +46,7 @@ export const Home = () => {
               errorText={errors.login}
             />
             <InputPassword
-              label={PASSWORD}
+              label="Password"
               placeholder="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
@@ -58,8 +55,8 @@ export const Home = () => {
             />
 
             <InputPassword
-              label={PASSWORD}
-              placeholder="Password"
+              label="Password Confirm"
+              placeholder="Password Confirm"
               onChangeText={handleChange('confirmPassword')}
               onBlur={handleBlur('confirmPassword')}
               value={values.confirmPassword}
