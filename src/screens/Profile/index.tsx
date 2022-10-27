@@ -1,4 +1,3 @@
-import React from 'react';
 import {StyleSheet} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';

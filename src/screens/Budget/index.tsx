@@ -1,4 +1,3 @@
-import React from 'react';
 import {Container} from 'src/components/Container';
 
 import {COLORS} from 'src/constants/colors';

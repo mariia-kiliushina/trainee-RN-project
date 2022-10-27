@@ -1,5 +1,4 @@
 import {Formik} from 'formik';
-import React from 'react';
 import {Button, Keyboard, StyleSheet, View} from 'react-native';
 
 import {Container} from 'src/components/Container';

@@ -1,5 +1,4 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Bank} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
