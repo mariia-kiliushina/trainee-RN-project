@@ -1,4 +1,3 @@
-import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Clocks} from 'assets/svg';
