@@ -1,10 +1,4 @@
-import {
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
 import {Rectangle} from 'src/assets/svg';
@@ -15,7 +9,6 @@ export const BottomSheetModal = ({
   route,
 }: RootStackScreenProps<'BottomSheetModal'>) => {
   const {children} = route.params;
-  const {width} = useWindowDimensions();
 
   return (
     <TouchableOpacity style={[styles.flex, styles.background]}>
@@ -26,7 +19,7 @@ export const BottomSheetModal = ({
             <Typography variant="16" textStyle={styles.text}>
               Select
             </Typography>
-            <View style={[styles.bottomLine, {width}]} />
+            <View style={[styles.bottomLine]} />
 
             {children}
           </View>
@@ -70,5 +63,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: COLORS.neutral200,
     paddingTop: 15,
+    width: '100%',
   },
 });

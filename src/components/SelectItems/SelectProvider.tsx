@@ -13,8 +13,6 @@ export const SelectProvider = ({value, onPress}: SelectItemProps) => {
       onPress={() => {
         navigation.goBack();
         onPress(value);
-        console.log('value');
-        console.log(value);
       }}
       style={({pressed}) => [pressed && styles.pressed]}
     >

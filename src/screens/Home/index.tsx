@@ -5,7 +5,6 @@ import {
   ListRenderItem,
   ListRenderItemInfo,
   StyleSheet,
-  View,
 } from 'react-native';
 
 import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
@@ -42,8 +41,8 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: values => {
-      console.log(JSON.stringify(values));
+    onSubmit: formValues => {
+      console.log(JSON.stringify(formValues));
       Keyboard.dismiss();
     },
     validationSchema: loginValidationSchema,
@@ -75,45 +74,43 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   };
   return (
     <Container style={styles.main}>
-      <View style={styles.main}>
-        <Input
-          label="Login"
-          placeholder="Login"
-          onChangeText={handleChange('login')}
-          onBlur={handleBlur('login')}
-          value={values.login}
-          errorText={errors.login}
-        />
-        <InputPassword
-          label="Password"
-          placeholder="Password"
-          onChangeText={handleChange('password')}
-          onBlur={handleBlur('password')}
-          value={values.password}
-          errorText={errors.password}
-        />
+      <Input
+        label="Login"
+        placeholder="Login"
+        onChangeText={handleChange('login')}
+        onBlur={handleBlur('login')}
+        value={values.login}
+        errorText={errors.login}
+      />
+      <InputPassword
+        label="Password"
+        placeholder="Password"
+        onChangeText={handleChange('password')}
+        onBlur={handleBlur('password')}
+        value={values.password}
+        errorText={errors.password}
+      />
 
-        <InputPassword
-          label="Password Confirm"
-          placeholder="Password Confirm"
-          onChangeText={handleChange('confirmPassword')}
-          onBlur={handleBlur('confirmPassword')}
-          value={values.confirmPassword}
-          errorText={errors.confirmPassword}
-        />
-        <Button onPress={handleSubmit} title="Submit" />
+      <InputPassword
+        label="Password Confirm"
+        placeholder="Password Confirm"
+        onChangeText={handleChange('confirmPassword')}
+        onBlur={handleBlur('confirmPassword')}
+        value={values.confirmPassword}
+        errorText={errors.confirmPassword}
+      />
+      <Button onPress={handleSubmit} title="Submit" />
 
-        <Input
-          value={values.provider?.provider}
-          errorText={errors.provider?.provider}
-          placeholder="Select provider"
-          label="Provider"
-          onPress={onInputPress}
-          isPressable
-          iconName="arrow-down"
-          iconColor={COLORS.neutral500}
-        />
-      </View>
+      <Input
+        value={values.provider?.provider}
+        errorText={errors.provider?.provider}
+        placeholder="Select provider"
+        label="Provider"
+        onPress={onInputPress}
+        isPressable
+        iconName="arrow-down"
+        iconColor={COLORS.neutral500}
+      />
     </Container>
   );
 };

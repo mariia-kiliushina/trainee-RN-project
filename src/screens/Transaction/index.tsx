@@ -5,7 +5,6 @@ import {
   ListRenderItem,
   ListRenderItemInfo,
   StyleSheet,
-  View,
 } from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
@@ -69,19 +68,17 @@ export const Transaction = ({
 
   return (
     <Container style={styles.flex}>
-      <View>
-        <Input
-          value={formik.values.fromAccount?.accountNumber}
-          errorText={formik.errors.fromAccount?.accountNumber}
-          placeholder="Select beneficiary"
-          label="Label"
-          onPress={onInputPress}
-          isPressable
-          iconName="arrow-down"
-          iconColor={COLORS.neutral500}
-        />
-        <Button onPress={formik.handleSubmit} title="Proceed" />
-      </View>
+      <Input
+        value={formik.values.fromAccount?.accountNumber}
+        errorText={formik.errors.fromAccount?.accountNumber}
+        placeholder="Select beneficiary"
+        label="Label"
+        onPress={onInputPress}
+        isPressable
+        iconName="arrow-down"
+        iconColor={COLORS.neutral500}
+      />
+      <Button onPress={formik.handleSubmit} title="Proceed" />
     </Container>
   );
 };
