@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs your permission to make photo</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -52,9 +54,9 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs access to your gallery</string>
+	<string>$(PRODUCT_NAME) needs access to your gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to your gallery</string>
+	<string>$(PRODUCT_NAME) needs access to your gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>
