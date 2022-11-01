@@ -117,7 +117,6 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
     backgroundColor: COLORS.base000,
   },
 });

@@ -9,7 +9,6 @@ export const BottomSheetModal = ({
   route,
 }: RootStackScreenProps<'BottomSheetModal'>) => {
   const {children} = route.params;
-
   return (
     <TouchableOpacity style={[styles.flex, styles.background]}>
       <Pressable style={styles.flex} onPress={navigation.goBack}>

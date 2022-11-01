@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from 'constants/colors';
 import {Profile} from 'screens/Profile';
@@ -38,6 +38,7 @@ export const Main = () => {
         tabBarActiveTintColor: COLORS.warning500,
         tabBarInactiveTintColor: COLORS.neutral300,
       }}
+      backBehavior={'history'}
     >
       <Tab.Screen
         name="Home"

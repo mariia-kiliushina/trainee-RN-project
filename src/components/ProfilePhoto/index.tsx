@@ -8,7 +8,6 @@ import {
   ListRenderItem,
   ListRenderItemInfo,
 } from 'react-native';
-import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
 import {BaseList} from 'src/components/BaseList';
 import {SelectAddPhotoOption} from 'components/SelectItems/SelectAddPhotoOption';
 import {HomeTabScreenProps} from 'src/navigation/types';
@@ -16,13 +15,26 @@ import ProfilePhotoPlacehoder from 'assets/img/avatarPlaceholder.png';
 import {Typography} from '../Typography';
 import {COLORS} from 'src/constants/colors';
 
-type Option = {
+export type Option = {
   name: string;
   iconName: string;
-  onPress: () => void;
 };
 
+const addPhotoOptions = [
+  {
+    name: 'Take photo',
+    iconName: 'Camera',
+  },
+  {
+    name: 'Upload photo',
+    iconName: 'Upload',
+  },
+];
+
 export const ProfilePhoto = () => {
+  const navigation =
+    useNavigation<HomeTabScreenProps<'Profile'>['navigation']>();
+
   const [image, setImage] = useState<{
     data: string | null | undefined;
     mimeType: string;
@@ -30,64 +42,13 @@ export const ProfilePhoto = () => {
     data: '',
     mimeType: '',
   });
-  const navigation =
-    useNavigation<HomeTabScreenProps<'Profile'>['navigation']>();
-
-  const uploadFromDevice = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    })
-      .then(_ => {
-        navigation.navigate('Profile');
-        return _;
-      })
-      .then((profilePhoto: ImageType) => {
-        setImage({data: profilePhoto.data, mimeType: profilePhoto.mime});
-      });
-  };
-
-  const takePicture = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    })
-      .then(_ => {
-        navigation.navigate('Profile');
-        return _;
-      })
-      .then((profilePhoto: ImageType) => {
-        setImage({data: profilePhoto.data, mimeType: profilePhoto.mime});
-      });
-  };
-
-  const addPhotoOptions = [
-    {
-      name: 'Take photo',
-      iconName: 'Camera',
-      onPress: function () {
-        takePicture();
-      },
-    },
-    {
-      name: 'Upload photo',
-      iconName: 'Upload',
-      onPress: function () {
-        uploadFromDevice();
-      },
-    },
-  ];
 
   const keyExtractor = (item: Option) => item.name;
 
   const renderItem: ListRenderItem<Option> = ({
     item,
   }: ListRenderItemInfo<Option>) => (
-    <SelectAddPhotoOption value={item} onPress={item.onPress} />
+    <SelectAddPhotoOption value={item} setImage={setImage} />
   );
 
   const onAddPhoto = () => {
@@ -132,7 +93,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {
-    padding: 12,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
     height: 44,
     backgroundColor: COLORS.warning500,
     borderRadius: 6,

@@ -1,21 +1,49 @@
 import {Pressable, StyleSheet, View} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from '../Typography';
-import {SelectItemProps} from './types';
+import {SelectPhotoProps} from './types';
 import {Camera, Upload, IconsType} from 'src/assets/svg';
+import {useNavigation} from '@react-navigation/native';
+import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
+import {Option} from 'components/ProfilePhoto';
 
 const icons: IconsType = {
   Upload,
   Camera,
 };
 
-export const SelectAddPhotoOption = ({value, onPress}: SelectItemProps) => {
+export const SelectAddPhotoOption = ({value, setImage}: SelectPhotoProps) => {
   const Icon = value.iconName ? icons[value.iconName] : null;
+
+  const navigation = useNavigation();
+
+  const addPhoto = (item: Option) => {
+    const pickOption = item.name === 'Take photo' ? 'openCamera' : 'openPicker';
+
+    ImagePicker[pickOption]({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    })
+      .then((profilePhoto: ImageType) => {
+        navigation.goBack();
+        setImage({data: profilePhoto.data, mimeType: profilePhoto.mime});
+      })
+      .catch(error => {
+        if (error.message === 'User cancelled image selection') {
+          navigation.goBack();
+          return;
+        } else {
+          console.log(error.message);
+        }
+      });
+  };
 
   return (
     <Pressable
       onPress={() => {
-        onPress(value);
+        addPhoto(value);
       }}
       style={({pressed}) => [pressed && styles.pressed]}
     >

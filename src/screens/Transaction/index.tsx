@@ -4,7 +4,6 @@ import {
   Keyboard,
   ListRenderItem,
   ListRenderItemInfo,
-  StyleSheet,
 } from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
@@ -62,7 +61,7 @@ export const Transaction = ({
   };
 
   return (
-    <Container style={styles.flex}>
+    <Container>
       <Input
         value={formik.values.fromAccount?.accountNumber}
         errorText={formik.errors.fromAccount?.accountNumber}
@@ -77,9 +76,3 @@ export const Transaction = ({
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-});

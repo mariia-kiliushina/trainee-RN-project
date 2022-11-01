@@ -24,7 +24,6 @@ export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
     backgroundColor: COLORS.base000,
   },
   button: {
