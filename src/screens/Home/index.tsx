@@ -41,8 +41,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: formValues => {
-      console.log(JSON.stringify(formValues));
+    onSubmit: _ => {
       Keyboard.dismiss();
     },
     validationSchema: loginValidationSchema,
@@ -117,7 +116,6 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
     backgroundColor: COLORS.base000,
   },
 });

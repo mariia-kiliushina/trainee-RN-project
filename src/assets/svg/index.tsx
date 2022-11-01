@@ -22,3 +22,5 @@ export {default as Clocks} from './clocks.svg';
 export {default as User} from './user.svg';
 export {default as ProfileIcon} from './profile.svg';
 export {default as Bank} from './bank.svg';
+export {default as Upload} from './pen.svg';
+export {default as Camera} from './plus-squared.svg';
