@@ -25,11 +25,6 @@ const initialValues: InitialValues = {
   },
 };
 
-export type BaseListProps<Option> = {
-  options: Option[];
-  renderItem: ListRenderItem<Option>;
-};
-
 export const Transaction = ({
   navigation,
 }: HomeTabScreenProps<'Transaction'>) => {
