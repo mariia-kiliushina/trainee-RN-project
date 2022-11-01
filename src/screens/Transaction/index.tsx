@@ -29,8 +29,7 @@ export const Transaction = ({
 }: HomeTabScreenProps<'Transaction'>) => {
   const formik = useFormik({
     initialValues,
-    onSubmit: values => {
-      console.log(JSON.stringify(values));
+    onSubmit: _ => {
       Keyboard.dismiss();
     },
   });

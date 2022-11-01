@@ -4,7 +4,9 @@ import {Typography} from '../Typography';
 import {SelectPhotoProps} from './types';
 import {Camera, Upload, IconsType} from 'src/assets/svg';
 import {useNavigation} from '@react-navigation/native';
-import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
+import ImagePicker, {
+  Image as ImagePickerType,
+} from 'react-native-image-crop-picker';
 import {Option} from 'components/ProfilePhoto';
 
 const icons: IconsType = {
@@ -30,10 +32,10 @@ export const SelectAddPhotoOption = ({
       cropping: true,
       includeBase64: true,
     })
-      .then((profilePhoto: ImageType) => {
+      .then((profilePhoto: ImagePickerType) => {
         navigation.goBack();
-        setImageParent({data: profilePhoto.data, mimeType: profilePhoto.mime});
-        setImage({data: profilePhoto.data, mimeType: profilePhoto.mime});
+        setImageParent({data: profilePhoto.data, mime: profilePhoto.mime});
+        setImage({data: profilePhoto.data, mime: profilePhoto.mime});
       })
       .catch(error => {
         if (error.message === 'User cancelled image selection') {
@@ -50,7 +52,7 @@ export const SelectAddPhotoOption = ({
       onPress={() => {
         addPhoto(value);
       }}
-      style={({pressed}) => [pressed && styles.pressed]}
+      style={({pressed}) => pressed && styles.pressed}
     >
       <View style={styles.wrapper}>
         {Icon && <Icon height={25} width={25} color={COLORS.neutral300} />}

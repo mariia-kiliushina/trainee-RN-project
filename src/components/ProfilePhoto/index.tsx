@@ -18,9 +18,15 @@ import {COLORS} from 'src/constants/colors';
 type Props = {
   setImageParent: (image: any) => any;
 };
+
 export type Option = {
   name: string;
   iconName: string;
+};
+
+export type ImageType = {
+  data: string | null | undefined;
+  mime: string;
 };
 
 const addPhotoOptions = [
@@ -38,12 +44,9 @@ export const ProfilePhoto = ({setImageParent}: Props) => {
   const navigation =
     useNavigation<HomeTabScreenProps<'Profile'>['navigation']>();
 
-  const [image, setImage] = useState<{
-    data: string | null | undefined;
-    mimeType: string;
-  }>({
+  const [image, setImage] = useState<ImageType>({
     data: '',
-    mimeType: '',
+    mime: '',
   });
 
   const keyExtractor = (item: Option) => item.name;
@@ -72,7 +75,7 @@ export const ProfilePhoto = ({setImageParent}: Props) => {
   const defaultPath = Image.resolveAssetSource(ProfilePhotoPlacehoder).uri;
 
   const imageSource = image.data
-    ? `data:${image.mimeType};base64,${image.data}`
+    ? `data:${image.mime};base64,${image.data}`
     : defaultPath;
 
   return (

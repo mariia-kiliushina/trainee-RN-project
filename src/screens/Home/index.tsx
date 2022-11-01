@@ -41,8 +41,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: formValues => {
-      console.log(JSON.stringify(formValues));
+    onSubmit: _ => {
       Keyboard.dismiss();
     },
     validationSchema: loginValidationSchema,

@@ -1,9 +1,12 @@
+import {ImageType} from 'components/ProfilePhoto';
+
 export type SelectItemProps = {
   value: any;
   onPress: (value: any) => void;
 };
+
 export type SelectPhotoProps = {
   value: any;
-  setImage: (value: any) => void;
-  setImageParent: (value: any) => void;
+  setImage: (value: ImageType) => void;
+  setImageParent: (value: ImageType) => void;
 };
