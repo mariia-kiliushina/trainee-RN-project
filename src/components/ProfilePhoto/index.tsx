@@ -15,6 +15,9 @@ import ProfilePhotoPlacehoder from 'assets/img/avatarPlaceholder.png';
 import {Typography} from '../Typography';
 import {COLORS} from 'src/constants/colors';
 
+type Props = {
+  setImageParent: (image: any) => any;
+};
 export type Option = {
   name: string;
   iconName: string;
@@ -31,7 +34,7 @@ const addPhotoOptions = [
   },
 ];
 
-export const ProfilePhoto = () => {
+export const ProfilePhoto = ({setImageParent}: Props) => {
   const navigation =
     useNavigation<HomeTabScreenProps<'Profile'>['navigation']>();
 
@@ -48,7 +51,11 @@ export const ProfilePhoto = () => {
   const renderItem: ListRenderItem<Option> = ({
     item,
   }: ListRenderItemInfo<Option>) => (
-    <SelectAddPhotoOption value={item} setImage={setImage} />
+    <SelectAddPhotoOption
+      value={item}
+      setImage={setImage}
+      setImageParent={setImageParent}
+    />
   );
 
   const onAddPhoto = () => {

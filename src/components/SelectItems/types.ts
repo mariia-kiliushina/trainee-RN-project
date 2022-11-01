@@ -5,4 +5,5 @@ export type SelectItemProps = {
 export type SelectPhotoProps = {
   value: any;
   setImage: (value: any) => void;
+  setImageParent: (value: any) => void;
 };

@@ -12,7 +12,11 @@ const icons: IconsType = {
   Camera,
 };
 
-export const SelectAddPhotoOption = ({value, setImage}: SelectPhotoProps) => {
+export const SelectAddPhotoOption = ({
+  value,
+  setImage,
+  setImageParent,
+}: SelectPhotoProps) => {
   const Icon = value.iconName ? icons[value.iconName] : null;
 
   const navigation = useNavigation();
@@ -28,6 +32,7 @@ export const SelectAddPhotoOption = ({value, setImage}: SelectPhotoProps) => {
     })
       .then((profilePhoto: ImageType) => {
         navigation.goBack();
+        setImageParent({data: profilePhoto.data, mimeType: profilePhoto.mime});
         setImage({data: profilePhoto.data, mimeType: profilePhoto.mime});
       })
       .catch(error => {
