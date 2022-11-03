@@ -13,8 +13,11 @@ export const profileSlice = createSlice({
     logInUser: state => {
       state.isSignedIn = true;
     },
+    logOutUser: state => {
+      state.isSignedIn = false;
+    },
   },
 });
 
-export const {logInUser} = profileSlice.actions;
+export const {logInUser, logOutUser} = profileSlice.actions;
 export default profileSlice.reducer;
