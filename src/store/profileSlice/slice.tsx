@@ -1,9 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import type {RootState} from 'src/store/index';
 
-interface ProfileState {
-  isSignedIn: boolean;
-}
+import {ProfileState} from 'src/store/profileSlice/types';
 
 const initialState: ProfileState = {
   isSignedIn: false,
@@ -13,13 +10,11 @@ export const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    logUser: state => {
+    logInUser: state => {
       state.isSignedIn = true;
     },
   },
 });
 
-export const selectProfile = (state: RootState) => state.profile;
-
-export const {logUser} = profileSlice.actions;
+export const {logInUser} = profileSlice.actions;
 export default profileSlice.reducer;

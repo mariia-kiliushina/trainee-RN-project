@@ -5,11 +5,10 @@ import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
-import {RootStackScreenProps} from 'src/navigation/types';
 import {loginValidationSchema} from 'src/helpers/validation';
 import {useFormik} from 'formik';
 import {useAppDispatch} from 'src/hooks';
-import {logUser} from 'src/store/profileSlice';
+import {logInUser} from 'src/store/profileSlice/slice';
 
 type InitialValues = {
   login: string;
@@ -21,7 +20,7 @@ const initialValues: InitialValues = {
   password: '',
 };
 
-export const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
+export const Login = () => {
   const dispatch = useAppDispatch();
 
   const {handleChange, handleSubmit, values, errors, handleBlur} = useFormik({
@@ -29,15 +28,14 @@ export const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
     validationSchema: loginValidationSchema,
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: _ => {
-      dispatch(logUser());
+    onSubmit: () => {
+      dispatch(logInUser());
       Keyboard.dismiss();
-      navigation.navigate('Main');
     },
   });
 
   return (
-    <Container style={styles.main}>
+    <Container style={styles.main} backgroundStyle={styles.background}>
       <Typography fontType="bold" color={COLORS.warning500} variant="24">
         Welcome back
       </Typography>
@@ -66,8 +64,9 @@ export const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
     justifyContent: 'center',
+  },
+  background: {
     backgroundColor: COLORS.genericWhite,
   },
 });

@@ -5,7 +5,6 @@ import {
   PressableProps,
   StyleProp,
   ViewStyle,
-  GestureResponderEvent,
 } from 'react-native';
 import {Typography} from 'components/Typography';
 import {COLORS} from 'constants/colors';
@@ -16,17 +15,6 @@ type Props = PressableProps & {
   type: TButtonType;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  iconHeight?: number;
-  iconWidth?: number;
-  onPress?: (event: GestureResponderEvent) => void;
-  hitSlop?:
-    | number
-    | {
-        bottom: number;
-        left: number;
-        right: number;
-        top: number;
-      };
 };
 
 export const Button = ({

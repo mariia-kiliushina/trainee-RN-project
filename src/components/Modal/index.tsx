@@ -26,6 +26,7 @@ export const ModalWindow = ({
   const onPress = () => {
     setIsModalOpen(false);
   };
+
   return (
     <Modal
       animationType="slide"

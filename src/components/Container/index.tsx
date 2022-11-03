@@ -7,14 +7,16 @@ import {COLORS} from 'constants/colors';
 type Props = {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  backgroundStyle?: StyleProp<ViewStyle>;
 };
 
-export const Container = ({children, style}: Props) => {
+export const Container = ({children, style, backgroundStyle}: Props) => {
   const insets = useSafeAreaInsets();
+
   return (
     <KeyboardAwareScrollView
       enableOnAndroid
-      style={styles.background}
+      style={[styles.background, backgroundStyle]}
       contentContainerStyle={styles.flex}
     >
       <View style={[{paddingTop: insets.top}, styles.layout, style]}>

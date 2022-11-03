@@ -1,12 +1,13 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
+import {Container} from 'src/components/Container';
 
 export const AddRecord = () => {
   return (
-    <View style={styles.main}>
+    <Container style={styles.main} backgroundStyle={styles.background}>
       <Typography>Add record</Typography>
-    </View>
+    </Container>
   );
 };
 
@@ -15,5 +16,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary100,
     paddingHorizontal: 20,
+  },
+  background: {
+    backgroundColor: COLORS.genericWhite,
   },
 });

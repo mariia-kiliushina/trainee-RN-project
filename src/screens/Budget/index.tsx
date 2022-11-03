@@ -7,6 +7,7 @@ export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
   const onNavigate = () => {
     navigation.navigate('AddRecord');
   };
+
   return (
     <Container>
       <Typography>Budget</Typography>

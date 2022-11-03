@@ -5,26 +5,19 @@ import {Onboarding} from 'screens/Onboarding';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {RootStackParamList} from '../types';
+import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
 
 export const ScreenNavigation = () => {
-  const isSignedIn = useAppSelector(state => state.profile.isSignedIn);
-
+  const {isSignedIn} = useAppSelector(selectProfile);
   const Stack = createNativeStackNavigator<RootStackParamList>();
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen name="Onboarding" component={Onboarding} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Main" component={Main} />
-      <Stack.Screen
-        options={{headerShown: true}}
-        name="AddRecord"
-        component={AddRecord}
-      /> */}
       {isSignedIn ? (
         <>
           <Stack.Screen name="Main" component={Main} />

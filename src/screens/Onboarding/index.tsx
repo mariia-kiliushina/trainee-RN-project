@@ -11,11 +11,12 @@ export const Onboarding = ({
   const onPress = () => {
     navigation.navigate('Login');
   };
+
   return (
     <Container style={styles.main}>
       <Logo style={styles.logo} />
       <Button type="primary" onPress={onPress} style={styles.button}>
-        Go on
+        Get started
       </Button>
     </Container>
   );

@@ -44,7 +44,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     validationSchema: registeringValidationSchema,
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: _ => {
+    onSubmit: () => {
       Keyboard.dismiss();
     },
   });
@@ -73,8 +73,9 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
       ),
     });
   };
+
   return (
-    <Container style={styles.main}>
+    <Container backgroundStyle={styles.background}>
       <Input
         label="Login"
         placeholder="Login"
@@ -119,9 +120,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 };
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    justifyContent: 'flex-start',
+  background: {
     backgroundColor: COLORS.genericWhite,
   },
 });
