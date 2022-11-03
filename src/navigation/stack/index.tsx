@@ -5,9 +5,11 @@ import {Onboarding} from 'screens/Onboarding';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {RootStackParamList} from '../types';
+import {useAppSelector} from 'src/hooks';
 
 export const ScreenNavigation = () => {
-  let isSignedIn = false;
+  const isSignedIn = useAppSelector(state => state.profile.isSignedIn);
+
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (
     <Stack.Navigator

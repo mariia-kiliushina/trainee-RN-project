@@ -8,6 +8,8 @@ import {InputPassword} from 'src/components/InputPassword';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {loginValidationSchema} from 'src/helpers/validation';
 import {useFormik} from 'formik';
+import {useAppDispatch} from 'src/hooks';
+import {logUser} from 'src/store/profileSlice';
 
 type InitialValues = {
   login: string;
@@ -20,14 +22,18 @@ const initialValues: InitialValues = {
 };
 
 export const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
+  const dispatch = useAppDispatch();
+
   const {handleChange, handleSubmit, values, errors, handleBlur} = useFormik({
     initialValues,
-    onSubmit: valuess => {
-      console.log(valuess);
+    validationSchema: loginValidationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: _ => {
+      dispatch(logUser());
       Keyboard.dismiss();
       navigation.navigate('Main');
     },
-    validationSchema: loginValidationSchema,
   });
 
   return (

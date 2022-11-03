@@ -41,11 +41,12 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: valuess => {
-      console.log(valuess);
+    validationSchema: registeringValidationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: _ => {
       Keyboard.dismiss();
     },
-    validationSchema: registeringValidationSchema,
   });
 
   const keyExtractor = (item: Provider) => item.provider;
