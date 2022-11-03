@@ -4,11 +4,7 @@ const validation = /^[a-zA-Z0-9]+$/g;
 
 export const loginValidationSchema = yup.object().shape({
   login: yup.string().required('Login is a required field'),
-  password: yup
-    .string()
-    .min(6, 'Password should consts of at least 6 chars')
-    .matches(validation, 'Password includes chars that are not allowed')
-    .required('Password is a required field'),
+  password: yup.string().required('Password is a required field'),
 });
 
 export const registeringValidationSchema = yup.object().shape({

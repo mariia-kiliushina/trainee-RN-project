@@ -7,22 +7,43 @@ import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
+  let isSignedIn = false;
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Onboarding"
     >
-      <Stack.Screen name="Onboarding" component={Onboarding} />
+      {/* <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Main" component={Main} />
       <Stack.Screen
         options={{headerShown: true}}
         name="AddRecord"
         component={AddRecord}
-      />
+      /> */}
+      {isSignedIn ? (
+        <>
+          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen
+            options={{headerShown: true}}
+            name="AddRecord"
+            component={AddRecord}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Onboarding" component={Onboarding} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              animationTypeForReplace: isSignedIn ? 'pop' : 'push',
+            }}
+          />
+        </>
+      )}
       <Stack.Group
         screenOptions={{
           animation: 'fade',
