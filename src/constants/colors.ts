@@ -1,4 +1,6 @@
 export const COLORS = {
+  omniPrimaryColor: '#02B8A6',
+  omniDark: '#021921',
   neutral100: '#F3F4F6',
   neutral200: '#E5E7EB',
   neutral300: '#D1D5DB',
@@ -13,5 +15,5 @@ export const COLORS = {
   warning300: '#FCD34D',
   warning500: '#F59E0B',
   shadow: 'rgb(16, 24, 40)',
-  base000: '#FFFFFF',
+  genericWhite: '#FFFFFF',
 };

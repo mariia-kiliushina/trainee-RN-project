@@ -5,6 +5,8 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type RootStackParamList = {
   AddRecord: undefined;
   Main: undefined;
+  Onboarding: undefined;
+  Login: undefined;
   BottomSheetModal: {children: React.ReactNode};
 };
 

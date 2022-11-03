@@ -12,7 +12,11 @@ type Props = {
 export const Container = ({children, style}: Props) => {
   const insets = useSafeAreaInsets();
   return (
-    <KeyboardAwareScrollView enableOnAndroid style={styles.background}>
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      style={styles.background}
+      contentContainerStyle={styles.flex}
+    >
       <View style={[{paddingTop: insets.top}, styles.layout, style]}>
         {children}
       </View>
@@ -21,9 +25,13 @@ export const Container = ({children, style}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  flex: {flex: 1},
   layout: {
     flex: 1,
     paddingHorizontal: 16,
+    justifyContent: 'flex-start',
   },
-  background: {backgroundColor: COLORS.base000},
+  background: {
+    backgroundColor: COLORS.omniPrimaryColor,
+  },
 });

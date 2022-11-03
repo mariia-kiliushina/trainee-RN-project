@@ -24,3 +24,4 @@ export {default as ProfileIcon} from './profile.svg';
 export {default as Bank} from './bank.svg';
 export {default as Upload} from './pen.svg';
 export {default as Camera} from './plus-squared.svg';
+export {default as Logo} from './omni-logo.svg';

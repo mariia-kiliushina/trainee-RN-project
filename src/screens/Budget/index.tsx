@@ -10,11 +10,11 @@ export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
     navigation.navigate('AddRecord');
   };
   return (
-    <Container style={styles.main}>
+    <Container>
       <Typography>Budget</Typography>
 
       <Pressable onPress={onNavigate} style={styles.button}>
-        <Typography variant="18" fontType="regular" color={COLORS.base000}>
+        <Typography variant="18" fontType="regular" color={COLORS.genericWhite}>
           Go to another screen
         </Typography>
       </Pressable>
@@ -23,11 +23,9 @@ export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
 };
 
 const styles = StyleSheet.create({
-  main: {
-    backgroundColor: COLORS.base000,
-  },
   button: {
     marginTop: 'auto',
+    marginBottom: 12,
     paddingVertical: 12,
     paddingHorizontal: 'auto',
     height: 44,
