@@ -68,6 +68,7 @@ export const Button = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 6,
+    padding: 12,
     paddingHorizontal: 'auto',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -75,11 +76,9 @@ const styles = StyleSheet.create({
   },
   /*eslint-disable react-native/no-unused-styles */
   primary: {
-    paddingVertical: 12,
     backgroundColor: COLORS.warning500,
   },
   secondary: {
-    paddingVertical: 12,
     backgroundColor: COLORS.genericWhite,
     borderWidth: 1,
     borderColor: COLORS.warning500,
