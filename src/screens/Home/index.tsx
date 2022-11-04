@@ -5,20 +5,20 @@ import {
   ListRenderItemInfo,
   StyleSheet,
 } from 'react-native';
-
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 import {COLORS} from 'src/constants/colors';
+import {STORAGE} from 'src/constants/storage';
+import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 import {BaseList} from 'src/components/BaseList';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
-import {Provider, providerData} from './mock';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {registeringValidationSchema} from 'src/helpers/validation';
 import {useAppDispatch} from 'src/hooks';
 import {logOutUser} from 'src/store/profileSlice/slice';
+import {Provider, providerData} from './mock';
 
 type InitialValues = {
   login: string;
@@ -84,7 +84,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   };
 
   const cleanStorage = () => {
-    removeItem('sessionData');
+    removeItem(STORAGE.loginStorage);
   };
 
   async function removeItem(itemName: string) {
