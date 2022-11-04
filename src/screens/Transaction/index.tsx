@@ -1,15 +1,11 @@
 import {useFormik} from 'formik';
-import {
-  Button,
-  Keyboard,
-  ListRenderItem,
-  ListRenderItemInfo,
-} from 'react-native';
+import {Keyboard, ListRenderItem, ListRenderItemInfo} from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
 import {ownAccountData, Account} from './mock';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
+import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
 
@@ -71,7 +67,9 @@ export const Transaction = ({
         iconName="arrow-down"
         iconColor={COLORS.neutral500}
       />
-      <Button onPress={formik.handleSubmit} title="Proceed" />
+      <Button onPress={formik.handleSubmit} type="primary">
+        Proceed
+      </Button>
     </Container>
   );
 };

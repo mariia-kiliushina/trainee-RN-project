@@ -7,12 +7,18 @@ import {COLORS} from 'constants/colors';
 type Props = {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  backgroundStyle?: StyleProp<ViewStyle>;
 };
 
-export const Container = ({children, style}: Props) => {
+export const Container = ({children, style, backgroundStyle}: Props) => {
   const insets = useSafeAreaInsets();
+
   return (
-    <KeyboardAwareScrollView enableOnAndroid style={styles.background}>
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      style={[styles.background, backgroundStyle]}
+      contentContainerStyle={styles.flex}
+    >
       <View style={[{paddingTop: insets.top}, styles.layout, style]}>
         {children}
       </View>
@@ -21,9 +27,13 @@ export const Container = ({children, style}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  flex: {flex: 1},
   layout: {
     flex: 1,
     paddingHorizontal: 16,
+    justifyContent: 'flex-start',
   },
-  background: {backgroundColor: COLORS.base000},
+  background: {
+    backgroundColor: COLORS.omniPrimaryColor,
+  },
 });

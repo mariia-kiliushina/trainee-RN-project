@@ -1,6 +1,5 @@
 import {useFormik} from 'formik';
 import {
-  Button,
   Keyboard,
   ListRenderItem,
   ListRenderItemInfo,
@@ -11,11 +10,12 @@ import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 import {COLORS} from 'src/constants/colors';
 import {BaseList} from 'src/components/BaseList';
 import {Container} from 'src/components/Container';
+import {Button} from 'src/components/Button';
 import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
 import {Provider, providerData} from './mock';
 import {HomeTabScreenProps} from 'src/navigation/types';
-import {loginValidationSchema} from 'src/helpers/validation';
+import {registeringValidationSchema} from 'src/helpers/validation';
 
 type InitialValues = {
   login: string;
@@ -41,10 +41,12 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     handleBlur,
   } = useFormik({
     initialValues,
-    onSubmit: _ => {
+    validationSchema: registeringValidationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: () => {
       Keyboard.dismiss();
     },
-    validationSchema: loginValidationSchema,
   });
 
   const keyExtractor = (item: Provider) => item.provider;
@@ -71,8 +73,9 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
       ),
     });
   };
+
   return (
-    <Container style={styles.main}>
+    <Container backgroundStyle={styles.background}>
       <Input
         label="Login"
         placeholder="Login"
@@ -98,7 +101,9 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
         value={values.confirmPassword}
         errorText={errors.confirmPassword}
       />
-      <Button onPress={handleSubmit} title="Submit" />
+      <Button onPress={handleSubmit} type="primary">
+        Submit
+      </Button>
 
       <Input
         value={values.provider?.provider}
@@ -115,7 +120,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 };
 
 const styles = StyleSheet.create({
-  main: {
-    backgroundColor: COLORS.base000,
+  background: {
+    backgroundColor: COLORS.genericWhite,
   },
 });

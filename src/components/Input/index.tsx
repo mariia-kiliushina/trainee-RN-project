@@ -63,9 +63,7 @@ export const Input = ({
         style={({pressed}) => [pressed && styles.pressed]}
         onPress={onPress}
       >
-        <View pointerEvents="none" style={styles.flex}>
-          {children}
-        </View>
+        <View pointerEvents="none">{children}</View>
       </Pressable>
     );
   };
@@ -94,7 +92,7 @@ export const Input = ({
   };
 
   return (
-    <View style={styles.flex}>
+    <View>
       {label && <Typography textStyle={styles.label}>{label}</Typography>}
       <View style={[styles.wrapper, editable && styles.shadow]}>
         <ConditionalWrapper
@@ -129,10 +127,6 @@ export const Input = ({
 };
 
 const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-
   iconPressable: {
     position: 'absolute',
     right: INPUT_PADDING,
@@ -150,7 +144,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.neutral100,
     paddingHorizontal: INPUT_PADDING,
     paddingVertical: 10,
-    backgroundColor: COLORS.base000,
+    backgroundColor: COLORS.genericWhite,
   },
   iconPadding: {
     paddingRight: ICON_SIZE + INPUT_PADDING + 5,

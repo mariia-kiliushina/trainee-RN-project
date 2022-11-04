@@ -3,7 +3,6 @@ import {useState} from 'react';
 import {
   Image,
   StyleSheet,
-  Pressable,
   View,
   ListRenderItem,
   ListRenderItemInfo,
@@ -12,8 +11,7 @@ import {BaseList} from 'src/components/BaseList';
 import {SelectAddPhotoOption} from 'components/SelectItems/SelectAddPhotoOption';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import ProfilePhotoPlacehoder from 'assets/img/avatarPlaceholder.png';
-import {Typography} from '../Typography';
-import {COLORS} from 'src/constants/colors';
+import {Button} from 'components/Button';
 
 type Props = {
   setImageParent: (image: any) => any;
@@ -81,12 +79,9 @@ export const ProfilePhoto = ({setImageParent}: Props) => {
   return (
     <View style={styles.wrapper}>
       <Image source={{uri: imageSource}} style={styles.avatar} />
-      <Pressable
-        style={({pressed}) => [styles.button, pressed && styles.pressed]}
-        onPress={onAddPhoto}
-      >
-        <Typography color={COLORS.base000}>Add profile photo</Typography>
-      </Pressable>
+      <Button onPress={onAddPhoto} type="primary">
+        Add profile photo
+      </Button>
     </View>
   );
 };
@@ -101,15 +96,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-  },
-  button: {
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    height: 44,
-    backgroundColor: COLORS.warning500,
-    borderRadius: 6,
-  },
-  pressed: {
-    opacity: 0.7,
   },
 });

@@ -26,6 +26,7 @@ export const ModalWindow = ({
   const onPress = () => {
     setIsModalOpen(false);
   };
+
   return (
     <Modal
       animationType="slide"
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
-    backgroundColor: COLORS.base000,
+    backgroundColor: COLORS.genericWhite,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',

@@ -3,6 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {ScreenNavigation} from 'src/navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {LogBox} from 'react-native';
+import {store} from 'src/store';
+import {Provider} from 'react-redux';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -16,9 +18,11 @@ const App = () => {
         backgroundColor="transparent"
         barStyle="dark-content"
       />
-      <NavigationContainer>
-        <ScreenNavigation />
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <ScreenNavigation />
+        </NavigationContainer>
+      </Provider>
     </SafeAreaProvider>
   );
 };
