@@ -13,7 +13,7 @@ export const Onboarding = ({
   };
 
   return (
-    <Container style={styles.main}>
+    <Container style={styles.main} contentLayout={styles.contentLayout}>
       <Logo style={styles.logo} />
       <Button type="primary" onPress={onPress} style={styles.button}>
         Get started
@@ -24,6 +24,9 @@ export const Onboarding = ({
 
 const styles = StyleSheet.create({
   main: {
+    backgroundColor: COLORS.omniPrimaryColor,
+  },
+  contentLayout: {
     flex: 1,
     justifyContent: 'center',
   },

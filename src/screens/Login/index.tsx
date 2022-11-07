@@ -82,7 +82,7 @@ export const Login = () => {
   }, [setValues]);
 
   return (
-    <Container style={styles.main} backgroundStyle={styles.background}>
+    <Container contentLayout={styles.contentLayout}>
       <Typography fontType="bold" color={COLORS.warning500} variant="24">
         Welcome back
       </Typography>
@@ -111,10 +111,8 @@ export const Login = () => {
 };
 
 const styles = StyleSheet.create({
-  main: {
+  contentLayout: {
+    flex: 1,
     justifyContent: 'center',
-  },
-  background: {
-    backgroundColor: COLORS.genericWhite,
   },
 });
