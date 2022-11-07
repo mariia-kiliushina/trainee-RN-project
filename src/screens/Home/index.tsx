@@ -5,17 +5,20 @@ import {
   ListRenderItemInfo,
   StyleSheet,
 } from 'react-native';
-
-import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {COLORS} from 'src/constants/colors';
+import {STORAGE} from 'src/constants/storage';
+import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 import {BaseList} from 'src/components/BaseList';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
-import {Provider, providerData} from './mock';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {registeringValidationSchema} from 'src/helpers/validation';
+import {useAppDispatch} from 'src/hooks';
+import {logOutUser} from 'src/store/profileSlice/slice';
+import {Provider, providerData} from './mock';
 
 type InitialValues = {
   login: string;
@@ -32,6 +35,8 @@ const initialValues: InitialValues = {
 };
 
 export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
+  const dispatch = useAppDispatch();
+
   const {
     setFieldValue,
     handleChange,
@@ -74,6 +79,21 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     });
   };
 
+  const logUserOut = () => {
+    dispatch(logOutUser());
+  };
+
+  const cleanStorage = () => {
+    removeItem(STORAGE.loginStorage);
+  };
+
+  async function removeItem(itemName: string) {
+    try {
+      await EncryptedStorage.removeItem(itemName);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <Container backgroundStyle={styles.background}>
       <Input
@@ -115,6 +135,12 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
         iconName="arrow-down"
         iconColor={COLORS.neutral500}
       />
+      <Button type="secondary" onPress={cleanStorage}>
+        Clean storage
+      </Button>
+      <Button type="secondary" onPress={logUserOut}>
+        Log out
+      </Button>
     </Container>
   );
 };

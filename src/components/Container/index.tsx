@@ -2,38 +2,37 @@ import {ReactNode} from 'react';
 import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {COLORS} from 'constants/colors';
+import {COLORS} from 'src/constants/colors';
 
 type Props = {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
-  backgroundStyle?: StyleProp<ViewStyle>;
+  contentLayout?: StyleProp<ViewStyle>;
 };
 
-export const Container = ({children, style, backgroundStyle}: Props) => {
+export const Container = ({children, style, contentLayout}: Props) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <KeyboardAwareScrollView
-      enableOnAndroid
-      style={[styles.background, backgroundStyle]}
-      contentContainerStyle={styles.flex}
-    >
-      <View style={[{paddingTop: insets.top}, styles.layout, style]}>
+    <View style={[{paddingTop: insets.top}, styles.default, style]}>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        style={styles.layout}
+        contentContainerStyle={contentLayout}
+      >
         {children}
-      </View>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {flex: 1},
+  default: {
+    flex: 1,
+    backgroundColor: COLORS.genericWhite,
+  },
   layout: {
     flex: 1,
     paddingHorizontal: 16,
-    justifyContent: 'flex-start',
-  },
-  background: {
-    backgroundColor: COLORS.omniPrimaryColor,
   },
 });
