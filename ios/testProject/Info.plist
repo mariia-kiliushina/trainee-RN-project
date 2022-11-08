@@ -60,7 +60,5 @@
 		<string>Inter-Bold.ttf</string>
 		<string>Inter-Regular.ttf</string>
 	</array>
-	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your Face ID</string>
 </dict>
 </plist>
