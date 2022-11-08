@@ -93,15 +93,12 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    rnBiometrics
-      .isSensorAvailable()
-      .then(({available}) => setIsBiometricsAvailable(available));
-  }, []);
-
-  useEffect(() => {
     retrieveItem(STORAGE.loginStorage).then(credentials => {
       if (credentials) {
         setValues(formValues => ({...formValues, login: credentials.login}));
+        rnBiometrics
+          .isSensorAvailable()
+          .then(({available}) => setIsBiometricsAvailable(available));
       }
     });
   }, [setValues]);
@@ -142,7 +139,6 @@ export const Login = () => {
 
 const styles = StyleSheet.create({
   contentLayout: {
-    flex: 1,
     justifyContent: 'center',
   },
 });
