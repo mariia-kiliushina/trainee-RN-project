@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {Keyboard, StyleSheet} from 'react-native';
 import {useFormik} from 'formik';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -12,6 +12,9 @@ import {STORAGE} from 'src/constants/storage';
 import {InputPassword} from 'src/components/InputPassword';
 import {loginValidationSchema} from 'src/helpers/validation';
 import {logInUser} from 'src/store/profileSlice/slice';
+import ReactNativeBiometrics from 'react-native-biometrics';
+
+const rnBiometrics = new ReactNativeBiometrics();
 
 type InitialValues = {
   login: string;
@@ -29,7 +32,29 @@ const initialValues: InitialValues = {
 };
 
 export const Login = () => {
+  const [isBiometricsAvailable, setIsBiometricsAvailable] = useState(false);
+
   const dispatch = useAppDispatch();
+
+  const submitHandler = (formValues: InitialValues) => {
+    Keyboard.dismiss();
+
+    dispatch(logInUser());
+
+    storeItem(STORAGE.loginStorage, {
+      login: formValues.login,
+      password: formValues.password,
+    });
+  };
+
+  const {handleChange, handleSubmit, values, errors, handleBlur, setValues} =
+    useFormik({
+      initialValues,
+      validationSchema: loginValidationSchema,
+      validateOnChange: false,
+      validateOnBlur: false,
+      onSubmit: submitHandler,
+    });
 
   const storeItem = async (itemName: string, data: StoreValues) => {
     try {
@@ -53,25 +78,25 @@ export const Login = () => {
     return response;
   };
 
-  const submitHandler = (formValues: InitialValues) => {
-    Keyboard.dismiss();
+  const onBiometricsSelection = async () => {
+    const {available, biometryType} = await rnBiometrics.isSensorAvailable();
 
-    dispatch(logInUser());
-
-    storeItem(STORAGE.loginStorage, {
-      login: formValues.login,
-      password: formValues.password,
-    });
+    if (available) {
+      let {success} = await rnBiometrics.simplePrompt({
+        promptMessage: `Sign in with ${biometryType}`,
+        cancelButtonText: 'Close',
+      });
+      if (success) {
+        dispatch(logInUser());
+      }
+    }
   };
 
-  const {handleChange, handleSubmit, values, errors, handleBlur, setValues} =
-    useFormik({
-      initialValues,
-      validationSchema: loginValidationSchema,
-      validateOnChange: false,
-      validateOnBlur: false,
-      onSubmit: submitHandler,
-    });
+  useEffect(() => {
+    rnBiometrics
+      .isSensorAvailable()
+      .then(({available}) => setIsBiometricsAvailable(available));
+  }, []);
 
   useEffect(() => {
     retrieveItem(STORAGE.loginStorage).then(credentials => {
@@ -106,6 +131,11 @@ export const Login = () => {
       <Button type="secondary" onPress={handleSubmit}>
         Log in
       </Button>
+      {isBiometricsAvailable && (
+        <Button type="primary" onPress={onBiometricsSelection}>
+          Use biometrics
+        </Button>
+      )}
     </Container>
   );
 };
