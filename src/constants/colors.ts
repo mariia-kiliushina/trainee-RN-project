@@ -16,4 +16,5 @@ export const COLORS = {
   warning500: '#F59E0B',
   shadow: 'rgb(16, 24, 40)',
   genericWhite: '#FFFFFF',
+  cardFiller: '#ADC3FF',
 };

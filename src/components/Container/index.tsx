@@ -1,5 +1,11 @@
 import {ReactNode} from 'react';
-import {StyleProp, StyleSheet, SafeAreaView, ViewStyle} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  SafeAreaView,
+  ViewStyle,
+  Dimensions,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {COLORS} from 'src/constants/colors';
@@ -10,8 +16,25 @@ type Props = {
   contentLayout?: StyleProp<ViewStyle>;
 };
 
+export let paddingHorizontalExported: number;
+
 export const Container = ({children, style, contentLayout}: Props) => {
   const insets = useSafeAreaInsets();
+  let {width} = Dimensions.get('window');
+
+  const getPaddingHorizontal = (deviceWidth: number) => {
+    if (deviceWidth < 480) {
+      return 16;
+    } else if (deviceWidth < 720) {
+      return 24;
+    } else if (deviceWidth < 830) {
+      return 36;
+    } else {
+      return 42;
+    }
+  };
+
+  paddingHorizontalExported = getPaddingHorizontal(width);
 
   return (
     <SafeAreaView
@@ -19,8 +42,11 @@ export const Container = ({children, style, contentLayout}: Props) => {
     >
       <KeyboardAwareScrollView
         enableOnAndroid
-        style={styles.layout}
-        contentContainerStyle={[styles.contentContainerStyle, contentLayout]}
+        contentContainerStyle={[
+          {paddingHorizontal: paddingHorizontalExported},
+          styles.contentContainerStyle,
+          contentLayout,
+        ]}
       >
         {children}
       </KeyboardAwareScrollView>
@@ -35,8 +61,5 @@ const styles = StyleSheet.create({
   safeAreaStyle: {
     backgroundColor: COLORS.genericWhite,
     flexGrow: 1,
-  },
-  layout: {
-    paddingHorizontal: 16,
   },
 });

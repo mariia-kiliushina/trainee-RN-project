@@ -8,6 +8,7 @@ import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
+import {Cards} from 'components/Cards';
 
 export type InitialValues = {
   fromAccount: Account;
@@ -70,6 +71,8 @@ export const Transaction = ({
       <Button onPress={formik.handleSubmit} type="primary">
         Proceed
       </Button>
+
+      <Cards />
     </Container>
   );
 };
