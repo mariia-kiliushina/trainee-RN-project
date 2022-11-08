@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, SafeAreaView, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {COLORS} from 'src/constants/colors';
@@ -14,25 +14,29 @@ export const Container = ({children, style, contentLayout}: Props) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[{paddingTop: insets.top}, styles.default, style]}>
+    <SafeAreaView
+      style={[{paddingTop: insets.top}, styles.safeAreaStyle, style]}
+    >
       <KeyboardAwareScrollView
         enableOnAndroid
         style={styles.layout}
-        contentContainerStyle={contentLayout}
+        contentContainerStyle={[styles.contentContainerStyle, contentLayout]}
       >
         {children}
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  default: {
-    flex: 1,
+  contentContainerStyle: {
+    flexGrow: 1,
+  },
+  safeAreaStyle: {
     backgroundColor: COLORS.genericWhite,
+    flexGrow: 1,
   },
   layout: {
-    flex: 1,
     paddingHorizontal: 16,
   },
 });
