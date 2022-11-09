@@ -1,13 +1,8 @@
-import {
-  Dimensions,
-  StyleProp,
-  StyleSheet,
-  Pressable,
-  ViewStyle,
-} from 'react-native';
+import {StyleProp, StyleSheet, Pressable, ViewStyle} from 'react-native';
 import {Typography} from '../Typography';
 import {ArrowsDownUp, CreditCard, FileCheck, Phone} from 'assets/svg';
 import {COLORS} from 'src/constants/colors';
+import {maxNonScalabaleSize} from 'components/Slider';
 
 const images = {
   ArrowsDownUp,
@@ -22,31 +17,53 @@ type Props = {
   text: string;
   iconName: keyof typeof images;
   style?: StyleProp<ViewStyle>;
+  maxHeight: number;
 };
 
 export const cardMinWidth = 80;
 export const cardMarginRight = 5;
 
-export const Card = ({text, iconName, style}: Props) => {
-  const {width} = Dimensions.get('window');
+const iconGrowScale = 0.4;
 
-  const Image = iconName ? images[iconName] : undefined;
+const getFontSize = (maxHeight: number) => {
+  if (maxHeight > maxNonScalabaleSize) {
+    return 16;
+  } else if (maxHeight > cardMinWidth) {
+    return 13;
+  } else {
+    return 11;
+  }
+};
 
-  const getFontSize = (screenWidth: number) => {
-    if (screenWidth > 390) {
-      return 15;
-    } else if (screenWidth > 320) {
-      return 13;
+const getPadding = (maxHeight: number) => {
+  const calculate = () => {
+    if (maxHeight > cardMinWidth * 1.5) {
+      return maxHeight * 0.15;
+    } else if (maxHeight > cardMinWidth * 1.2) {
+      return maxHeight * 0.12;
     } else {
-      return 12;
+      return maxHeight * 0.1;
     }
   };
+  return Math.round(calculate());
+};
 
-  const fontSize = getFontSize(width);
+export const Card = ({text, iconName, style, maxHeight}: Props) => {
+  const Image = iconName ? images[iconName] : undefined;
+
+  const fontSize = getFontSize(maxHeight);
+  const padding = getPadding(maxHeight);
+
+  let iconSizeRelativeToCardContentSize = maxHeight * iconGrowScale;
 
   return (
     <Pressable
-      style={({pressed}) => [styles.wrapper, style, pressed && styles.pressed]}
+      style={({pressed}) => [
+        styles.wrapper,
+        {height: maxHeight, padding},
+        style,
+        pressed && styles.pressed,
+      ]}
     >
       <Typography
         fontType="bold"
@@ -54,21 +71,25 @@ export const Card = ({text, iconName, style}: Props) => {
       >
         {text}
       </Typography>
-      {Image && <Image color={COLORS.neutral900} style={styles.icon} />}
+      {Image && (
+        <Image
+          color={COLORS.neutral900}
+          style={styles.icon}
+          width={iconSizeRelativeToCardContentSize}
+        />
+      )}
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
+    flexGrow: 1,
+    width: cardMinWidth,
     backgroundColor: COLORS.cardFiller,
     borderRadius: 10,
     justifyContent: 'space-between',
     marginRight: cardMarginRight,
-    maxHeight: cardMinWidth,
-    padding: 8,
-    width: cardMinWidth,
-    flex: 1,
   },
 
   text: {
@@ -79,6 +100,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginBottom: 0,
     margintTop: 'auto',
+    flexGrow: iconGrowScale,
   },
   pressed: {
     opacity: 0.7,

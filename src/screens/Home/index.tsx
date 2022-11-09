@@ -95,7 +95,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     }
   }
   return (
-    <Container backgroundStyle={styles.background}>
+    <Container style={styles.style}>
       <Input
         label="Login"
         placeholder="Login"
@@ -146,7 +146,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
+  style: {
     backgroundColor: COLORS.genericWhite,
   },
 });

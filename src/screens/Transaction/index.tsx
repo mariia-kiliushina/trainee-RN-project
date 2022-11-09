@@ -8,7 +8,7 @@ import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
-import {Cards} from 'components/Cards';
+import {Slider} from 'src/components/Slider';
 
 export type InitialValues = {
   fromAccount: Account;
@@ -72,7 +72,7 @@ export const Transaction = ({
         Proceed
       </Button>
 
-      <Cards />
+      <Slider />
     </Container>
   );
 };

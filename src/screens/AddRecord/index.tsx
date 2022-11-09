@@ -5,19 +5,14 @@ import {Container} from 'src/components/Container';
 
 export const AddRecord = () => {
   return (
-    <Container style={styles.main} backgroundStyle={styles.background}>
+    <Container style={styles.style}>
       <Typography>Add record</Typography>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: COLORS.primary100,
-    paddingHorizontal: 20,
-  },
-  background: {
+  style: {
     backgroundColor: COLORS.genericWhite,
   },
 });
