@@ -64,7 +64,6 @@ export const Slider = ({cardsData}: Props) => {
       scrollEnabled={scrollEnabled}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      style={{maxHeight}}
       contentContainerStyle={styles.contentContainer}
     >
       {cards}

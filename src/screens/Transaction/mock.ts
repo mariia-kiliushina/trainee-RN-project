@@ -47,8 +47,8 @@ export const ownAccountData: Account[] = [
 export type SlideCard = {text: string; iconName: IconName};
 
 export const cardsData: SlideCard[] = [
-  {text: 'Make Transfers', iconName: 'ArrowsDownUp'},
-  {text: 'Airtime & Data', iconName: 'Phone'},
-  {text: 'Bill Payments', iconName: 'FileCheck'},
-  {text: 'Manage Cards', iconName: 'CreditCard'},
+  {text: 'Make\nTransfers', iconName: 'ArrowsDownUp'},
+  {text: 'Airtime &\n Data', iconName: 'Phone'},
+  {text: 'Bill\nPayments', iconName: 'FileCheck'},
+  {text: 'Manage\nCards', iconName: 'CreditCard'},
 ];

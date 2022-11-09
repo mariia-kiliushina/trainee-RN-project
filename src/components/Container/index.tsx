@@ -42,11 +42,7 @@ export const Container = ({children, style, contentLayout}: Props) => {
     >
       <KeyboardAwareScrollView
         enableOnAndroid
-        contentContainerStyle={[
-          {paddingHorizontal: paddingHorizontalExported},
-          styles.contentContainerStyle,
-          contentLayout,
-        ]}
+        contentContainerStyle={[styles.contentContainerStyle, contentLayout]}
       >
         {children}
       </KeyboardAwareScrollView>
@@ -57,6 +53,7 @@ export const Container = ({children, style, contentLayout}: Props) => {
 const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
+    paddingHorizontal: 20,
   },
   safeAreaStyle: {
     backgroundColor: COLORS.genericWhite,
