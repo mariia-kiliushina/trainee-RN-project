@@ -1,4 +1,10 @@
-import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {
+  Dimensions,
+  StyleProp,
+  StyleSheet,
+  Pressable,
+  ViewStyle,
+} from 'react-native';
 import {Typography} from '../Typography';
 import {ArrowsDownUp, CreditCard, FileCheck, Phone} from 'assets/svg';
 import {COLORS} from 'src/constants/colors';
@@ -22,17 +28,26 @@ export const cardMinWidth = 80;
 export const cardMarginRight = 5;
 
 export const Card = ({text, iconName, style}: Props) => {
+  const {width} = Dimensions.get('window');
+
   const Image = iconName ? images[iconName] : undefined;
 
-  let {width, fontScale} = Dimensions.get('window');
-  console.log(width);
+  const getFontSize = (screenWidth: number) => {
+    if (screenWidth > 390) {
+      return 15;
+    } else if (screenWidth > 320) {
+      return 13;
+    } else {
+      return 12;
+    }
+  };
 
-  let fontSize = 13 / fontScale;
-  console.log('fontScale');
-  console.log(fontScale);
+  const fontSize = getFontSize(width);
 
   return (
-    <View style={[styles.wrapper, style]}>
+    <Pressable
+      style={({pressed}) => [styles.wrapper, style, pressed && styles.pressed]}
+    >
       <Typography
         fontType="bold"
         textStyle={[styles.text, {fontSize: fontSize}]}
@@ -40,7 +55,7 @@ export const Card = ({text, iconName, style}: Props) => {
         {text}
       </Typography>
       {Image && <Image color={COLORS.neutral900} style={styles.icon} />}
-    </View>
+    </Pressable>
   );
 };
 
@@ -53,6 +68,7 @@ const styles = StyleSheet.create({
     maxHeight: cardMinWidth,
     padding: 8,
     width: cardMinWidth,
+    flex: 1,
   },
 
   text: {
@@ -63,5 +79,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginBottom: 0,
     margintTop: 'auto',
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });

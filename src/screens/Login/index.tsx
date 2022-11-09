@@ -14,7 +14,7 @@ import {loginValidationSchema} from 'src/helpers/validation';
 import {logInUser} from 'src/store/profileSlice/slice';
 import ReactNativeBiometrics from 'react-native-biometrics';
 
-const rnBiometrics = new ReactNativeBiometrics();
+const rnBiometrics = new ReactNativeBiometrics({allowDeviceCredentials: true});
 
 type InitialValues = {
   login: string;
@@ -79,28 +79,29 @@ export const Login = () => {
   };
 
   const onBiometricsSelection = async () => {
-    const {available, biometryType} = await rnBiometrics.isSensorAvailable();
-
-    if (available) {
-      let {success} = await rnBiometrics.simplePrompt({
-        promptMessage: `Sign in with ${biometryType}`,
-        cancelButtonText: 'Close',
-      });
-      if (success) {
-        dispatch(logInUser());
-      }
+    const {biometryType} = await rnBiometrics.isSensorAvailable();
+    let {success} = await rnBiometrics.simplePrompt({
+      promptMessage: `Sign in with ${biometryType}`,
+      cancelButtonText: 'Close',
+    });
+    if (success) {
+      dispatch(logInUser());
     }
   };
 
   useEffect(() => {
-    retrieveItem(STORAGE.loginStorage).then(credentials => {
-      if (credentials) {
-        setValues(formValues => ({...formValues, login: credentials.login}));
-        rnBiometrics
-          .isSensorAvailable()
-          .then(({available}) => setIsBiometricsAvailable(available));
-      }
-    });
+    retrieveItem(STORAGE.loginStorage)
+      .then(credentials => {
+        if (credentials) {
+          setValues(formValues => ({...formValues, login: credentials.login}));
+
+          rnBiometrics
+            .isSensorAvailable()
+            .then(({available}) => setIsBiometricsAvailable(available))
+            .catch(error => console.log(error));
+        }
+      })
+      .catch(error => console.log(error));
   }, [setValues]);
 
   return (

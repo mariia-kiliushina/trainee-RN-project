@@ -13,15 +13,12 @@ const cardsMapping: {text: string; iconName: IconName}[] = [
 type Props = {};
 
 export const Cards = ({}: Props) => {
-  let {width} = Dimensions.get('window');
+  const {width} = Dimensions.get('window');
 
   const sliderContainerMinWidth =
     cardMinWidth * 4 + cardMarginRight * 3 + paddingHorizontalExported * 2;
 
   const scrollEnabled = width < sliderContainerMinWidth ? true : false;
-
-  console.log('scrollEnabled');
-  console.log(scrollEnabled);
 
   const cards = cardsMapping.map(({text, iconName}, index) => {
     return (
