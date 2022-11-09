@@ -2,14 +2,13 @@ import {useFormik} from 'formik';
 import {Keyboard, ListRenderItem, ListRenderItemInfo} from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
-import {ownAccountData, Account} from './mock';
+import {ownAccountData, Account, cardsData} from './mock';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {Slider} from 'src/components/Slider';
-
 export type InitialValues = {
   fromAccount: Account;
 };
@@ -72,7 +71,7 @@ export const Transaction = ({
         Proceed
       </Button>
 
-      <Slider />
+      <Slider cardsData={cardsData} />
     </Container>
   );
 };

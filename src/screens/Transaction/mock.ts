@@ -1,3 +1,5 @@
+import {IconName} from 'src/components/Card';
+
 export type Account = {
   name: string;
   accountNumber: string;
@@ -40,4 +42,13 @@ export const ownAccountData: Account[] = [
     name: 'Account9',
     accountNumber: '30187876787',
   },
+];
+
+export type SlideCard = {text: string; iconName: IconName};
+
+export const cardsData: SlideCard[] = [
+  {text: 'Make Transfers', iconName: 'ArrowsDownUp'},
+  {text: 'Airtime & Data', iconName: 'Phone'},
+  {text: 'Bill Payments', iconName: 'FileCheck'},
+  {text: 'Manage Cards', iconName: 'CreditCard'},
 ];
