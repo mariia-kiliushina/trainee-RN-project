@@ -48,7 +48,7 @@ export type SlideCard = {text: string; iconName: IconName};
 
 export const cardsData: SlideCard[] = [
   {text: 'Make\nTransfers', iconName: 'ArrowsDownUp'},
-  {text: 'Airtime &\n Data', iconName: 'Phone'},
+  {text: 'Airtime &\nData', iconName: 'Phone'},
   {text: 'Bill\nPayments', iconName: 'FileCheck'},
   {text: 'Manage\nCards', iconName: 'CreditCard'},
 ];

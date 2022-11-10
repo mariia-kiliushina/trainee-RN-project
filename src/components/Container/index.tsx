@@ -1,13 +1,8 @@
 import {ReactNode} from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  SafeAreaView,
-  ViewStyle,
-  Dimensions,
-} from 'react-native';
+import {StyleProp, StyleSheet, SafeAreaView, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useWindowDimensions} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 
 type Props = {
@@ -20,7 +15,7 @@ export let paddingHorizontalExported: number;
 
 export const Container = ({children, style, contentLayout}: Props) => {
   const insets = useSafeAreaInsets();
-  let {width} = Dimensions.get('window');
+  let {width} = useWindowDimensions();
 
   const getPaddingHorizontal = (deviceWidth: number) => {
     if (deviceWidth < 480) {
