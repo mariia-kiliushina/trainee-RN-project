@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-import {Transaction} from 'screens/Transaction';
+import {Onboarding} from 'screens/Onboarding';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {RootStackParamList} from '../types';
@@ -29,7 +29,7 @@ export const ScreenNavigation = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Transaction} />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
           <Stack.Screen
             name="Login"
             component={Login}

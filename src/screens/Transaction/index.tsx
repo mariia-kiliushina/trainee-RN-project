@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
-import {Card, cardMinWidth, cardMarginRight} from 'components/Card';
+import {Card, cardMarginRight} from 'components/Card';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
@@ -27,6 +27,14 @@ const initialValues: InitialValues = {
     accountNumber: '',
   },
 };
+
+const maxCardSize = 90;
+const paddingHorizontal = 2;
+const numOfCards = cardsData.length;
+const requiredSliderWidth =
+  maxCardSize * numOfCards +
+  paddingHorizontal * 2 +
+  cardMarginRight * (numOfCards - 1); //last child doesn't have margin
 
 export const Transaction = ({
   navigation,
@@ -64,8 +72,8 @@ export const Transaction = ({
   };
 
   return (
-    <Container contentLayout={{paddingHorizontal: 0}}>
-      <View style={{paddingHorizontal: 20}}>
+    <Container contentLayout={styles.contentLayout}>
+      <View style={styles.contentWrapper}>
         <Input
           value={formik.values.fromAccount?.accountNumber}
           errorText={formik.errors.fromAccount?.accountNumber}
@@ -84,14 +92,21 @@ export const Transaction = ({
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainer}
+          contentContainerStyle={[
+            {
+              width: requiredSliderWidth,
+            },
+            styles.sliderContainer,
+          ]}
         >
           {cardsData.map((card, index) => {
             return (
               <Card
+                key={card.iconName}
                 text={card.text}
                 iconName={card.iconName}
-                isLast={cardsData - 1 === index}
+                isLast={cardsData.length - 1 === index}
+                maxSize={maxCardSize}
               />
             );
           })}
@@ -102,8 +117,15 @@ export const Transaction = ({
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    borderWidth: 1,
+  sliderContainer: {
     flexGrow: 1,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: paddingHorizontal,
+  },
+  contentLayout: {
+    paddingHorizontal: 0,
+  },
+  contentWrapper: {
+    paddingHorizontal: 20,
   },
 });

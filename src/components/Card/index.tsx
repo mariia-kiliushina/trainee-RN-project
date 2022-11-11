@@ -1,8 +1,7 @@
-import {StyleProp, StyleSheet, Pressable, ViewStyle, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Typography} from '../Typography';
 import {ArrowsDownUp, CreditCard, FileCheck, Phone} from 'assets/svg';
 import {COLORS} from 'src/constants/colors';
-import {maxNonScalabaleSize} from 'components/Slider';
 
 const images = {
   ArrowsDownUp,
@@ -16,28 +15,20 @@ export type IconName = keyof typeof images;
 type Props = {
   text: string;
   iconName: keyof typeof images;
-  // style?: StyleProp<ViewStyle>;
-  // maxHeight: number;
+  isLast: boolean;
+  maxSize: number;
 };
 
-export const cardMinWidth = 80;
 export const cardMarginRight = 5;
 
-export const Card = ({text, iconName}: Props) => {
+export const Card = ({text, iconName, isLast, maxSize}: Props) => {
   const Image = iconName ? images[iconName] : undefined;
-
-  // const fontSize = getFontSize(maxHeight);
-  // const padding = getPadding(maxHeight);
-
-  // let iconSizeRelativeToCardContentSize = maxHeight * iconGrowScale;
-
   return (
     <View
       style={[
         styles.wrapper,
-        // {height: maxHeight, padding},
-        // style,
-        // pressed && styles.pressed,
+        isLast && styles.noRightMargin,
+        maxSize >= 0 && {maxHeight: maxSize, maxWidth: maxSize},
       ]}
     >
       <Typography fontType="bold" textStyle={[styles.text]}>
@@ -50,15 +41,16 @@ export const Card = ({text, iconName}: Props) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    minWidth: 95,
+    flexGrow: 1,
     aspectRatio: 1,
     padding: 10,
     backgroundColor: COLORS.cardFiller,
     borderRadius: 10,
     marginRight: cardMarginRight,
   },
-
+  noRightMargin: {
+    marginRight: 0,
+  },
   text: {
     color: COLORS.neutral900,
   },
