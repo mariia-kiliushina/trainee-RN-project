@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
-import {Card, cardMarginRight} from 'components/Card';
+import {Card} from 'components/Card';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
-import {ownAccountData, Account, cardsData} from './mock';
+import {Account} from './types';
+import {ownAccountData, cardsData} from './mock';
 
 export type InitialValues = {
   fromAccount: Account;
@@ -27,14 +28,6 @@ const initialValues: InitialValues = {
     accountNumber: '',
   },
 };
-
-const maxCardSize = 90;
-const paddingHorizontal = 2;
-const numOfCards = cardsData.length;
-const requiredSliderWidth =
-  maxCardSize * numOfCards +
-  paddingHorizontal * 2 +
-  cardMarginRight * (numOfCards - 1); //last child doesn't have margin
 
 export const Transaction = ({
   navigation,
@@ -92,12 +85,7 @@ export const Transaction = ({
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[
-            {
-              width: requiredSliderWidth,
-            },
-            styles.sliderContainer,
-          ]}
+          contentContainerStyle={styles.sliderContainer}
         >
           {cardsData.map((card, index) => {
             return (
@@ -106,7 +94,6 @@ export const Transaction = ({
                 text={card.text}
                 iconName={card.iconName}
                 isLast={cardsData.length - 1 === index}
-                maxSize={maxCardSize}
               />
             );
           })}
@@ -119,8 +106,8 @@ export const Transaction = ({
 const styles = StyleSheet.create({
   sliderContainer: {
     flexGrow: 1,
-    justifyContent: 'space-evenly',
-    paddingHorizontal: paddingHorizontal,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   contentLayout: {
     paddingHorizontal: 0,

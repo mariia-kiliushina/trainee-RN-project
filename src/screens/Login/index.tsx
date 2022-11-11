@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {Keyboard, StyleSheet} from 'react-native';
 import {useFormik} from 'formik';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import ReactNativeBiometrics from 'react-native-biometrics';
 import {useAppDispatch} from 'src/hooks';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
@@ -12,7 +13,6 @@ import {STORAGE} from 'src/constants/storage';
 import {InputPassword} from 'src/components/InputPassword';
 import {loginValidationSchema} from 'src/helpers/validation';
 import {logInUser} from 'src/store/profileSlice/slice';
-import ReactNativeBiometrics from 'react-native-biometrics';
 
 const rnBiometrics = new ReactNativeBiometrics({allowDeviceCredentials: true});
 

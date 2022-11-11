@@ -1,10 +1,5 @@
 import {useFormik} from 'formik';
-import {
-  Keyboard,
-  ListRenderItem,
-  ListRenderItemInfo,
-  StyleSheet,
-} from 'react-native';
+import {Keyboard, ListRenderItem, ListRenderItemInfo} from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {COLORS} from 'src/constants/colors';
 import {STORAGE} from 'src/constants/storage';
@@ -95,7 +90,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     }
   }
   return (
-    <Container style={styles.style}>
+    <Container>
       <Input
         label="Login"
         placeholder="Login"
@@ -144,9 +139,3 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  style: {
-    backgroundColor: COLORS.genericWhite,
-  },
-});

@@ -1,10 +1,11 @@
+import {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 import {Container} from 'src/components/Container';
 import {ImageType, ProfilePhoto} from 'components/ProfilePhoto';
-import {useEffect, useState} from 'react';
 import {logOutUser} from 'src/store/profileSlice/slice';
 import {Button} from 'src/components/Button';
 import {useAppDispatch} from 'src/hooks';
-import {StyleSheet} from 'react-native';
+
 export const Profile = () => {
   const [image, setImage] = useState<ImageType>({
     data: '',
@@ -12,7 +13,9 @@ export const Profile = () => {
   });
 
   useEffect(() => {}, [image]);
+
   const dispatch = useAppDispatch();
+
   const onLogOut = () => {
     dispatch(logOutUser());
   };

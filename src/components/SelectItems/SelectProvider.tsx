@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Bank} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
-import {Typography} from '../Typography';
+import {Typography} from 'src/components/Typography';
 import {SelectItemProps} from './types';
 
 export const SelectProvider = ({value, onPress}: SelectItemProps) => {

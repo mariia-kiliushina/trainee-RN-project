@@ -2,7 +2,6 @@ import {ReactNode} from 'react';
 import {StyleProp, StyleSheet, SafeAreaView, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useWindowDimensions} from 'react-native';
 import {COLORS} from 'src/constants/colors';
 
 type Props = {
@@ -11,25 +10,8 @@ type Props = {
   contentLayout?: StyleProp<ViewStyle>;
 };
 
-export let paddingHorizontalExported: number;
-
 export const Container = ({children, style, contentLayout}: Props) => {
   const insets = useSafeAreaInsets();
-  let {width} = useWindowDimensions();
-
-  const getPaddingHorizontal = (deviceWidth: number) => {
-    if (deviceWidth < 480) {
-      return 16;
-    } else if (deviceWidth < 720) {
-      return 24;
-    } else if (deviceWidth < 830) {
-      return 36;
-    } else {
-      return 42;
-    }
-  };
-
-  paddingHorizontalExported = getPaddingHorizontal(width);
 
   return (
     <SafeAreaView

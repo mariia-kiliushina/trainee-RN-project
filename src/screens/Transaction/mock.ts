@@ -1,9 +1,4 @@
-import {IconName} from 'src/components/Card';
-
-export type Account = {
-  name: string;
-  accountNumber: string;
-};
+import {Account, SlideCard} from './types';
 
 export const ownAccountData: Account[] = [
   {
@@ -43,8 +38,6 @@ export const ownAccountData: Account[] = [
     accountNumber: '30187876787',
   },
 ];
-
-export type SlideCard = {text: string; iconName: IconName};
 
 export const cardsData: SlideCard[] = [
   {text: 'Make\nTransfers', iconName: 'ArrowsDownUp'},

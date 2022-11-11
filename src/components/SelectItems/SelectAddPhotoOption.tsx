@@ -1,13 +1,13 @@
 import {Pressable, StyleSheet, View} from 'react-native';
-import {COLORS} from 'src/constants/colors';
-import {Typography} from '../Typography';
-import {SelectPhotoProps} from './types';
-import {Camera, Upload, IconsType} from 'src/assets/svg';
 import {useNavigation} from '@react-navigation/native';
 import ImagePicker, {
   Image as ImagePickerType,
 } from 'react-native-image-crop-picker';
+import {COLORS} from 'src/constants/colors';
+import {Typography} from 'src/components/Typography';
+import {Camera, Upload, IconsType} from 'src/assets/svg';
 import {Option} from 'components/ProfilePhoto';
+import {SelectPhotoProps} from './types';
 
 const icons: IconsType = {
   Upload,
