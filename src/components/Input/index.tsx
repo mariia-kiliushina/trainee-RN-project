@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import {Typography} from '../Typography';
 import {
   StyleSheet,
   TextInput,
@@ -8,6 +7,7 @@ import {
   Platform,
   Pressable,
 } from 'react-native';
+import {Typography} from 'src/components/Typography';
 import {ArrowDown, HideEye, Clocks, IconsType} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
 import {ConditionalWrapper} from 'src/helpers/conditionalWrapper';

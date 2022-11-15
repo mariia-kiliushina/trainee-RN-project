@@ -40,9 +40,6 @@ export const ModalWindow = ({
         <KeyboardAwareScrollView contentContainerStyle={styles.centeredView}>
           <View
             onStartShouldSetResponder={_ => true}
-            onTouchEnd={e => {
-              e.stopPropagation();
-            }}
             style={[styles.modalView, style]}
           >
             {children}

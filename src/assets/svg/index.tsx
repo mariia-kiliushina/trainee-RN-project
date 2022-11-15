@@ -25,3 +25,7 @@ export {default as Bank} from './bank.svg';
 export {default as Upload} from './pen.svg';
 export {default as Camera} from './plus-squared.svg';
 export {default as Logo} from './omni-logo.svg';
+export {default as CreditCard} from './credit-card.svg';
+export {default as FileCheck} from './file-check.svg';
+export {default as ArrowsDownUp} from './arrow-down-up.svg';
+export {default as Phone} from './phone.svg';

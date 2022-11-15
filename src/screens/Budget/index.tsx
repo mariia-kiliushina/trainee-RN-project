@@ -1,4 +1,4 @@
-import {Container} from 'components/Container';
+import {Container} from 'src/components/Container';
 import {Typography} from 'components/Typography';
 import {Button} from 'components/Button';
 import {HomeTabScreenProps} from 'src/navigation/types';
