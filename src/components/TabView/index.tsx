@@ -5,7 +5,6 @@ import {
   ScrollView,
   Pressable,
   useWindowDimensions,
-  NativeScrollEvent,
   NativeSyntheticEvent,
   LayoutRectangle,
   Animated,
@@ -30,20 +29,17 @@ export const TabView = ({tabs}: Props) => {
 
   const [tabsCoordinates, setTabsCoordinates] = useState<TTabsPositionState>(
     () => {
-      return {
-        '0': {offsetX: 0, tabWidth: 0},
-        '1': {offsetX: 0, tabWidth: 0},
-        '2': {offsetX: 0, tabWidth: 0},
-        '3': {offsetX: 0, tabWidth: 0},
-        '4': {offsetX: 0, tabWidth: 0},
-      };
+      const obj: {[key: string]: TTabPosition} = {};
+
+      for (let index = 0; index < tabs.length; index++) {
+        obj[index] = {tabWidth: 0, offsetX: 0};
+      }
+
+      return obj;
     },
   );
 
-  const [indicator, setIndicator] = useState(0);
-
   const indicatorOffset = useRef(new Animated.Value(0)).current;
-  const indicatorWidth = new Animated.Value(indicator);
 
   const {width: screenWidth} = useWindowDimensions();
 
@@ -56,23 +52,13 @@ export const TabView = ({tabs}: Props) => {
         animated: true,
       });
     }
-  };
+    Animated.timing(indicatorOffset, {
+      toValue: tabsCoordinates[index].offsetX,
+      useNativeDriver: false,
+      duration: 400,
+    }).start();
 
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    let tabIndex = Math.round(event.nativeEvent.contentOffset.x / screenWidth); //there could be small diff in pixels, so index happens to be of a float type
-    setSelectedTabIndex(tabIndex);
-    Animated.parallel([
-      Animated.timing(indicatorOffset, {
-        toValue: tabsCoordinates[selectedTabIndex].offsetX,
-        useNativeDriver: false,
-        duration: 400,
-      }),
-      Animated.timing(indicatorWidth, {
-        toValue: tabsCoordinates[selectedTabIndex].tabWidth,
-        useNativeDriver: false,
-        duration: 400,
-      }),
-    ]).start();
+    setSelectedTabIndex(index);
   };
 
   const handleOnLayout = (
@@ -85,9 +71,6 @@ export const TabView = ({tabs}: Props) => {
     }>,
     index: number,
   ) => {
-    if (index === 0) {
-      setIndicator(tabWidth);
-    }
     setTabsCoordinates(prevState => {
       return {
         ...prevState,
@@ -133,7 +116,7 @@ export const TabView = ({tabs}: Props) => {
               styles.indicator,
               {
                 transform: [{translateX: indicatorOffset}],
-                width: indicatorWidth,
+                width: tabsCoordinates[selectedTabIndex].tabWidth,
               },
             ]}
           />
@@ -142,7 +125,6 @@ export const TabView = ({tabs}: Props) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         scrollEnabled={true}
-        onScroll={onScroll}
         scrollEventThrottle={1}
         pagingEnabled={true}
         horizontal
