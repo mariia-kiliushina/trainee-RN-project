@@ -8,6 +8,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   LayoutRectangle,
+  Animated,
 } from 'react-native';
 import {Typography} from 'src/components/Typography';
 import {Input} from 'src/components/Input';
@@ -17,22 +18,30 @@ import {TTab} from './types';
 type Props = {
   tabs: TTab[];
 };
-type Type = Record<string, number>;
+type TTabPosition = {
+  offsetX: number;
+  tabWidth: number;
+};
 
-type TState = Record<string, Type>;
+type TTabsPositionState = Record<string, TTabPosition>;
 
 export const TabView = ({tabs}: Props) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const [tabsCoordinates, setTabsCoordinates] = useState<TState>(() => {
-    return {
-      '0': {offsetX: 0, tabWidth: 0},
-      '1': {offsetX: 0, tabWidth: 0},
-      '2': {offsetX: 0, tabWidth: 0},
-      '3': {offsetX: 0, tabWidth: 0},
-      '4': {offsetX: 0, tabWidth: 0},
-    };
-  });
+  const [tabsCoordinates, setTabsCoordinates] = useState<TTabsPositionState>(
+    () => {
+      return {
+        '0': {offsetX: 0, tabWidth: 0},
+        '1': {offsetX: 0, tabWidth: 0},
+        '2': {offsetX: 0, tabWidth: 0},
+        '3': {offsetX: 0, tabWidth: 0},
+        '4': {offsetX: 0, tabWidth: 0},
+      };
+    },
+  );
+
+  const indicatorOffset = useRef(new Animated.Value(0)).current;
+  const indicatorWidth = useRef(new Animated.Value(0)).current;
 
   const {width: screenWidth} = useWindowDimensions();
 
@@ -50,6 +59,18 @@ export const TabView = ({tabs}: Props) => {
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     let tabIndex = Math.round(event.nativeEvent.contentOffset.x / screenWidth); //there could be small diff in pixels, so index happens to be of a float type
     setSelectedTabIndex(tabIndex);
+    Animated.parallel([
+      Animated.timing(indicatorOffset, {
+        toValue: tabsCoordinates[selectedTabIndex].offsetX,
+        useNativeDriver: false,
+        duration: 600,
+      }),
+      Animated.timing(indicatorWidth, {
+        toValue: tabsCoordinates[selectedTabIndex].tabWidth,
+        useNativeDriver: false,
+        duration: 600,
+      }),
+    ]).start();
   };
 
   const handleOnLayout = (
@@ -102,14 +123,12 @@ export const TabView = ({tabs}: Props) => {
               </Pressable>
             );
           })}
-          <View
+          <Animated.View
             style={[
               styles.indicator,
               {
-                transform: [
-                  {translateX: tabsCoordinates[selectedTabIndex].offsetX},
-                ],
-                width: tabsCoordinates[selectedTabIndex].tabWidth,
+                transform: [{translateX: indicatorOffset}],
+                width: indicatorWidth,
               },
             ]}
           />
