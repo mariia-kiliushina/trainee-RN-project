@@ -40,8 +40,10 @@ export const TabView = ({tabs}: Props) => {
     },
   );
 
+  const [indicator, setIndicator] = useState(0);
+
   const indicatorOffset = useRef(new Animated.Value(0)).current;
-  const indicatorWidth = useRef(new Animated.Value(0)).current;
+  const indicatorWidth = new Animated.Value(indicator);
 
   const {width: screenWidth} = useWindowDimensions();
 
@@ -63,12 +65,12 @@ export const TabView = ({tabs}: Props) => {
       Animated.timing(indicatorOffset, {
         toValue: tabsCoordinates[selectedTabIndex].offsetX,
         useNativeDriver: false,
-        duration: 600,
+        duration: 400,
       }),
       Animated.timing(indicatorWidth, {
         toValue: tabsCoordinates[selectedTabIndex].tabWidth,
         useNativeDriver: false,
-        duration: 600,
+        duration: 400,
       }),
     ]).start();
   };
@@ -83,6 +85,9 @@ export const TabView = ({tabs}: Props) => {
     }>,
     index: number,
   ) => {
+    if (index === 0) {
+      setIndicator(tabWidth);
+    }
     setTabsCoordinates(prevState => {
       return {
         ...prevState,
