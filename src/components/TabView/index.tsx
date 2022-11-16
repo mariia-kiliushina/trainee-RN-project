@@ -7,58 +7,94 @@ import {
   useWindowDimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  LayoutRectangle,
 } from 'react-native';
-import {Input} from 'components/Input';
 import {Typography} from 'src/components/Typography';
+import {Input} from 'src/components/Input';
 import {COLORS} from 'src/constants/colors';
 import {TTab} from './types';
 
 type Props = {
   tabs: TTab[];
 };
+type Type = Record<string, number>;
+
+type TState = Record<string, Type>;
 
 export const TabView = ({tabs}: Props) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const {width} = useWindowDimensions();
+  const [tabsCoordinates, setTabsCoordinates] = useState<TState>(() => {
+    return {
+      '0': {offsetX: 0, tabWidth: 0},
+      '1': {offsetX: 0, tabWidth: 0},
+      '2': {offsetX: 0, tabWidth: 0},
+      '3': {offsetX: 0, tabWidth: 0},
+      '4': {offsetX: 0, tabWidth: 0},
+    };
+  });
+
+  const {width: screenWidth} = useWindowDimensions();
 
   const scrollRef = useRef<ScrollView>(null);
 
   const selectAndScrollToItem = (index: number) => {
-    setSelectedTab(index);
-
     if (scrollRef) {
       scrollRef?.current?.scrollTo({
-        x: width * index,
+        x: screenWidth * index,
         animated: true,
       });
     }
   };
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    let tabIndex = event.nativeEvent.contentOffset.x / width;
-    setSelectedTab(tabIndex);
+    let tabIndex = Math.round(event.nativeEvent.contentOffset.x / screenWidth); //there could be small diff in pixels, so index happens to be of a float type
+    setSelectedTabIndex(tabIndex);
+  };
+
+  const handleOnLayout = (
+    {
+      nativeEvent: {
+        layout: {x: offsetX, width: tabWidth},
+      },
+    }: NativeSyntheticEvent<{
+      layout: LayoutRectangle;
+    }>,
+    index: number,
+  ) => {
+    setTabsCoordinates(prevState => {
+      return {
+        ...prevState,
+        [index]: {
+          offsetX,
+          tabWidth,
+        },
+      };
+    });
   };
 
   return (
-    <View style={styles.tabsWrapper}>
+    <View style={styles.wrapper}>
       <View>
         <ScrollView
-          horizontal={true}
-          style={styles.sliderStyle}
-          contentContainerStyle={styles.sliderContainer}
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
           scrollEnabled={true}
+          horizontal
+          contentContainerStyle={styles.tabsContainerStyle}
+          style={styles.tabsStyle}
         >
           {tabs.map((item, index) => {
             return (
               <Pressable
                 key={item.id}
-                style={styles.tabWrapper}
+                onLayout={event => {
+                  handleOnLayout(event, index);
+                }}
                 onPress={() => selectAndScrollToItem(index)}
+                style={styles.tab}
               >
                 <Typography
-                  fontType={selectedTab === index ? 'bold' : 'regular'}
+                  fontType={selectedTabIndex === index ? 'bold' : 'regular'}
                   textStyle={styles.text}
                 >
                   {item.name}
@@ -66,25 +102,32 @@ export const TabView = ({tabs}: Props) => {
               </Pressable>
             );
           })}
+          <View
+            style={[
+              styles.indicator,
+              {
+                transform: [
+                  {translateX: tabsCoordinates[selectedTabIndex].offsetX},
+                ],
+                width: tabsCoordinates[selectedTabIndex].tabWidth,
+              },
+            ]}
+          />
         </ScrollView>
       </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={false}
-        // onScroll={onScroll}
+        scrollEnabled={true}
+        onScroll={onScroll}
+        scrollEventThrottle={1}
         pagingEnabled={true}
         horizontal
         ref={scrollRef}
       >
         {tabs.map((item, index) => {
           return (
-            <View style={[styles.tabContainer, {width}]}>
-              <Input
-                key={index}
-                value={item.name}
-                onPress={() => {}}
-                isPressable
-              />
+            <View key={index} style={[styles.content, {width: screenWidth}]}>
+              <Input value={item.name} onPress={() => {}} isPressable />
             </View>
           );
         })}
@@ -94,31 +137,39 @@ export const TabView = ({tabs}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  sliderStyle: {
+  wrapper: {
+    paddingBottom: 10,
+    flex: 1,
+  },
+  tabsStyle: {
     backgroundColor: COLORS.genericWhite,
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 10,
     marginHorizontal: 20,
   },
-  sliderContainer: {
+  tabsContainerStyle: {
     flexGrow: 1,
   },
-  tabWrapper: {
+  tab: {
     paddingVertical: 10,
     paddingHorizontal: 15,
     alignItems: 'center',
     flex: 1,
     flexGrow: 1,
   },
+  content: {
+    paddingHorizontal: 20,
+    flex: 1,
+  },
   text: {
     color: COLORS.neutral900,
   },
-  tabsWrapper: {
-    paddingBottom: 10,
-    flex: 1,
-  },
-  tabContainer: {
-    paddingHorizontal: 20,
-    flex: 1,
+  indicator: {
+    position: 'absolute',
+    bottom: 0,
+    left: 2,
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: COLORS.omniPrimaryColor,
   },
 });
