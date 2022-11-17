@@ -5,8 +5,7 @@ import {
   ScrollView,
   Pressable,
   useWindowDimensions,
-  NativeSyntheticEvent,
-  LayoutRectangle,
+  LayoutChangeEvent,
   Animated,
 } from 'react-native';
 import {Typography} from 'src/components/Typography';
@@ -39,9 +38,10 @@ export const TabView = ({tabs}: Props) => {
     },
   );
 
-  const indicatorOffset = useRef(new Animated.Value(0)).current;
-
   const {width: screenWidth} = useWindowDimensions();
+
+  const indicatorOffset = useRef(new Animated.Value(0)).current;
+  const indicatorWidth = useRef(new Animated.Value(0)).current;
 
   const scrollRef = useRef<ScrollView>(null);
 
@@ -52,13 +52,22 @@ export const TabView = ({tabs}: Props) => {
         animated: true,
       });
     }
-    Animated.timing(indicatorOffset, {
-      toValue: tabsCoordinates[index].offsetX,
-      useNativeDriver: false,
-      duration: 400,
-    }).start();
 
-    setSelectedTabIndex(index);
+    Animated.parallel([
+      Animated.timing(indicatorOffset, {
+        toValue: tabsCoordinates[index].offsetX,
+        useNativeDriver: false,
+        duration: 400,
+      }),
+
+      Animated.timing(indicatorWidth, {
+        toValue: tabsCoordinates[index].tabWidth,
+        useNativeDriver: false,
+        duration: 400,
+      }),
+    ]).start(({finished}) => {
+      finished && setSelectedTabIndex(index);
+    });
   };
 
   const handleOnLayout = (
@@ -66,11 +75,13 @@ export const TabView = ({tabs}: Props) => {
       nativeEvent: {
         layout: {x: offsetX, width: tabWidth},
       },
-    }: NativeSyntheticEvent<{
-      layout: LayoutRectangle;
-    }>,
+    }: LayoutChangeEvent,
     index: number,
   ) => {
+    if (index === 0) {
+      indicatorWidth.setValue(tabWidth);
+    }
+
     setTabsCoordinates(prevState => {
       return {
         ...prevState,
@@ -89,8 +100,8 @@ export const TabView = ({tabs}: Props) => {
           showsHorizontalScrollIndicator={false}
           scrollEnabled={true}
           horizontal
-          contentContainerStyle={styles.tabsContainerStyle}
-          style={styles.tabsStyle}
+          contentContainerStyle={styles.tabsContentContainer}
+          style={styles.tabsContainer}
         >
           {tabs.map((item, index) => {
             return (
@@ -103,8 +114,7 @@ export const TabView = ({tabs}: Props) => {
                 style={styles.tab}
               >
                 <Typography
-                  fontType={selectedTabIndex === index ? 'bold' : 'regular'}
-                  textStyle={styles.text}
+                  textStyle={selectedTabIndex === index && styles.selectedText}
                 >
                   {item.name}
                 </Typography>
@@ -113,19 +123,20 @@ export const TabView = ({tabs}: Props) => {
           })}
           <Animated.View
             style={[
-              styles.indicator,
+              styles.indicatorContainer,
               {
                 transform: [{translateX: indicatorOffset}],
-                width: tabsCoordinates[selectedTabIndex].tabWidth,
+                width: indicatorWidth,
               },
             ]}
-          />
+          >
+            <View style={styles.indicator} />
+          </Animated.View>
         </ScrollView>
       </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={true}
-        scrollEventThrottle={1}
+        scrollEnabled={false}
         pagingEnabled={true}
         horizontal
         ref={scrollRef}
@@ -147,13 +158,13 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     flex: 1,
   },
-  tabsStyle: {
+  tabsContainer: {
     backgroundColor: COLORS.genericWhite,
     borderRadius: 5,
     marginBottom: 10,
     marginHorizontal: 20,
   },
-  tabsContainerStyle: {
+  tabsContentContainer: {
     flexGrow: 1,
   },
   tab: {
@@ -167,13 +178,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flex: 1,
   },
-  text: {
-    color: COLORS.neutral900,
+  selectedText: {
+    color: COLORS.omniPrimaryColor,
   },
-  indicator: {
+  indicatorContainer: {
     position: 'absolute',
     bottom: 0,
-    left: 2,
+    paddingHorizontal: 3,
+  },
+  indicator: {
     height: 5,
     borderRadius: 5,
     backgroundColor: COLORS.omniPrimaryColor,
