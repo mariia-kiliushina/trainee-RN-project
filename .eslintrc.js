@@ -6,6 +6,7 @@ module.exports = {
     'react-native/no-unused-styles': 2,
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'no-duplicate-imports': 'warn',
   },
   plugins: ['react-hooks', 'react-native'],
 

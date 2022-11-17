@@ -14,7 +14,7 @@ import {ConditionalWrapper} from 'src/helpers/conditionalWrapper';
 
 export type InputProps = Omit<TextInputProps, 'onChangeText'> & {
   label?: string;
-  errorText: string | undefined;
+  errorText?: string | undefined;
   iconName?: 'arrow-down' | 'clocks' | 'hide-eye';
   iconColor?: string;
   isPressable?: boolean;
