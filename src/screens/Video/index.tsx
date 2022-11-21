@@ -29,7 +29,6 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   }, []);
 
   useEffect(() => {
-    console.log('RENDER');
     if (hasPermission === false) {
       Camera.requestCameraPermission().then(permission => {
         setHasPermission(permission === 'authorized');
