@@ -1,12 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-import {Budget} from 'screens/Budget';
+// import {Onboarding} from 'screens/Onboarding';
+import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
-import {RootStackParamList} from '../types';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
+import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
   const {isSignedIn} = useAppSelector(selectProfile);
@@ -26,10 +27,11 @@ export const ScreenNavigation = () => {
             name="AddRecord"
             component={AddRecord}
           />
+          <Stack.Screen name="Video" component={Video} />
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Budget} />
+          <Stack.Screen name="Onboarding" component={Video} />
           <Stack.Screen
             name="Login"
             component={Login}

@@ -89,6 +89,10 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
       console.log(error);
     }
   }
+
+  const onNavigate = () => {
+    navigation.navigate('Video');
+  };
   return (
     <Container>
       <Input
@@ -130,6 +134,9 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
         iconName="arrow-down"
         iconColor={COLORS.neutral500}
       />
+      <Button type="primary" onPress={onNavigate}>
+        Create biometry snapshot
+      </Button>
       <Button type="secondary" onPress={cleanStorage}>
         Clean storage
       </Button>

@@ -23,7 +23,11 @@ module.exports = (async () => {
     },
     resolver: {
       assetExts: assetExts.filter(ext => ext !== 'svg'),
-      sourceExts: [...sourceExts, 'svg'],
+      sourceExts: [
+        process.env.RN_SRC_EXT && process.env.RN_SRC_EXT.split(','),
+        'svg',
+        ...sourceExts,
+      ],
     },
   };
 })();
