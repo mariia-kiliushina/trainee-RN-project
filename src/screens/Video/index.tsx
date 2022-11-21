@@ -7,6 +7,7 @@ import {Container} from 'src/components/Container';
 import {Loading} from 'src/components/Loading';
 import {PressableIcon} from 'src/components/PressableIcon';
 import {COLORS} from 'src/constants/colors';
+import {Typography} from 'src/components/Typography';
 
 type TPosition = 'front' | 'back';
 
@@ -68,11 +69,13 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     setVideo('');
   };
 
+  const record = hasPermission && !video;
+
   if (device == null) {
     return <Loading />;
   }
 
-  if (hasPermission && !video) {
+  if (record) {
     return (
       <View style={styles.flex}>
         <Camera
@@ -82,6 +85,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
           isActive={true}
           video={true}
         />
+
         <Container
           style={[styles.flex, styles.containerStyle]}
           contentLayout={[styles.contentLayout]}
@@ -92,24 +96,31 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
             onPress={goBack}
             iconName="Cross"
           />
-          <View style={[styles.absolute, styles.pressableWrapper]}>
-            <PressableIcon
-              color={COLORS.genericWhite}
-              onPress={turnCameraPosition}
-              iconName="Flip"
-            />
-            <PressableIcon
-              onPress={isRecording ? stopRecording : startRecording}
-              color={isRecording ? COLORS.genericWhite : 'red'}
-              iconName={isRecording ? 'Stop' : 'Record'}
-            />
 
-            <PressableIcon disabled>
-              <Image
-                source={require('src/assets/face.gif')}
-                style={styles.gifStyle}
+          <View style={[styles.absolute, styles.contentWrapper]}>
+            <Typography variant="16" textStyle={styles.textStyle}>
+              Make 2 cycles with your head
+            </Typography>
+
+            <View style={[styles.pressableWrapper]}>
+              <PressableIcon
+                color={COLORS.genericWhite}
+                onPress={turnCameraPosition}
+                iconName="Flip"
               />
-            </PressableIcon>
+              <PressableIcon
+                onPress={isRecording ? stopRecording : startRecording}
+                color={isRecording ? COLORS.genericWhite : 'red'}
+                iconName={isRecording ? 'Stop' : 'Record'}
+              />
+
+              <PressableIcon disabled>
+                <Image
+                  source={require('src/assets/face.gif')}
+                  style={styles.gifStyle}
+                />
+              </PressableIcon>
+            </View>
           </View>
         </Container>
       </View>
@@ -124,22 +135,29 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
           style={[styles.backgroundVideo, styles.absolute]}
           resizeMode={'cover'}
         />
+
         <Container
           style={[styles.flex, styles.containerStyle]}
           contentLayout={[styles.contentLayout]}
         >
-          <View style={[styles.absolute, styles.pressableWrapper]}>
-            <PressableIcon
-              color={COLORS.genericWhite}
-              onPress={deleteRecording}
-              iconName="Reset"
-            />
-            <PressableIcon
-              color={COLORS.omniPrimaryColor}
-              onPress={goBack}
-              iconName="Checkmark"
-            />
-            <PressableIcon disabled />
+          <View style={[styles.absolute, styles.contentWrapper]}>
+            <Typography variant="16" textStyle={styles.textStyle}>
+              Make 2 cycles with your head
+            </Typography>
+
+            <View style={[styles.pressableWrapper]}>
+              <PressableIcon
+                color={COLORS.genericWhite}
+                onPress={deleteRecording}
+                iconName="Reset"
+              />
+              <PressableIcon
+                color={COLORS.omniPrimaryColor}
+                onPress={goBack}
+                iconName="Checkmark"
+              />
+              <PressableIcon disabled />
+            </View>
           </View>
         </Container>
       </View>
@@ -157,8 +175,21 @@ const styles = StyleSheet.create({
   containerStyle: {
     backgroundColor: 'transparent',
   },
+  contentWrapper: {
+    flex: 1,
+    bottom: 0,
+    width: '100%',
+    height: 200,
+    backgroundColor: COLORS.neutral300opaque,
+    justifyContent: 'center',
+  },
   contentLayout: {
     paddingHorizontal: 0,
+  },
+  textStyle: {
+    color: COLORS.genericWhite,
+    textAlign: 'center',
+    marginBottom: 15,
   },
 
   backgroundVideo: {
@@ -170,11 +201,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pressableWrapper: {
-    bottom: 0,
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: COLORS.neutral200,
   },
   cameraStyle: {
     top: 0,
