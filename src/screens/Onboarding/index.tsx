@@ -12,11 +12,18 @@ export const Onboarding = ({
     navigation.navigate('Login');
   };
 
+  const onNavigate = () => {
+    navigation.navigate('Video');
+  };
+
   return (
     <Container contentLayout={styles.contentLayout} style={styles.style}>
       <Logo style={styles.logo} />
       <Button type="primary" onPress={onPress} style={styles.button}>
         Get started
+      </Button>
+      <Button type="primary" onPress={onNavigate} style={styles.button}>
+        Create biometry snapshot
       </Button>
     </Container>
   );

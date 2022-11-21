@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-// import {Onboarding} from 'screens/Onboarding';
+import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
@@ -27,11 +27,11 @@ export const ScreenNavigation = () => {
             name="AddRecord"
             component={AddRecord}
           />
-          <Stack.Screen name="Video" component={Video} />
+          {/* <Stack.Screen name="Video" component={Video} /> */}
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Video} />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
           <Stack.Screen
             name="Login"
             component={Login}
@@ -39,6 +39,7 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
+          <Stack.Screen name="Video" component={Video} />
         </>
       )}
       <Stack.Group
