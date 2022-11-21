@@ -1,18 +1,19 @@
-import {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Pressable} from 'react-native';
 import VideoPlayer from 'react-native-video';
+import {useEffect, useRef, useState} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
-import {Loading} from 'src/components/Loading';
-import {RoundMask} from 'src/components/RoundMask';
-import {COLORS} from 'src/constants/colors';
 import {RootStackScreenProps} from 'src/navigation/types';
-import {Record, Checkmark, Flip, Cross, Reset, Stop} from 'src/assets/svg';
+import {Container} from 'src/components/Container';
+import {Loading} from 'src/components/Loading';
+import {PressableIcon} from 'src/components/PressableIcon';
+import {COLORS} from 'src/constants/colors';
 
 type TPosition = 'front' | 'back';
 
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const [video, setVideo] = useState('');
   const [hasPermission, setHasPermission] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const [position, setPosition] = useState<TPosition>('back');
 
   const devices = useCameraDevices();
@@ -27,12 +28,13 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   }, []);
 
   useEffect(() => {
+    console.log('RENDER');
     if (hasPermission === false) {
       Camera.requestCameraPermission().then(permission => {
         setHasPermission(permission === 'authorized');
       });
     }
-  }, []);
+  }, [hasPermission]);
 
   const turnCameraPosition = () => {
     setPosition(prevPosition => (prevPosition === 'back' ? 'front' : 'back'));
@@ -46,10 +48,14 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     if (cameraRef && cameraRef.current) {
       cameraRef.current.startRecording({
         flash: 'on',
-        onRecordingFinished: video => setVideo(video.path),
+        onRecordingFinished: recordedVideo => {
+          setVideo(recordedVideo.path);
+          setIsRecording(false);
+        },
         onRecordingError: error => console.error(error),
       });
     }
+    setIsRecording(true);
   };
 
   const stopRecording = () => {
@@ -62,56 +68,80 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     setVideo('');
   };
 
-  let makeRecord = hasPermission && !video;
-  let display = video;
-
   if (device == null) {
     return <Loading />;
   }
 
-  if (makeRecord) {
+  if (hasPermission && !video) {
     return (
-      <>
-        <View style={styles.flex}>
-          <RoundMask />
-          <Pressable style={styles.button} onPress={goBack}>
-            <Cross color={'white'} />
-          </Pressable>
-          <Camera
-            ref={cameraRef}
-            style={styles.cameraStyle}
-            device={device}
-            isActive={true}
-            video={true}
+      <View style={styles.flex}>
+        <Camera
+          ref={cameraRef}
+          style={[styles.absolute, styles.cameraStyle]}
+          device={device}
+          isActive={true}
+          video={true}
+        />
+        <Container
+          style={[styles.flex, styles.containerStyle]}
+          contentLayout={[styles.contentLayout]}
+        >
+          <PressableIcon
+            style={styles.absolute}
+            color={COLORS.neutral300}
+            onPress={goBack}
+            iconName="Cross"
           />
-          <View style={styles.pressableWrapper}>
-            <Pressable style={styles.button} onPress={turnCameraPosition}>
-              <Flip color={'white'} width={40} height={40} />
-            </Pressable>
-            <Pressable style={styles.button} onPress={startRecording}>
-              <Record color={'red'} width={70} height={70} />
-            </Pressable>
-            <Pressable style={styles.button} onPress={stopRecording}>
-              <Stop color={'white'} width={40} height={40} />
-            </Pressable>
+          <View style={[styles.absolute, styles.pressableWrapper]}>
+            <PressableIcon
+              color={COLORS.genericWhite}
+              onPress={turnCameraPosition}
+              iconName="Flip"
+            />
+            <PressableIcon
+              onPress={isRecording ? stopRecording : startRecording}
+              color={isRecording ? COLORS.genericWhite : 'red'}
+              iconName={isRecording ? 'Stop' : 'Record'}
+            />
+
+            <PressableIcon disabled>
+              <Image
+                source={require('src/assets/face.gif')}
+                style={styles.gifStyle}
+              />
+            </PressableIcon>
           </View>
-        </View>
-      </>
+        </Container>
+      </View>
     );
   }
 
-  if (display) {
+  if (video) {
     return (
       <View style={styles.flex}>
-        <VideoPlayer source={{uri: video}} style={styles.backgroundVideo} />
-        <View style={styles.pressableWrapper}>
-          <Pressable style={styles.button} onPress={deleteRecording}>
-            <Reset color={'white'} />
-          </Pressable>
-          <Pressable style={styles.button} onPress={goBack}>
-            <Checkmark color={'green'} />
-          </Pressable>
-        </View>
+        <VideoPlayer
+          source={{uri: video}}
+          style={[styles.backgroundVideo, styles.absolute]}
+          resizeMode={'cover'}
+        />
+        <Container
+          style={[styles.flex, styles.containerStyle]}
+          contentLayout={[styles.contentLayout]}
+        >
+          <View style={[styles.absolute, styles.pressableWrapper]}>
+            <PressableIcon
+              color={COLORS.genericWhite}
+              onPress={deleteRecording}
+              iconName="Reset"
+            />
+            <PressableIcon
+              color={COLORS.omniPrimaryColor}
+              onPress={goBack}
+              iconName="Checkmark"
+            />
+            <PressableIcon disabled />
+          </View>
+        </Container>
       </View>
     );
   }
@@ -121,36 +151,41 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  absolute: {
+    position: 'absolute',
+  },
+  containerStyle: {
+    backgroundColor: 'transparent',
+  },
+  contentLayout: {
+    paddingHorizontal: 0,
+  },
+
   backgroundVideo: {
-    position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-  },
-
-  pressableWrapper: {
-    position: 'absolute',
-    justifyContent: 'space-around',
-    backgroundColor: COLORS.neutral300,
-    flexDirection: 'row',
     width: '100%',
-    bottom: 0,
+    height: '100%',
   },
-
+  pressableWrapper: {
+    bottom: 0,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: COLORS.neutral200,
+  },
   cameraStyle: {
-    position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    flex: 1,
+    width: '100%',
+    height: '100%',
   },
-
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 70,
-    height: 70,
+  gifStyle: {
+    width: '100%',
+    height: '100%',
   },
 });
