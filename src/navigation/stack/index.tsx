@@ -10,7 +10,7 @@ import {useAppSelector} from 'src/hooks';
 import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
-  const {isSignedIn} = useAppSelector(selectProfile);
+  const isSignedIn = useAppSelector(selectProfile);
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
