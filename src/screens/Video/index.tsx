@@ -161,7 +161,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
 
               <PressableIcon disabled>
                 <Image
-                  source={require('src/assets/face.gif')}
+                  source={require('src/assets/gif/face.gif')}
                   style={styles.gifStyle}
                 />
               </PressableIcon>
