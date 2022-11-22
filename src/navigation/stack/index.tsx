@@ -27,7 +27,6 @@ export const ScreenNavigation = () => {
             name="AddRecord"
             component={AddRecord}
           />
-          {/* <Stack.Screen name="Video" component={Video} /> */}
         </>
       ) : (
         <>
@@ -39,7 +38,6 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
-          <Stack.Screen name="Video" component={Video} />
         </>
       )}
       <Stack.Group
@@ -50,6 +48,7 @@ export const ScreenNavigation = () => {
         }}
       >
         <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
+        <Stack.Screen name="Video" component={Video} />
       </Stack.Group>
     </Stack.Navigator>
   );

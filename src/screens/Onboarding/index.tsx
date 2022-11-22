@@ -1,30 +1,40 @@
 import {StyleSheet} from 'react-native';
+import {useCameraDevices} from 'react-native-vision-camera';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {COLORS} from 'src/constants/colors';
-import {Logo} from 'assets/svg/index';
+import {Logo} from 'src/assets/svg/index';
 
 export const Onboarding = ({
   navigation,
 }: RootStackScreenProps<'Onboarding'>) => {
-  const onPress = () => {
+  const devices = useCameraDevices();
+  const frontalCamera = devices.front;
+
+  const onLogin = () => {
     navigation.navigate('Login');
   };
 
-  const onNavigate = () => {
+  const onNavigateToVideo = () => {
     navigation.navigate('Video');
   };
 
   return (
     <Container contentLayout={styles.contentLayout} style={styles.style}>
       <Logo style={styles.logo} />
-      <Button type="primary" onPress={onPress} style={styles.button}>
+      <Button type="primary" onPress={onLogin} style={styles.button}>
         Get started
       </Button>
-      <Button type="primary" onPress={onNavigate} style={styles.button}>
-        Create biometry snapshot
-      </Button>
+      {frontalCamera && (
+        <Button
+          type="primary"
+          onPress={onNavigateToVideo}
+          style={styles.button}
+        >
+          Create biometry snapshot
+        </Button>
+      )}
     </Container>
   );
 };

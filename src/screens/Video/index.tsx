@@ -1,20 +1,26 @@
 import VideoPlayer from 'react-native-video';
-import {useEffect, useRef, useState} from 'react';
+import {useRef, useState, useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {Loading} from 'src/components/Loading';
+import {Button} from 'src/components/Button';
+import {ModalWindow} from 'src/components/ModalWindow';
 import {PressableIcon} from 'src/components/PressableIcon';
-import {COLORS} from 'src/constants/colors';
 import {Typography} from 'src/components/Typography';
+import {COLORS} from 'src/constants/colors';
 
 type TPosition = 'front' | 'back';
 
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const [video, setVideo] = useState('');
-  const [hasPermission, setHasPermission] = useState(false);
+
+  const [permission, setPermission] = useState('');
+
   const [isRecording, setIsRecording] = useState(false);
+
   const [position, setPosition] = useState<TPosition>('back');
 
   const devices = useCameraDevices();
@@ -23,18 +29,10 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const cameraRef = useRef<Camera>(null);
 
   useEffect(() => {
-    Camera.getCameraPermissionStatus().then(res => {
-      setHasPermission(res === 'authorized');
+    Camera.requestCameraPermission().then(response => {
+      setPermission(response);
     });
-  }, []);
-
-  useEffect(() => {
-    if (hasPermission === false) {
-      Camera.requestCameraPermission().then(permission => {
-        setHasPermission(permission === 'authorized');
-      });
-    }
-  }, [hasPermission]);
+  }, [permission, navigation]);
 
   const turnCameraPosition = () => {
     setPosition(prevPosition => (prevPosition === 'back' ? 'front' : 'back'));
@@ -68,23 +66,71 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     setVideo('');
   };
 
-  const record = hasPermission && !video;
+  const isFocused = useIsFocused();
 
-  if (device == null) {
-    return <Loading />;
-  }
-
-  if (record) {
+  if (video) {
     return (
       <View style={styles.flex}>
+        <VideoPlayer
+          source={{uri: video}}
+          style={[styles.backgroundVideo, styles.absolute]}
+          resizeMode={'cover'}
+        />
+
+        <Container
+          style={[styles.flex, styles.containerStyle]}
+          contentLayout={[styles.contentLayout]}
+        >
+          <View style={[styles.absolute, styles.contentWrapper]}>
+            <Typography variant="16" textStyle={styles.textStyle}>
+              Make 2 cycles with your head
+            </Typography>
+
+            <View style={[styles.pressableWrapper]}>
+              <PressableIcon
+                color={COLORS.genericWhite}
+                onPress={deleteRecording}
+                iconName="Reset"
+              />
+              <PressableIcon
+                color={COLORS.omniPrimaryColor}
+                onPress={goBack}
+                iconName="Checkmark"
+              />
+              <PressableIcon disabled />
+            </View>
+          </View>
+        </Container>
+      </View>
+    );
+  }
+
+  if (device) {
+    return (
+      <View style={styles.flex}>
+        {permission === 'denied' && (
+          <ModalWindow
+            isModalOpen={permission === 'denied'}
+            setIsModalOpen={() => {}}
+            style={styles.modal}
+          >
+            <>
+              <Typography textStyle={styles.text}>
+                Biometrics is unavailable until camera permission is given
+              </Typography>
+              <Button type="secondary" onPress={() => navigation.goBack()}>
+                <Typography>Go back</Typography>
+              </Button>
+            </>
+          </ModalWindow>
+        )}
         <Camera
           ref={cameraRef}
           style={[styles.absolute, styles.cameraStyle]}
           device={device}
-          isActive={true}
+          isActive={isFocused}
           video={true}
         />
-
         <Container
           style={[styles.flex, styles.containerStyle]}
           contentLayout={[styles.contentLayout]}
@@ -126,47 +172,20 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     );
   }
 
-  if (video) {
-    return (
-      <View style={styles.flex}>
-        <VideoPlayer
-          source={{uri: video}}
-          style={[styles.backgroundVideo, styles.absolute]}
-          resizeMode={'cover'}
-        />
-
-        <Container
-          style={[styles.flex, styles.containerStyle]}
-          contentLayout={[styles.contentLayout]}
-        >
-          <View style={[styles.absolute, styles.contentWrapper]}>
-            <Typography variant="16" textStyle={styles.textStyle}>
-              Make 2 cycles with your head
-            </Typography>
-
-            <View style={[styles.pressableWrapper]}>
-              <PressableIcon
-                color={COLORS.genericWhite}
-                onPress={deleteRecording}
-                iconName="Reset"
-              />
-              <PressableIcon
-                color={COLORS.omniPrimaryColor}
-                onPress={goBack}
-                iconName="Checkmark"
-              />
-              <PressableIcon disabled />
-            </View>
-          </View>
-        </Container>
-      </View>
-    );
-  }
+  return <Loading />;
 };
 
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  modal: {
+    justifyContent: 'space-around',
+    alignItems: 'stretch',
+  },
+  text: {
+    textAlign: 'center',
+    marginBottom: 15,
   },
   absolute: {
     position: 'absolute',
