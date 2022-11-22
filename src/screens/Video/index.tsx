@@ -3,6 +3,7 @@ import {useRef, useState, useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {Loading} from 'src/components/Loading';
@@ -15,6 +16,8 @@ import {COLORS} from 'src/constants/colors';
 type TPosition = 'front' | 'back';
 
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
+  const insets = useSafeAreaInsets();
+
   const [video, setVideo] = useState('');
 
   const [permission, setPermission] = useState('');
@@ -43,9 +46,8 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   };
 
   const startRecording = () => {
-    if (cameraRef && cameraRef.current) {
+    if (cameraRef.current) {
       cameraRef.current.startRecording({
-        flash: 'on',
         onRecordingFinished: recordedVideo => {
           setVideo(recordedVideo.path);
           setIsRecording(false);
@@ -68,20 +70,46 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
 
   const isFocused = useIsFocused();
 
-  if (video) {
-    return (
-      <View style={styles.flex}>
-        <VideoPlayer
-          source={{uri: video}}
-          style={[styles.backgroundVideo, styles.absolute]}
-          resizeMode={'cover'}
-        />
-
-        <Container
-          style={[styles.flex, styles.containerStyle]}
-          contentLayout={[styles.contentLayout]}
-        >
-          <View style={[styles.absolute, styles.contentWrapper]}>
+  return (
+    <View style={{flex: 1}}>
+      {video ? (
+        <View style={styles.flex}>
+          <VideoPlayer
+            source={{uri: video}}
+            style={{flex: 1}}
+            resizeMode={'cover'}
+          />
+        </View>
+      ) : (
+        device && (
+          <View style={styles.flex}>
+            <Camera
+              ref={cameraRef}
+              style={{flex: 1}}
+              device={device}
+              isActive={isFocused}
+              video={true}
+            />
+          </View>
+        )
+      )}
+      <PressableIcon
+        style={{position: 'absolute', top: insets.top, left: 10}}
+        color={COLORS.neutral300}
+        onPress={goBack}
+        iconName="Cross"
+      />
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          borderWidth: 1,
+          width: '100%',
+          paddingVertical: 10,
+        }}
+      >
+        {video ? (
+          <>
             <Typography variant="16" textStyle={styles.textStyle}>
               Make 2 cycles with your head
             </Typography>
@@ -99,55 +127,14 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
               />
               <PressableIcon disabled />
             </View>
-          </View>
-        </Container>
-      </View>
-    );
-  }
-
-  if (device) {
-    return (
-      <View style={styles.flex}>
-        {permission === 'denied' && (
-          <ModalWindow
-            isModalOpen={permission === 'denied'}
-            setIsModalOpen={() => {}}
-            style={styles.modal}
-          >
-            <>
-              <Typography textStyle={styles.text}>
-                Biometrics is unavailable until camera permission is given
-              </Typography>
-              <Button type="secondary" onPress={() => navigation.goBack()}>
-                <Typography>Go back</Typography>
-              </Button>
-            </>
-          </ModalWindow>
-        )}
-        <Camera
-          ref={cameraRef}
-          style={[styles.absolute, styles.cameraStyle]}
-          device={device}
-          isActive={isFocused}
-          video={true}
-        />
-        <Container
-          style={[styles.flex, styles.containerStyle]}
-          contentLayout={[styles.contentLayout]}
-        >
-          <PressableIcon
-            style={styles.absolute}
-            color={COLORS.neutral300}
-            onPress={goBack}
-            iconName="Cross"
-          />
-
-          <View style={[styles.absolute, styles.contentWrapper]}>
+          </>
+        ) : (
+          <>
             <Typography variant="16" textStyle={styles.textStyle}>
               Make 2 cycles with your head
             </Typography>
 
-            <View style={[styles.pressableWrapper]}>
+            <View style={styles.pressableWrapper}>
               <PressableIcon
                 color={COLORS.genericWhite}
                 onPress={turnCameraPosition}
@@ -159,6 +146,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
                 iconName={isRecording ? 'Stop' : 'Record'}
               />
 
+              {/* Why Pressable */}
               <PressableIcon disabled>
                 <Image
                   source={require('src/assets/gif/face.gif')}
@@ -166,13 +154,11 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
                 />
               </PressableIcon>
             </View>
-          </View>
-        </Container>
+          </>
+        )}
       </View>
-    );
-  }
-
-  return <Loading />;
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -194,7 +180,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   contentWrapper: {
-    flex: 1,
+    borderWidth: 1,
+    // flex: 1,
     bottom: 0,
     width: '100%',
     height: 200,
@@ -211,6 +198,7 @@ const styles = StyleSheet.create({
   },
 
   backgroundVideo: {
+    borderWidth: 1,
     top: 0,
     left: 0,
     bottom: 0,
@@ -235,3 +223,22 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
+
+{
+  /* {permission === 'denied' && (
+              <ModalWindow
+                isModalOpen={permission === 'denied'}
+                setIsModalOpen={() => {}}
+                style={styles.modal}
+              >
+                <>
+                  <Typography textStyle={styles.text}>
+                    Biometrics is unavailable until camera permission is given
+                  </Typography>
+                  <Button type="secondary" onPress={() => navigation.goBack()}>
+                    <Typography>Go back</Typography>
+                  </Button>
+                </>
+              </ModalWindow>
+            )} */
+}
