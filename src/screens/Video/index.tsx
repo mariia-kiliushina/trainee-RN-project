@@ -1,32 +1,44 @@
 import VideoPlayer from 'react-native-video';
 import {useRef, useState, useEffect} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
+import {AppState, AppStateStatus, StyleSheet, View, Image} from 'react-native';
+import {useIsFocused} from '@react-navigation/core';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from 'src/navigation/types';
-import {Container} from 'src/components/Container';
-import {Loading} from 'src/components/Loading';
-import {Button} from 'src/components/Button';
-import {ModalWindow} from 'src/components/ModalWindow';
 import {PressableIcon} from 'src/components/PressableIcon';
 import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
+import {Loading} from 'src/components/Loading';
 
 type TPosition = 'front' | 'back';
 
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
+  const insets = useSafeAreaInsets();
+
   const [video, setVideo] = useState('');
 
   const [permission, setPermission] = useState('');
 
   const [isRecording, setIsRecording] = useState(false);
 
-  const [position, setPosition] = useState<TPosition>('back');
+  const [isForeground, setIsForeground] = useState(true);
 
+  const isFocused = useIsFocused();
+
+  const [position, setPosition] = useState<TPosition>('back');
   const devices = useCameraDevices();
   const device = devices[position];
+  const areBothDevices = devices.front && devices.back;
 
   const cameraRef = useRef<Camera>(null);
+
+  useEffect(() => {
+    const onChange = (state: AppStateStatus): void => {
+      setIsForeground(state === 'active');
+    };
+    const listener = AppState.addEventListener('change', onChange);
+    return () => listener.remove();
+  }, [setIsForeground]);
 
   useEffect(() => {
     Camera.requestCameraPermission().then(response => {
@@ -34,6 +46,103 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     });
   }, [permission, navigation]);
 
+  const renderFooter = () => {
+    if (video) {
+      return (
+        <>
+          <View style={[styles.pressableWrapper]}>
+            <PressableIcon
+              color={COLORS.genericWhite}
+              onPress={deleteRecording}
+              iconName="Reset"
+            />
+            <PressableIcon
+              color={COLORS.omniPrimaryColor}
+              onPress={goBack}
+              iconName="Checkmark"
+            />
+            <PressableIcon disabled />
+          </View>
+        </>
+      );
+    }
+    if (isRecording && isForeground) {
+      return (
+        <>
+          <Typography variant="16" textStyle={styles.textStyle}>
+            Make 2 cycles with your head
+          </Typography>
+          <View style={styles.pressableWrapper}>
+            <PressableIcon disabled />
+            <PressableIcon
+              onPress={stopRecording}
+              color={COLORS.genericWhite}
+              iconName={'Stop'}
+            />
+            <View style={styles.gifContainer}>
+              <Image
+                source={require('src/assets/gif/face.gif')}
+                style={styles.gifStyle}
+              />
+            </View>
+          </View>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Typography variant="16" textStyle={styles.textStyle}>
+          Make 2 cycles with your head
+        </Typography>
+        <View style={styles.pressableWrapper}>
+          {areBothDevices ? (
+            <PressableIcon
+              color={COLORS.genericWhite}
+              onPress={turnCameraPosition}
+              iconName="Flip"
+            />
+          ) : (
+            <PressableIcon disabled />
+          )}
+          <PressableIcon
+            onPress={startRecording}
+            color={COLORS.warningUltimate}
+            iconName={'Record'}
+          />
+          <View style={styles.gifContainer}>
+            <Image
+              source={require('src/assets/gif/face.gif')}
+              style={styles.gifStyle}
+            />
+          </View>
+        </View>
+      </>
+    );
+  };
+
+  const renderContent = () => {
+    if (video) {
+      return (
+        <VideoPlayer
+          source={{uri: video}}
+          style={styles.flex}
+          resizeMode={'cover'}
+        />
+      );
+    }
+    if (device) {
+      return (
+        <Camera
+          ref={cameraRef}
+          style={styles.flex}
+          device={device}
+          isActive={isFocused && isForeground}
+          video={true}
+        />
+      );
+    }
+  };
   const turnCameraPosition = () => {
     setPosition(prevPosition => (prevPosition === 'back' ? 'front' : 'back'));
   };
@@ -43,22 +152,28 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   };
 
   const startRecording = () => {
-    if (cameraRef && cameraRef.current) {
+    setIsRecording(true);
+    if (cameraRef.current) {
       cameraRef.current.startRecording({
-        flash: 'on',
-        onRecordingFinished: recordedVideo => {
+        onRecordingFinished: async recordedVideo => {
           setVideo(recordedVideo.path);
-          setIsRecording(false);
         },
-        onRecordingError: error => console.error(error),
+        onRecordingError: error => {
+          stopRecording();
+          if (error?.code !== 'capture/inactive-source') {
+            navigation.navigate('PopUpModal', {
+              children: <Typography>Video recording error</Typography>,
+            });
+          }
+        },
       });
     }
-    setIsRecording(true);
   };
 
   const stopRecording = () => {
     if (cameraRef && cameraRef.current) {
       cameraRef.current.stopRecording();
+      setIsRecording(false);
     }
   };
 
@@ -66,172 +181,58 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     setVideo('');
   };
 
-  const isFocused = useIsFocused();
-
-  if (video) {
-    return (
-      <View style={styles.flex}>
-        <VideoPlayer
-          source={{uri: video}}
-          style={[styles.backgroundVideo, styles.absolute]}
-          resizeMode={'cover'}
-        />
-
-        <Container
-          style={[styles.flex, styles.containerStyle]}
-          contentLayout={[styles.contentLayout]}
-        >
-          <View style={[styles.absolute, styles.contentWrapper]}>
-            <Typography variant="16" textStyle={styles.textStyle}>
-              Make 2 cycles with your head
-            </Typography>
-
-            <View style={[styles.pressableWrapper]}>
-              <PressableIcon
-                color={COLORS.genericWhite}
-                onPress={deleteRecording}
-                iconName="Reset"
-              />
-              <PressableIcon
-                color={COLORS.omniPrimaryColor}
-                onPress={goBack}
-                iconName="Checkmark"
-              />
-              <PressableIcon disabled />
-            </View>
-          </View>
-        </Container>
-      </View>
-    );
+  if (device == null) {
+    return <Loading />;
   }
 
-  if (device) {
-    return (
-      <View style={styles.flex}>
-        {permission === 'denied' && (
-          <ModalWindow
-            isModalOpen={permission === 'denied'}
-            setIsModalOpen={() => {}}
-            style={styles.modal}
-          >
-            <>
-              <Typography textStyle={styles.text}>
-                Biometrics is unavailable until camera permission is given
-              </Typography>
-              <Button type="secondary" onPress={() => navigation.goBack()}>
-                <Typography>Go back</Typography>
-              </Button>
-            </>
-          </ModalWindow>
-        )}
-        <Camera
-          ref={cameraRef}
-          style={[styles.absolute, styles.cameraStyle]}
-          device={device}
-          isActive={isFocused}
-          video={true}
-        />
-        <Container
-          style={[styles.flex, styles.containerStyle]}
-          contentLayout={[styles.contentLayout]}
-        >
-          <PressableIcon
-            style={styles.absolute}
-            color={COLORS.neutral300}
-            onPress={goBack}
-            iconName="Cross"
-          />
+  return (
+    <View style={styles.flex}>
+      {renderContent()}
 
-          <View style={[styles.absolute, styles.contentWrapper]}>
-            <Typography variant="16" textStyle={styles.textStyle}>
-              Make 2 cycles with your head
-            </Typography>
+      <View style={styles.contentWrapper}>{renderFooter()}</View>
 
-            <View style={[styles.pressableWrapper]}>
-              <PressableIcon
-                color={COLORS.genericWhite}
-                onPress={turnCameraPosition}
-                iconName="Flip"
-              />
-              <PressableIcon
-                onPress={isRecording ? stopRecording : startRecording}
-                color={isRecording ? COLORS.genericWhite : 'red'}
-                iconName={isRecording ? 'Stop' : 'Record'}
-              />
-
-              <PressableIcon disabled>
-                <Image
-                  source={require('src/assets/gif/face.gif')}
-                  style={styles.gifStyle}
-                />
-              </PressableIcon>
-            </View>
-          </View>
-        </Container>
-      </View>
-    );
-  }
-
-  return <Loading />;
+      <PressableIcon
+        style={[styles.close, {top: insets.top}]}
+        color={COLORS.neutral300}
+        onPress={goBack}
+        iconName="Cross"
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  modal: {
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
-  text: {
-    textAlign: 'center',
-    marginBottom: 15,
-  },
-  absolute: {
-    position: 'absolute',
-  },
-  containerStyle: {
-    backgroundColor: 'transparent',
-  },
   contentWrapper: {
-    flex: 1,
+    position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: 200,
+    paddingVertical: 10,
     backgroundColor: COLORS.neutral300opaque,
-    justifyContent: 'center',
-  },
-  contentLayout: {
-    paddingHorizontal: 0,
   },
   textStyle: {
     color: COLORS.genericWhite,
     textAlign: 'center',
     marginBottom: 15,
   },
-
-  backgroundVideo: {
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
-  },
   pressableWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  cameraStyle: {
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
+  gifContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: 70,
   },
   gifStyle: {
     width: '100%',
     height: '100%',
+  },
+  close: {
+    position: 'absolute',
+    left: 10,
   },
 });

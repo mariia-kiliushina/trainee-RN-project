@@ -9,6 +9,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   BottomSheetModal: {children: React.ReactNode};
+  PopUpModal: {children: React.ReactNode};
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

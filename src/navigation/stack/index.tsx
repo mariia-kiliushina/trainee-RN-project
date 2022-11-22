@@ -5,6 +5,7 @@ import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
+import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
 import {RootStackParamList} from '../types';
@@ -38,6 +39,7 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
+          <Stack.Screen name="Video" component={Video} />
         </>
       )}
       <Stack.Group
@@ -48,7 +50,7 @@ export const ScreenNavigation = () => {
         }}
       >
         <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
-        <Stack.Screen name="Video" component={Video} />
+        <Stack.Screen name="PopUpModal" component={PopUpModal} />
       </Stack.Group>
     </Stack.Navigator>
   );
