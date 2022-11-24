@@ -12,7 +12,7 @@ export const PopUpModal = ({
     <TouchableOpacity style={styles.background}>
       <Pressable style={styles.pressableWraper} onPress={navigation.goBack}>
         <View onStartShouldSetResponder={_ => true} style={styles.modalView}>
-          <View style={styles.alignCenter}>{children}</View>
+          {children}
         </View>
       </Pressable>
     </TouchableOpacity>
@@ -25,10 +25,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
   },
-  alignCenter: {
-    alignItems: 'center',
-  },
-
   modalView: {
     backgroundColor: 'white',
     borderRadius: 30,

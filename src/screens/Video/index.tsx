@@ -2,35 +2,44 @@ import VideoPlayer from 'react-native-video';
 import {useRef, useState, useEffect} from 'react';
 import {AppState, AppStateStatus, StyleSheet, View, Image} from 'react-native';
 import {useIsFocused} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {PressableIcon} from 'src/components/PressableIcon';
 import {Typography} from 'src/components/Typography';
+import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {Loading} from 'src/components/Loading';
 
 type TPosition = 'front' | 'back';
 
+const RecordingError = () => {
+  const navigation = useNavigation();
+  return (
+    <>
+      <Typography textStyle={styles.text}>Video recording error</Typography>
+      <Button type="secondary" onPress={navigation.goBack}>
+        <Typography>Go back</Typography>
+      </Button>
+    </>
+  );
+};
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const insets = useSafeAreaInsets();
+  const cameraRef = useRef<Camera>(null);
+  const isFocused = useIsFocused();
+  const devices = useCameraDevices();
 
   const [video, setVideo] = useState('');
-
-  const [permission, setPermission] = useState('');
 
   const [isRecording, setIsRecording] = useState(false);
 
   const [isForeground, setIsForeground] = useState(true);
 
-  const isFocused = useIsFocused();
-
   const [position, setPosition] = useState<TPosition>('back');
-  const devices = useCameraDevices();
   const device = devices[position];
   const areBothDevices = devices.front && devices.back;
-
-  const cameraRef = useRef<Camera>(null);
 
   useEffect(() => {
     const onChange = (state: AppStateStatus): void => {
@@ -39,12 +48,6 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     const listener = AppState.addEventListener('change', onChange);
     return () => listener.remove();
   }, [setIsForeground]);
-
-  useEffect(() => {
-    Camera.requestCameraPermission().then(response => {
-      setPermission(response);
-    });
-  }, [permission, navigation]);
 
   const renderFooter = () => {
     if (video) {
@@ -69,7 +72,10 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     if (isRecording && isForeground) {
       return (
         <>
-          <Typography variant="16" textStyle={styles.textStyle}>
+          <Typography
+            variant="16"
+            textStyle={[styles.text, styles.pressableText]}
+          >
             Make 2 cycles with your head
           </Typography>
           <View style={styles.pressableWrapper}>
@@ -92,7 +98,10 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
 
     return (
       <>
-        <Typography variant="16" textStyle={styles.textStyle}>
+        <Typography
+          variant="16"
+          textStyle={[styles.text, styles.pressableText]}
+        >
           Make 2 cycles with your head
         </Typography>
         <View style={styles.pressableWrapper}>
@@ -162,7 +171,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
           stopRecording();
           if (error?.code !== 'capture/inactive-source') {
             navigation.navigate('PopUpModal', {
-              children: <Typography>Video recording error</Typography>,
+              children: <RecordingError />,
             });
           }
         },
@@ -181,7 +190,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     setVideo('');
   };
 
-  if (device == null) {
+  if (device === undefined) {
     return <Loading />;
   }
 
@@ -212,10 +221,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: COLORS.neutral300opaque,
   },
-  textStyle: {
-    color: COLORS.genericWhite,
+
+  text: {
     textAlign: 'center',
     marginBottom: 15,
+  },
+  pressableText: {
+    color: COLORS.genericWhite,
   },
   pressableWrapper: {
     flexDirection: 'row',
