@@ -30,7 +30,7 @@ export const Onboarding = ({
 }: RootStackScreenProps<'Onboarding'>) => {
   const devices = useCameraDevices();
 
-  const backCamera = devices.back;
+  const hasCamera = devices.back || devices.front;
 
   const onLogin = () => {
     navigation.navigate('Login');
@@ -54,7 +54,7 @@ export const Onboarding = ({
       <Button type="primary" onPress={onLogin} style={styles.button}>
         Get started
       </Button>
-      {backCamera && (
+      {!!hasCamera && (
         <Button
           type="primary"
           onPress={onNavigateToVideo}

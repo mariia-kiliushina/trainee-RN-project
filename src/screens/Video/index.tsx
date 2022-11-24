@@ -1,6 +1,13 @@
-import VideoPlayer from 'react-native-video';
 import {useRef, useState, useEffect} from 'react';
-import {AppState, AppStateStatus, StyleSheet, View, Image} from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  StyleSheet,
+  View,
+  Image,
+  Platform,
+} from 'react-native';
+import VideoPlayer from 'react-native-video';
 import {useIsFocused} from '@react-navigation/core';
 import {useNavigation} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
@@ -11,8 +18,6 @@ import {Typography} from 'src/components/Typography';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {Loading} from 'src/components/Loading';
-
-type TPosition = 'front' | 'back';
 
 const RecordingError = () => {
   const navigation = useNavigation();
@@ -30,22 +35,33 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const cameraRef = useRef<Camera>(null);
   const isFocused = useIsFocused();
   const devices = useCameraDevices();
-
   const [video, setVideo] = useState('');
 
   const [isRecording, setIsRecording] = useState(false);
 
   const [isForeground, setIsForeground] = useState(true);
 
-  const [position, setPosition] = useState<TPosition>('back');
-  const device = devices[position];
+  const [isFront, setIsFront] = useState(true);
+
+  const device = isFront ? devices.front : devices.back;
+
   const areBothDevices = devices.front && devices.back;
+
+  useEffect(() => {
+    if (!devices.front) {
+      setIsFront(false);
+    } else {
+      setIsFront(true);
+    }
+  }, [devices.front]);
 
   useEffect(() => {
     const onChange = (state: AppStateStatus): void => {
       setIsForeground(state === 'active');
     };
+
     const listener = AppState.addEventListener('change', onChange);
+
     return () => listener.remove();
   }, [setIsForeground]);
 
@@ -69,7 +85,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
         </>
       );
     }
-    if (isRecording && isForeground) {
+    if (isRecording) {
       return (
         <>
           <Typography
@@ -135,7 +151,11 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
       return (
         <VideoPlayer
           source={{uri: video}}
-          style={styles.flex}
+          style={[
+            styles.flex,
+            // For unknown reason anroid rotates video from front camera
+            Platform.OS === 'android' && isFront && {transform: [{scaleX: -1}]},
+          ]}
           resizeMode={'cover'}
         />
       );
@@ -153,7 +173,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     }
   };
   const turnCameraPosition = () => {
-    setPosition(prevPosition => (prevPosition === 'back' ? 'front' : 'back'));
+    setIsFront(currentIsFront => !currentIsFront);
   };
 
   const goBack = () => {
@@ -162,28 +182,29 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
 
   const startRecording = () => {
     setIsRecording(true);
-    if (cameraRef.current) {
-      cameraRef.current.startRecording({
-        onRecordingFinished: async recordedVideo => {
-          setVideo(recordedVideo.path);
-        },
-        onRecordingError: error => {
-          stopRecording();
-          if (error?.code !== 'capture/inactive-source') {
-            navigation.navigate('PopUpModal', {
-              children: <RecordingError />,
-            });
-          }
-        },
-      });
-    }
+
+    cameraRef.current?.startRecording({
+      onRecordingFinished: async recordedVideo => {
+        setIsRecording(false);
+
+        setVideo(recordedVideo.path);
+      },
+      onRecordingError: error => {
+        stopRecording();
+
+        if (error?.code !== 'capture/inactive-source') {
+          navigation.navigate('PopUpModal', {
+            children: <RecordingError />,
+          });
+        }
+      },
+    });
   };
 
   const stopRecording = () => {
-    if (cameraRef && cameraRef.current) {
-      cameraRef.current.stopRecording();
-      setIsRecording(false);
-    }
+    setIsRecording(false);
+
+    cameraRef.current?.stopRecording();
   };
 
   const deleteRecording = () => {
@@ -197,9 +218,11 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   return (
     <View style={styles.flex}>
       {renderContent()}
-
-      <View style={styles.contentWrapper}>{renderFooter()}</View>
-
+      <View
+        style={[styles.contentWrapper, {paddingBottom: insets.bottom || 10}]}
+      >
+        {renderFooter()}
+      </View>
       <PressableIcon
         style={[styles.close, {top: insets.top}]}
         color={COLORS.neutral300}
@@ -218,10 +241,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    paddingVertical: 10,
+    paddingTop: 10,
     backgroundColor: COLORS.neutral300opaque,
   },
-
   text: {
     textAlign: 'center',
     marginBottom: 15,
@@ -234,8 +256,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   gifContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: 70,
     height: 70,
   },
