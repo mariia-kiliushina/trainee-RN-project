@@ -1,15 +1,17 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-import {Budget} from 'screens/Budget';
+import {Onboarding} from 'screens/Onboarding';
+import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
-import {RootStackParamList} from '../types';
+import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
+import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
-  const {isSignedIn} = useAppSelector(selectProfile);
+  const isSignedIn = useAppSelector(selectProfile);
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
@@ -29,7 +31,7 @@ export const ScreenNavigation = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Budget} />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
           <Stack.Screen
             name="Login"
             component={Login}
@@ -37,6 +39,7 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
+          <Stack.Screen name="Video" component={Video} />
         </>
       )}
       <Stack.Group
@@ -47,6 +50,7 @@ export const ScreenNavigation = () => {
         }}
       >
         <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
+        <Stack.Screen name="PopUpModal" component={PopUpModal} />
       </Stack.Group>
     </Stack.Navigator>
   );

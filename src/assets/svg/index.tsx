@@ -29,3 +29,8 @@ export {default as CreditCard} from './credit-card.svg';
 export {default as FileCheck} from './file-check.svg';
 export {default as ArrowsDownUp} from './arrow-down-up.svg';
 export {default as Phone} from './phone.svg';
+export {default as Record} from './record.svg';
+export {default as Checkmark} from './checkmark.svg';
+export {default as Reset} from './reset.svg';
+export {default as Stop} from './stopRecording.svg';
+export {default as Flip} from './flip.svg';

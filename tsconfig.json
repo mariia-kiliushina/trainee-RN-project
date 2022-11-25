@@ -16,7 +16,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react-native",
-    "lib": ["es2019", "ES2021.String"],
+    "lib": ["ES2022"],
     "types": ["react-native", "jest"],
     "moduleResolution": "node",
     "noEmit": true,

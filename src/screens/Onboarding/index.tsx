@@ -1,23 +1,68 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Linking} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
-import {RootStackScreenProps} from 'src/navigation/types';
+import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
-import {Logo} from 'assets/svg/index';
+import {Logo} from 'src/assets/svg/index';
+
+const ModalContent = () => {
+  const navigation = useNavigation();
+  return (
+    <>
+      <Typography textStyle={styles.text}>
+        Biometrics is unavailable until camera permission is given
+      </Typography>
+      <Button type="secondary" onPress={navigation.goBack}>
+        <Typography>Go back</Typography>
+      </Button>
+      <Button type="secondary" onPress={Linking.openSettings}>
+        <Typography>Go to settings</Typography>
+      </Button>
+    </>
+  );
+};
 
 export const Onboarding = ({
   navigation,
 }: RootStackScreenProps<'Onboarding'>) => {
-  const onPress = () => {
+  const devices = useCameraDevices();
+
+  const hasCamera = devices.back || devices.front;
+
+  const onLogin = () => {
     navigation.navigate('Login');
+  };
+
+  const onNavigateToVideo = () => {
+    Camera.requestCameraPermission().then(response => {
+      if (response === 'authorized') {
+        navigation.navigate('Video');
+      } else {
+        navigation.navigate('PopUpModal', {
+          children: <ModalContent />,
+        });
+      }
+    });
   };
 
   return (
     <Container contentLayout={styles.contentLayout} style={styles.style}>
       <Logo style={styles.logo} />
-      <Button type="primary" onPress={onPress} style={styles.button}>
+      <Button type="primary" onPress={onLogin} style={styles.button}>
         Get started
       </Button>
+      {!!hasCamera && (
+        <Button
+          type="primary"
+          onPress={onNavigateToVideo}
+          style={styles.button}
+        >
+          Create biometry snapshot
+        </Button>
+      )}
     </Container>
   );
 };
@@ -35,5 +80,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.omniDark,
+  },
+  text: {
+    textAlign: 'center',
+    marginBottom: 15,
   },
 });

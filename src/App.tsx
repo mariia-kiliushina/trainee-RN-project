@@ -1,8 +1,7 @@
-import {StatusBar} from 'react-native';
+import {StatusBar, LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {ScreenNavigation} from 'src/navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {LogBox} from 'react-native';
 import {store} from 'src/store';
 import {Provider} from 'react-redux';
 
