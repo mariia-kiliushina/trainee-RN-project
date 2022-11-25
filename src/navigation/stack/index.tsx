@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
+import {Animations} from 'screens/Animations';
 import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
@@ -32,6 +33,7 @@ export const ScreenNavigation = () => {
       ) : (
         <>
           <Stack.Screen name="Onboarding" component={Onboarding} />
+          <Stack.Screen name="Animations" component={Animations} />
           <Stack.Screen
             name="Login"
             component={Login}

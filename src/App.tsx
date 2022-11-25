@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {StatusBar, LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {ScreenNavigation} from 'src/navigation/stack';
