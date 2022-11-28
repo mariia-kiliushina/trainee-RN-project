@@ -1,23 +1,41 @@
-import {Pressable, StyleSheet, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+import {
+  Gesture,
+  GestureDetector,
+  PanGestureHandler,
+  TapGestureHandler,
+  RectButton,
+  GestureEvent,
+} from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Animated, {
-  useSharedValue,
+  useAnimatedGestureHandler,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
   withTiming,
-  useAnimatedGestureHandler,
 } from 'react-native-reanimated';
-import {
-  TapGestureHandler,
-  PanGestureHandler,
-} from 'react-native-gesture-handler';
 import {Container} from 'src/components/Container';
-import {COLORS} from 'constants/colors';
+import {Typography} from 'src/components/Typography';
+import {COLORS} from 'src/constants/colors';
+import {ToDos} from './mock';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const SIZE = 120;
 
 export const Animations = () => {
   const rotation = useSharedValue(0);
   const offset = useSharedValue(0);
   const pressedForColor = useSharedValue(false);
-  const pressedForScale = useSharedValue(false);
+  const pressedForScaleAndColor = useSharedValue(false);
+  const pressedForColorSecondScreen = useSharedValue(false);
+  const pressedForScaleAndColorSecondScreen = useSharedValue(false);
   const pressedForPosition = useSharedValue(false);
   const pressedForPositionCtx = useSharedValue(false);
   const startingPosition = 0;
@@ -26,6 +44,10 @@ export const Animations = () => {
   const startingPositionCtx = 0;
   const xCtx = useSharedValue(startingPositionCtx);
   const yCtx = useSharedValue(startingPositionCtx);
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+  const rotationForGesture = useSharedValue(0);
+  const rotationForGestureSaved = useSharedValue(0);
 
   const rotateStyle = useAnimatedStyle(() => {
     return {
@@ -65,14 +87,55 @@ export const Animations = () => {
       backgroundColor: pressedForColor.value ? '#F2FF33' : '#A633FF',
     };
   });
-  const scaleStyle = useAnimatedStyle(() => {
+
+  const scaleAndColorStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: pressedForScale.value ? '#33FFA5' : '#FFA533',
-      transform: [{scale: withSpring(pressedForScale.value ? 1.2 : 1)}],
+      backgroundColor: pressedForScaleAndColor.value ? '#33FFA5' : '#FFA533',
+      transform: [{scale: withSpring(pressedForScaleAndColor.value ? 1.2 : 1)}],
     };
   });
 
-  const tapHandlerColor = useAnimatedGestureHandler({
+  const colorStyleSecondScreen = useAnimatedStyle(() => {
+    return {
+      backgroundColor: pressedForColorSecondScreen.value
+        ? '#F2FF33'
+        : '#A633FF',
+    };
+  });
+
+  const scaleAndColorStyleSecondScreen = useAnimatedStyle(() => {
+    return {
+      backgroundColor: pressedForScaleAndColorSecondScreen.value
+        ? '#33FFA5'
+        : '#FFA533',
+      transform: [
+        {
+          scale: withSpring(
+            pressedForScaleAndColorSecondScreen.value ? 1.2 : 1,
+          ),
+        },
+      ],
+    };
+  });
+
+  const rotationStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: '#33FFA5',
+      transform: [
+        {rotateZ: `${(rotationForGesture.value / Math.PI) * 180}deg`},
+      ],
+    };
+  });
+
+  const scalePinchStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: withSpring(scale.value)}],
+    };
+  });
+
+  const tapHandlerColor = useAnimatedGestureHandler<
+    GestureEvent<TapGestureHandler>
+  >({
     onStart: () => {
       pressedForColor.value = true;
     },
@@ -81,15 +144,20 @@ export const Animations = () => {
     },
   });
 
-  const tapHandlerScale = useAnimatedGestureHandler({
+  const tapHandlerScale = useAnimatedGestureHandler<
+    GestureEvent<TapGestureHandler>
+  >({
     onStart: () => {
-      pressedForScale.value = true;
+      pressedForScaleAndColor.value = true;
     },
     onEnd: () => {
-      pressedForScale.value = false;
+      pressedForScaleAndColor.value = false;
     },
   });
-  const dragHandler = useAnimatedGestureHandler({
+
+  const dragHandler = useAnimatedGestureHandler<
+    GestureEvent<PanGestureHandler>
+  >({
     onStart: () => {
       pressedForPosition.value = true;
     },
@@ -103,7 +171,10 @@ export const Animations = () => {
       y.value = withSpring(startingPosition);
     },
   });
-  const dragHandlerCtx = useAnimatedGestureHandler({
+
+  const dragHandlerCtx = useAnimatedGestureHandler<
+    GestureEvent<PanGestureHandler>
+  >({
     onStart: (_, ctx) => {
       pressedForPositionCtx.value = true;
       ctx.startXCtx = xCtx.value;
@@ -115,59 +186,218 @@ export const Animations = () => {
     },
   });
 
-  return (
-    <Container style={styles.style}>
-      <View style={styles.wrapper}>
-        <Pressable onPress={() => (rotation.value += 20)}>
-          <Animated.View style={[styles.quadro, rotateStyle]} />
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            offset.value += 20;
-          }}
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate(event => {
+      scale.value = savedScale.value * event.scale;
+    })
+    .onEnd(() => {
+      savedScale.value = scale.value;
+    });
+
+  const longPressGestureColors = Gesture.LongPress()
+    .onBegin(() => {
+      pressedForColorSecondScreen.value = true;
+    })
+    .onFinalize(() => {
+      pressedForColorSecondScreen.value = false;
+    });
+
+  const longPressGestureScaleAndColors = Gesture.LongPress()
+    .onBegin(() => {
+      pressedForScaleAndColorSecondScreen.value = true;
+    })
+    .onFinalize(() => {
+      pressedForScaleAndColorSecondScreen.value = false;
+    });
+
+  const rotationGesture = Gesture.Rotation()
+    .onUpdate(event => {
+      rotationForGesture.value = rotationForGestureSaved.value + event.rotation;
+    })
+    .onEnd(() => {
+      rotationForGestureSaved.value = rotationForGesture.value;
+    });
+
+  const renderLeftActions = () => {
+    return (
+      <RectButton style={[styles.leftAction, {backgroundColor: '#FFA533'}]}>
+        <Typography textStyle={styles.textStyle}>Archive</Typography>
+      </RectButton>
+    );
+  };
+
+  const renderRightActions = () => {
+    return (
+      <>
+        <RectButton style={[styles.action, {backgroundColor: `#FF3C33`}]}>
+          <Typography textStyle={styles.textStyle}>Delete</Typography>
+        </RectButton>
+        <RectButton style={[styles.action, {backgroundColor: '#33AAFF'}]}>
+          <Typography textStyle={styles.textStyle}>Mark as unread</Typography>
+        </RectButton>
+        <RectButton
+          style={[styles.action, {backgroundColor: COLORS.omniPrimaryColor}]}
         >
-          <Animated.View style={[styles.quadro, offsetStyle]} />
-        </Pressable>
-      </View>
-      <View style={styles.wrapper}>
-        <TapGestureHandler onGestureEvent={tapHandlerColor}>
-          <Animated.View style={[styles.quadro, colorStyle]} />
-        </TapGestureHandler>
-        <TapGestureHandler onGestureEvent={tapHandlerScale}>
-          <Animated.View style={[styles.quadro, scaleStyle]} />
-        </TapGestureHandler>
-      </View>
-      <View style={styles.wrapper}>
-        <PanGestureHandler onGestureEvent={dragHandler}>
-          <Animated.View style={[styles.circle, positionStyle]} />
-        </PanGestureHandler>
-        <PanGestureHandler onGestureEvent={dragHandlerCtx}>
-          <Animated.View style={[styles.circle, positionCtxStyle]} />
-        </PanGestureHandler>
-      </View>
-    </Container>
+          <Typography textStyle={styles.textStyle}>More</Typography>
+        </RectButton>
+      </>
+    );
+  };
+
+  return (
+    <ScrollView horizontal={true} pagingEnabled={true}>
+      <Container style={styles.containerStyle}>
+        <Typography>GestureHandlers</Typography>
+        <View style={styles.wrapper}>
+          <Pressable onPress={() => (rotation.value += 20)}>
+            <Animated.View style={[styles.quadro, rotateStyle]} />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              offset.value += 20;
+            }}
+          >
+            <Animated.View style={[styles.quadro, offsetStyle]} />
+          </Pressable>
+        </View>
+        <View style={styles.wrapper}>
+          <TapGestureHandler onGestureEvent={tapHandlerColor}>
+            <Animated.View style={[styles.quadro, colorStyle]} />
+          </TapGestureHandler>
+          <TapGestureHandler onGestureEvent={tapHandlerScale}>
+            <Animated.View style={[styles.quadro, scaleAndColorStyle]} />
+          </TapGestureHandler>
+        </View>
+        <View style={styles.wrapper}>
+          <PanGestureHandler onGestureEvent={dragHandler}>
+            <Animated.View style={[styles.smallCircle, positionStyle]} />
+          </PanGestureHandler>
+          <PanGestureHandler onGestureEvent={dragHandlerCtx}>
+            <Animated.View style={[styles.smallCircle, positionCtxStyle]} />
+          </PanGestureHandler>
+        </View>
+      </Container>
+      <Container style={styles.containerStyle}>
+        <Typography>GestureDetector</Typography>
+        <View style={styles.wrapper}>
+          <GestureDetector gesture={longPressGestureColors}>
+            <Animated.View style={[styles.quadro, colorStyleSecondScreen]} />
+          </GestureDetector>
+          <GestureDetector gesture={longPressGestureScaleAndColors}>
+            <Animated.View
+              style={[styles.quadro, scaleAndColorStyleSecondScreen]}
+            />
+          </GestureDetector>
+        </View>
+      </Container>
+      <Container style={styles.containerStyle}>
+        <Typography>GestureDetector</Typography>
+        <Typography>Zoom</Typography>
+        <View style={styles.wrapperColumn}>
+          <GestureDetector gesture={pinchGesture}>
+            <View style={[styles.containerCentering, {width: SCREEN_WIDTH}]}>
+              <Animated.View style={[styles.bigCircle, scalePinchStyle]} />
+            </View>
+          </GestureDetector>
+        </View>
+      </Container>
+      <Container style={styles.containerStyle}>
+        <Typography>GestureDetector</Typography>
+        <Typography>Rotate</Typography>
+        <View style={styles.wrapperColumn}>
+          <GestureDetector gesture={rotationGesture}>
+            <View style={[styles.containerCentering, {width: SCREEN_WIDTH}]}>
+              <Animated.View
+                style={[styles.quadro, styles.bigQuadro, rotationStyle]}
+              />
+            </View>
+          </GestureDetector>
+        </View>
+      </Container>
+      <Container style={styles.containerStyle}>
+        {ToDos.map(todo => {
+          return (
+            <Swipeable
+              renderLeftActions={renderLeftActions}
+              renderRightActions={renderRightActions}
+            >
+              <Typography
+                variant="18"
+                style={styles.typographyStyle}
+                textStyle={styles.textStyle}
+              >
+                {todo}
+              </Typography>
+            </Swipeable>
+          );
+        })}
+      </Container>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  style: {
-    backgroundColor: COLORS.genericWhite,
+  containerStyle: {
+    width: SCREEN_WIDTH,
   },
+
   wrapper: {
     flex: 1,
     flexDirection: 'row',
     paddingTop: 30,
   },
+  wrapperColumn: {
+    flex: 1,
+    alignItems: 'center',
+  },
   quadro: {
     height: 120,
-    width: 120,
+    aspectRatio: 1,
     borderRadius: 6,
     marginRight: 30,
   },
-  circle: {
-    height: 150,
-    width: 150,
-    borderRadius: 75,
+  bigQuadro: {
+    height: 200,
+  },
+
+  containerCentering: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  smallCircle: {
+    aspectRatio: 1,
+    height: SIZE,
+    borderRadius: SIZE / 2,
+    backgroundColor: '#FFA533',
     marginRight: 30,
+  },
+  bigCircle: {
+    aspectRatio: 1,
+    height: SIZE * 2,
+    borderRadius: SIZE,
+    backgroundColor: '#FFA533',
+  },
+  textStyle: {
+    color: COLORS.genericWhite,
+    textAlign: 'center',
+  },
+  typographyStyle: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: COLORS.genericWhite,
+    justifyContent: 'center',
+    height: 50,
+    backgroundColor: COLORS.cardFiller,
+  },
+  action: {
+    flex: 0.2,
+    color: COLORS.genericWhite,
+    justifyContent: 'center',
+  },
+  leftAction: {
+    flex: 0.5,
+    color: COLORS.genericWhite,
+    justifyContent: 'center',
   },
 });

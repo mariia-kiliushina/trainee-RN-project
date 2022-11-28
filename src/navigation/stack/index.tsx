@@ -10,8 +10,9 @@ import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
 import {RootStackParamList} from '../types';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 
-export const ScreenNavigation = () => {
+export const ScreenNavigation = gestureHandlerRootHOC(() => {
   const isSignedIn = useAppSelector(selectProfile);
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -56,4 +57,4 @@ export const ScreenNavigation = () => {
       </Stack.Group>
     </Stack.Navigator>
   );
-};
+});
