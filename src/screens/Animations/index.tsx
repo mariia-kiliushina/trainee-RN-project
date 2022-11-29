@@ -10,14 +10,16 @@ import {
   GestureDetector,
   PanGestureHandler,
   TapGestureHandler,
-  RectButton,
+  PanGestureHandlerGestureEvent,
   GestureEvent,
+  RectButton,
 } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Animated, {
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
+  useDerivedValue,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
@@ -26,7 +28,7 @@ import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
 import {ToDos} from './mock';
 
-const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const SIZE = 120;
 
 export const Animations = () => {
@@ -37,17 +39,56 @@ export const Animations = () => {
   const pressedForColorSecondScreen = useSharedValue(false);
   const pressedForScaleAndColorSecondScreen = useSharedValue(false);
   const pressedForPosition = useSharedValue(false);
-  const pressedForPositionCtx = useSharedValue(false);
   const startingPosition = 0;
   const x = useSharedValue(startingPosition);
   const y = useSharedValue(startingPosition);
   const startingPositionCtx = 0;
-  const xCtx = useSharedValue(startingPositionCtx);
-  const yCtx = useSharedValue(startingPositionCtx);
+  const xWithContext = useSharedValue(startingPositionCtx);
+  const yWithContext = useSharedValue(startingPositionCtx);
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
   const rotationForGesture = useSharedValue(0);
   const rotationForGestureSaved = useSharedValue(0);
+  const startContextForPanHandler = useSharedValue({x: 0, y: 0});
+  const startContextForPanGesture = useSharedValue({x: 0, y: 0});
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(20);
+
+  const useGetBubbleStyle = (
+    baseX: Animated.SharedValue<number>,
+    baseY: Animated.SharedValue<number>,
+  ) => {
+    const derivedX = useDerivedValue(() => {
+      return withSpring(baseX.value);
+    });
+
+    const derivedY = useDerivedValue(() => {
+      return withSpring(baseY.value);
+    });
+    const bubbleStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{translateX: derivedX.value}, {translateY: derivedY.value}],
+      };
+    });
+    return {derivedX, derivedY, bubbleStyle};
+  };
+
+  const {
+    derivedX: mainX,
+    derivedY: mainY,
+    bubbleStyle,
+  } = useGetBubbleStyle(translateX, translateY);
+
+  const {
+    derivedX: firstFollowerX,
+    derivedY: firstFollowerY,
+    bubbleStyle: firstFollowerBubbleStyle,
+  } = useGetBubbleStyle(mainX, mainY);
+
+  const {bubbleStyle: secondFollowerBubbleStyle} = useGetBubbleStyle(
+    firstFollowerX,
+    firstFollowerY,
+  );
 
   const rotateStyle = useAnimatedStyle(() => {
     return {
@@ -78,7 +119,10 @@ export const Animations = () => {
   const positionCtxStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: '#DC33FF',
-      transform: [{translateX: xCtx.value}, {translateY: yCtx.value}],
+      transform: [
+        {translateX: xWithContext.value},
+        {translateY: yWithContext.value},
+      ],
     };
   });
 
@@ -155,9 +199,7 @@ export const Animations = () => {
     },
   });
 
-  const dragHandler = useAnimatedGestureHandler<
-    GestureEvent<PanGestureHandler>
-  >({
+  const dragHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onStart: () => {
       pressedForPosition.value = true;
     },
@@ -172,19 +214,21 @@ export const Animations = () => {
     },
   });
 
-  const dragHandlerCtx = useAnimatedGestureHandler<
-    GestureEvent<PanGestureHandler>
-  >({
-    onStart: (_, ctx) => {
-      pressedForPositionCtx.value = true;
-      ctx.startXCtx = xCtx.value;
-      ctx.startYCtx = yCtx.value;
-    },
-    onActive: (event, ctx) => {
-      xCtx.value = ctx.startXCtx + event.translationX;
-      yCtx.value = ctx.startYCtx + event.translationY;
-    },
-  });
+  const dragHandlerWithContext =
+    useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
+      onStart: () => {
+        startContextForPanHandler.value = {
+          x: xWithContext.value,
+          y: yWithContext.value,
+        };
+      },
+      onActive: event => {
+        xWithContext.value =
+          startContextForPanHandler.value.x + event.translationX;
+        yWithContext.value =
+          startContextForPanHandler.value.y + event.translationY;
+      },
+    });
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate(event => {
@@ -216,6 +260,22 @@ export const Animations = () => {
     })
     .onEnd(() => {
       rotationForGestureSaved.value = rotationForGesture.value;
+    });
+
+  const dragAndBubbleGesture = Gesture.Pan()
+    .onStart(() => {
+      startContextForPanGesture.value = {
+        x: translateX.value,
+        y: translateY.value,
+      };
+    })
+    .onUpdate(event => {
+      translateX.value = startContextForPanGesture.value.x + event.translationX;
+      translateY.value = startContextForPanGesture.value.y + event.translationY;
+    })
+    .onEnd(() => {
+      translateX.value =
+        Math.abs(translateX.value) < width / 2 ? 0 : width - SIZE;
     });
 
   const renderLeftActions = () => {
@@ -272,7 +332,7 @@ export const Animations = () => {
           <PanGestureHandler onGestureEvent={dragHandler}>
             <Animated.View style={[styles.smallCircle, positionStyle]} />
           </PanGestureHandler>
-          <PanGestureHandler onGestureEvent={dragHandlerCtx}>
+          <PanGestureHandler onGestureEvent={dragHandlerWithContext}>
             <Animated.View style={[styles.smallCircle, positionCtxStyle]} />
           </PanGestureHandler>
         </View>
@@ -295,7 +355,7 @@ export const Animations = () => {
         <Typography>Zoom</Typography>
         <View style={styles.wrapperColumn}>
           <GestureDetector gesture={pinchGesture}>
-            <View style={[styles.containerCentering, {width: SCREEN_WIDTH}]}>
+            <View style={[styles.containerCentering, {width}]}>
               <Animated.View style={[styles.bigCircle, scalePinchStyle]} />
             </View>
           </GestureDetector>
@@ -306,7 +366,7 @@ export const Animations = () => {
         <Typography>Rotate</Typography>
         <View style={styles.wrapperColumn}>
           <GestureDetector gesture={rotationGesture}>
-            <View style={[styles.containerCentering, {width: SCREEN_WIDTH}]}>
+            <View style={[styles.containerCentering, {width}]}>
               <Animated.View
                 style={[styles.quadro, styles.bigQuadro, rotationStyle]}
               />
@@ -314,10 +374,46 @@ export const Animations = () => {
           </GestureDetector>
         </View>
       </Container>
+
+      <Container
+        style={styles.containerStyle}
+        contentLayout={{paddingHorizontal: 0}}
+      >
+        <Typography>Bubbles</Typography>
+        <View style={styles.followerWrapper}>
+          <Animated.View
+            style={[
+              styles.smallCircle,
+              {backgroundColor: '#A633FF', height: SIZE * 0.6},
+              secondFollowerBubbleStyle,
+            ]}
+          />
+        </View>
+        <View style={styles.followerWrapper}>
+          <Animated.View
+            style={[
+              styles.smallCircle,
+              {backgroundColor: '#33FFA5', height: SIZE * 0.8},
+              firstFollowerBubbleStyle,
+            ]}
+          />
+        </View>
+        <GestureDetector gesture={dragAndBubbleGesture}>
+          <Animated.View
+            style={[
+              styles.smallCircle,
+              {backgroundColor: '#33AAFF', position: 'absolute'},
+              bubbleStyle,
+            ]}
+          />
+        </GestureDetector>
+      </Container>
       <Container style={styles.containerStyle}>
+        <Typography>Swipable</Typography>
         {ToDos.map(todo => {
           return (
             <Swipeable
+              key={todo}
               renderLeftActions={renderLeftActions}
               renderRightActions={renderRightActions}
             >
@@ -338,7 +434,7 @@ export const Animations = () => {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    width: SCREEN_WIDTH,
+    width,
   },
 
   wrapper: {
@@ -398,6 +494,12 @@ const styles = StyleSheet.create({
   leftAction: {
     flex: 0.5,
     color: COLORS.genericWhite,
+    justifyContent: 'center',
+  },
+  followerWrapper: {
+    height: SIZE,
+    aspectRatio: 1,
+    position: 'absolute',
     justifyContent: 'center',
   },
 });
