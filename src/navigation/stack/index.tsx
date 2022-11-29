@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-import {Animations} from 'screens/Animations';
+import {Timer} from 'screens/Timer';
 import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
@@ -10,9 +10,8 @@ import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks';
 import {RootStackParamList} from '../types';
-import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 
-export const ScreenNavigation = gestureHandlerRootHOC(() => {
+export const ScreenNavigation = () => {
   const isSignedIn = useAppSelector(selectProfile);
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,7 +33,7 @@ export const ScreenNavigation = gestureHandlerRootHOC(() => {
       ) : (
         <>
           <Stack.Screen name="Onboarding" component={Onboarding} />
-          <Stack.Screen name="Animations" component={Animations} />
+          <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen
             name="Login"
             component={Login}
@@ -57,4 +56,4 @@ export const ScreenNavigation = gestureHandlerRootHOC(() => {
       </Stack.Group>
     </Stack.Navigator>
   );
-});
+};
