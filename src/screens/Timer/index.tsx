@@ -9,13 +9,21 @@ const useTimer: (initialTime: number) => {
   countdownTime: number;
   restart: () => void;
 } = initialTime => {
-  const positiveNumberForTime = initialTime < 0 ? 0 : initialTime;
+  ///
+  const [time, setTime] = useState(Math.abs(initialTime));
+  const intervalRef = useRef(null);
+
   const [hasTimeBeenAdjusted, setHasTimeBeenAdjusted] = useState(false);
   const [timestampOut, setTimestampOut] = useState(0);
   const [timestampIn, setTimestampIn] = useState(0);
-  const [time, setTime] = useState(positiveNumberForTime);
 
-  let refTime = useRef(time);
+  useEffect(() => {
+    // intervalRef.current = setInterval(() => {}, 1000);
+    //   const listener = AppState.addEventListener('change', () => {});
+    // return () => listener.remove();
+  }, []);
+
+  /////
 
   const restart = useCallback(() => {
     setTime(initialTime);
@@ -33,6 +41,7 @@ const useTimer: (initialTime: number) => {
   const timeInTheBackground = getTimeInTheBackground();
 
   useEffect(() => {
+    console.log('time');
     if (refTime.current > 0) {
       const id = setInterval(() => {
         if (hasTimeBeenAdjusted) {
@@ -68,7 +77,7 @@ const useTimer: (initialTime: number) => {
 };
 
 export const Timer = () => {
-  const {countdownTime, restart} = useTimer(50);
+  const {countdownTime, restart} = useTimer(10);
 
   const isRestartDisabled = countdownTime > 0 ? true : false;
 
