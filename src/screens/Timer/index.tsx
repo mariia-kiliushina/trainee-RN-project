@@ -1,47 +1,83 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {View, StyleSheet, AppStateStatus, AppState} from 'react-native';
 import {Container} from 'src/components/Container';
 import {Typography} from 'src/components/Typography';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 
-export const Timer = () => {
-  //
-  const useTimer: (initialTime: number) => {
-    refTime: number;
-    restart: () => void;
-  } = initialTime => {
-    const positiveTime = initialTime < 0 ? 0 : initialTime;
+const useTimer: (initialTime: number) => {
+  countdownTime: number;
+  restart: () => void;
+} = initialTime => {
+  const positiveNumberForTime = initialTime < 0 ? 0 : initialTime;
+  const [hasTimeBeenAdjusted, setHasTimeBeenAdjusted] = useState(false);
+  const [timestampOut, setTimestampOut] = useState(0);
+  const [timestampIn, setTimestampIn] = useState(0);
+  const [time, setTime] = useState(positiveNumberForTime);
 
-    const [time, setTime] = useState(positiveTime);
-    let refTime = useMemo(() => ({current: time}), [time]);
+  let refTime = useRef(time);
 
-    useEffect(() => {
-      if (refTime.current > 0) {
-        const id = setInterval(() => {
-          refTime.current -= 1;
-          setTime(refTime.current);
-        }, 1000);
-        return () => clearInterval(id);
-      }
-    }, [refTime]);
+  const restart = useCallback(() => {
+    setTime(initialTime);
+  }, [initialTime]);
 
-    const restart = useCallback(() => {
-      setTime(initialTime);
-    }, [initialTime]);
-
-    return {refTime: refTime.current, restart};
+  const getTimeInTheBackground = () => {
+    if (timestampIn && timestampIn > timestampOut) {
+      let timeInTheBackground = (timestampIn - timestampOut) / 1000;
+      return Math.round(timeInTheBackground);
+    } else {
+      return 0;
+    }
   };
 
-  const {refTime, restart} = useTimer(8);
+  const timeInTheBackground = getTimeInTheBackground();
 
-  const isRestartDisabled = refTime > 0 ? true : false;
+  useEffect(() => {
+    if (refTime.current > 0) {
+      const id = setInterval(() => {
+        if (hasTimeBeenAdjusted) {
+          refTime.current -= 1;
+        } else {
+          refTime.current = refTime.current - timeInTheBackground;
+          setHasTimeBeenAdjusted(true);
+        }
+
+        setTime(refTime.current < 0 ? 0 : refTime.current);
+      }, 1000);
+      return () => {
+        clearInterval(id);
+      };
+    }
+  }, [refTime, timeInTheBackground, hasTimeBeenAdjusted]);
+
+  useEffect(() => {
+    const onChange = (state: AppStateStatus): void => {
+      if (state === 'active') {
+        setTimestampIn(Date.now());
+      } else {
+        setTimestampOut(Date.now());
+        setHasTimeBeenAdjusted(false);
+      }
+    };
+
+    const listener = AppState.addEventListener('change', onChange);
+    return () => listener.remove();
+  }, [timestampOut]);
+
+  return {countdownTime: refTime.current, restart};
+};
+
+export const Timer = () => {
+  const {countdownTime, restart} = useTimer(50);
+
+  const isRestartDisabled = countdownTime > 0 ? true : false;
 
   return (
     <Container style={styles.style} contentLayout={styles.contentLayout}>
       <Typography variant="24" textStyle={styles.textStyle}>
-        {`${refTime}s`}
+        {`${countdownTime}s`}
       </Typography>
+
       <View style={styles.buttonsWrapper}>
         <Button
           disabled={isRestartDisabled}
