@@ -33,7 +33,7 @@ export const Onboarding = ({
   const hasCamera = devices.back || devices.front;
 
   const onLogin = () => {
-    navigation.navigate('Animations');
+    navigation.navigate('Timer');
   };
 
   const onNavigateToVideo = () => {

@@ -23,22 +23,21 @@ export const Button = ({
   style,
   onPress,
   hitSlop,
+  disabled,
   ...restProps
 }: Props) => {
-  const styleButton = styles[type];
+  const buttonStyle = disabled ? styles[`${type}Disabled`] : styles[type];
 
-  const textColorVariants = {
-    primary: COLORS.genericWhite,
-    secondary: COLORS.warning500,
-  };
-
-  const textColor = textColorVariants[type];
+  const textStyle = disabled
+    ? styles[`${type}TextDisabled`]
+    : styles[`${type}Text`];
 
   return (
     <Pressable
+      disabled={disabled}
       style={({pressed}) => [
         styles.button,
-        styleButton,
+        buttonStyle,
         style,
         pressed && styles.pressed,
       ]}
@@ -46,7 +45,7 @@ export const Button = ({
       hitSlop={hitSlop}
       {...restProps}
     >
-      <Typography color={textColor} variant="14">
+      <Typography textStyle={textStyle} variant="14">
         {children}
       </Typography>
     </Pressable>
@@ -74,6 +73,28 @@ const styles = StyleSheet.create({
 
   pressed: {
     opacity: 0.7,
+  },
+
+  secondaryDisabled: {
+    backgroundColor: COLORS.genericWhite,
+    borderWidth: 1,
+    borderColor: COLORS.neutral300,
+  },
+  primaryDisabled: {
+    backgroundColor: COLORS.neutral300,
+  },
+
+  primaryText: {
+    color: COLORS.genericWhite,
+  },
+  secondaryText: {
+    color: COLORS.warning500,
+  },
+  primaryTextDisabled: {
+    color: COLORS.genericWhite,
+  },
+  secondaryTextDisabled: {
+    color: COLORS.neutral300,
   },
   /*eslint-enable react-native/no-unused-styles */
 });
