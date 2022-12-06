@@ -11,26 +11,31 @@ LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-const App = () => {
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
+const requestUserPermission = async () => {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
   }
+};
+const registerDeviceInFireBaseMesages = async () => {
+  await messaging().registerDeviceForRemoteMessages();
+};
 
-  requestUserPermission();
+const getFireBaseMesagesToken = async () => {
+  await messaging().registerDeviceForRemoteMessages();
+  const token = await messaging().getToken();
+  console.log(token);
+};
 
-  const getToken = async () => {
-    await messaging().registerDeviceForRemoteMessages();
-    const token = await messaging().getToken();
-    console.log(token);
-  };
-  getToken();
+const App = () => {
+  useEffect(() => {
+    requestUserPermission();
+    registerDeviceInFireBaseMesages();
+    getFireBaseMesagesToken(); // for testing purposes
+  }, []);
 
   useEffect(() => {
     messaging().onNotificationOpenedApp(remoteMessage => {
@@ -59,6 +64,7 @@ const App = () => {
 
     return unsubscribe;
   }, []);
+
   return (
     <SafeAreaProvider>
       <StatusBar
