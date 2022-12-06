@@ -9,6 +9,7 @@ import {store} from 'src/store';
 import {ScreenNavigation} from 'src/navigation/stack';
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
+  'Usage of "messaging().registerDeviceForRemoteMessages()" is not required.',
 ]);
 
 const requestUserPermission = async () => {
@@ -17,7 +18,7 @@ const requestUserPermission = async () => {
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   if (enabled) {
-    console.log('Authorization status:', authStatus);
+    //do sth with   enabled
   }
 };
 const registerDeviceInFireBaseMesages = async () => {
@@ -25,9 +26,8 @@ const registerDeviceInFireBaseMesages = async () => {
 };
 
 const getFireBaseMesagesToken = async () => {
-  await messaging().registerDeviceForRemoteMessages();
-  const token = await messaging().getToken();
-  console.log(token);
+  await messaging().getToken();
+  //do sth with   token
 };
 
 const App = () => {
@@ -38,28 +38,20 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
+    messaging().onNotificationOpenedApp(() => {
+      //do sth with   remoteMessage.notification
     });
 
     messaging()
       .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-        }
+      .then(() => {
+        //do sth with   remoteMessage.notification
       });
   });
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const unsubscribe = messaging().onMessage(async () => {
+      //do sth with   remoteMessage.notification
     });
 
     return unsubscribe;
