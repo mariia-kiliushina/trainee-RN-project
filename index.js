@@ -11,13 +11,4 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 
-function HeadlessCheck({isHeadless}) {
-  if (isHeadless) {
-    // if App has been launched in the background by iOS then ignore
-    return null;
-  }
-
-  return <App />;
-}
-
-AppRegistry.registerComponent(appName, () => HeadlessCheck);
+AppRegistry.registerComponent(appName, () => App);

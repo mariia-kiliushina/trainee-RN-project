@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {StatusBar, LogBox} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import messaging from '@react-native-firebase/messaging';
 import {store} from 'src/store';
@@ -12,6 +12,19 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
+  requestUserPermission();
+
   const getToken = async () => {
     await messaging().registerDeviceForRemoteMessages();
     const token = await messaging().getToken();
