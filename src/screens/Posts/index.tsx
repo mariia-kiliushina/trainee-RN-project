@@ -34,19 +34,10 @@ export const Posts = () => {
     item,
   }: ListRenderItemInfo<TPost>) => <Post title={item.title} body={item.body} />;
 
-  const keyExtractor = (item: TPost) => {
-    return item.id;
-  };
-
   return (
     <SafeAreaView style={[styles.safeAreaStyle, {paddingTop: insets.top}]}>
       {status === true && <Typography>LOADING</Typography>}
-      <FlatList
-        style={styles.list}
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
+      <FlatList style={styles.list} data={data} renderItem={renderItem} />
     </SafeAreaView>
   );
 };
