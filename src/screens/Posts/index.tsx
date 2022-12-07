@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -10,26 +9,17 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Typography} from 'src/components/Typography';
 import {TPost} from 'src/store/postsSlice/types';
-import {fetchPosts} from 'src/store/postsSlice/slice';
-import {selectPosts, selectStatus} from 'src/store/postsSlice/selectors';
-import {useAppDispatch, useAppSelector} from 'src/hooks';
+import {selectStatus} from 'src/store/postsSlice/selectors';
+import {useAppSelector, usePosts} from 'src/hooks';
+
 import {COLORS} from 'src/constants/colors';
 
 export const Posts = () => {
   const insets = useSafeAreaInsets();
-  const dispatch = useAppDispatch();
-  const posts = useAppSelector(selectPosts);
+
   const status = useAppSelector(selectStatus);
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
 
-  useEffect(() => {
-    console.log('status');
-    console.log(status);
-  }, [status]);
-
-  const data = posts;
+  const data = usePosts();
 
   const Post = ({title, body}: Omit<TPost, 'id' | 'userId'>) => (
     <Pressable style={styles.pressableCard}>
