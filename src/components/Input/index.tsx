@@ -97,8 +97,8 @@ export const Input = ({
       <View style={[styles.wrapper, editable && styles.shadow]}>
         <ConditionalWrapper
           condition={isPressable}
-          wrapper={(children: JSX.Element) =>
-            renderPressableInputWrapper(children)
+          wrapper={(wrapperChildren: JSX.Element) =>
+            renderPressableInputWrapper(wrapperChildren)
           }
         >
           <>

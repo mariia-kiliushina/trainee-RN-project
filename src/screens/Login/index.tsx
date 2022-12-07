@@ -3,7 +3,7 @@ import {Keyboard, StyleSheet} from 'react-native';
 import {useFormik} from 'formik';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import ReactNativeBiometrics from 'react-native-biometrics';
-import {useAppDispatch} from 'src/hooks';
+import {useAppDispatch} from 'src/hooks/redux';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
 import {Container} from 'src/components/Container';

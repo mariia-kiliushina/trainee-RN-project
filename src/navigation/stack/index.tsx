@@ -1,14 +1,14 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
 import {AddRecord} from 'screens/AddRecord';
-import {Timer} from 'screens/Timer';
+import {Posts} from 'screens/Posts';
 import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
-import {useAppSelector} from 'src/hooks';
+import {useAppSelector} from 'src/hooks/redux';
 import {RootStackParamList} from '../types';
 
 export const ScreenNavigation = () => {
@@ -33,7 +33,7 @@ export const ScreenNavigation = () => {
       ) : (
         <>
           <Stack.Screen name="Onboarding" component={Onboarding} />
-          <Stack.Screen name="Timer" component={Timer} />
+          <Stack.Screen name="Posts" component={Posts} />
           <Stack.Screen
             name="Login"
             component={Login}
