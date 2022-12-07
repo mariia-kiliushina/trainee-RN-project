@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {COLORS} from 'constants/colors';
 import {capitalizeFirstLetter} from 'utils/formatters';
+import {ReactNode} from 'react';
 
 type TFontVariant = '14' | '16' | '18' | '24';
 type FontType = 'regular' | 'bold';
@@ -37,7 +38,7 @@ const fontVariants: {[k in TFontVariant]: StyleProp<TextStyle>} =
   });
 
 type Props = TextProps & {
-  children: any;
+  children: ReactNode;
   variant?: TFontVariant;
   color?: ColorValue;
   fontType?: FontType;

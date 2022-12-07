@@ -1,6 +1,6 @@
 type ConditionalWrapperParams = {
   condition: boolean | undefined;
-  wrapper: (children: JSX.Element) => JSX.Element;
+  wrapper: (wrapperChildren: JSX.Element) => JSX.Element;
   children: JSX.Element;
 };
 

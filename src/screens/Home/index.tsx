@@ -11,7 +11,7 @@ import {Input} from 'src/components/Input';
 import {InputPassword} from 'src/components/InputPassword';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {registeringValidationSchema} from 'src/helpers/validation';
-import {useAppDispatch} from 'src/hooks';
+import {useAppDispatch} from 'src/hooks/redux';
 import {logOutUser} from 'src/store/profileSlice/slice';
 import {Provider, providerData} from './mock';
 

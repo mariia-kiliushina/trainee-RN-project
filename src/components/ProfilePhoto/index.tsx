@@ -13,10 +13,6 @@ import {HomeTabScreenProps} from 'src/navigation/types';
 import ProfilePhotoPlacehoder from 'assets/img/avatarPlaceholder.png';
 import {Button} from 'components/Button';
 
-type Props = {
-  setImageParent: (image: any) => any;
-};
-
 export type Option = {
   name: string;
   iconName: string;
@@ -25,6 +21,10 @@ export type Option = {
 export type ImageType = {
   data: string | null | undefined;
   mime: string;
+};
+
+type Props = {
+  setImageParent: (image: ImageType) => any;
 };
 
 const addPhotoOptions = [

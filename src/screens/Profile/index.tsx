@@ -4,7 +4,7 @@ import {Container} from 'src/components/Container';
 import {ImageType, ProfilePhoto} from 'components/ProfilePhoto';
 import {logOutUser} from 'src/store/profileSlice/slice';
 import {Button} from 'src/components/Button';
-import {useAppDispatch} from 'src/hooks';
+import {useAppDispatch} from 'src/hooks/redux';
 
 export const Profile = () => {
   const [image, setImage] = useState<ImageType>({
