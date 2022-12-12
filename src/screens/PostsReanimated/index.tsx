@@ -1,23 +1,16 @@
-import {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, View, Platform, Animated} from 'react-native';
+import {useEffect, useRef, useState} from 'react';
+import {Pressable, StyleSheet, View, Platform} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {Button} from 'src/components/Button';
-import {usePosts} from 'src/hooks/usePosts';
-import {TPost} from 'src/store/postsSlice/types';
 import {RootStackScreenProps} from 'src/navigation/types';
+import {TPost} from 'src/store/postsSlice/types';
+import {usePosts} from 'src/hooks/usePosts';
 import {Container} from 'src/components/Container';
+import {Button} from 'src/components/Button';
 import {Typography} from 'src/components/Typography';
-import {COLORS} from 'src/constants/colors';
 import {CrossClose} from 'src/assets/svg';
+import {COLORS} from 'src/constants/colors';
 
-type PropsModal = {
-  rowData: any;
-  listData: TPost[];
-  setListData: (listData: TPost[]) => void;
-};
-
-const NEGATVE_RIGHT_OFFSET = -10;
-const PADDING_HORIZONTAL = 20 + NEGATVE_RIGHT_OFFSET;
+const PADDING_HORIZONTAL = 20;
 
 export const PostsReanimated = ({
   navigation,
@@ -26,8 +19,11 @@ export const PostsReanimated = ({
 
   const [listData, setListData] = useState<TPost[]>([]);
 
+  const rowsRefsArray = useRef<Swipeable[]>([]);
+  const previouslyOpenedRow = useRef<Swipeable | null>(null);
+
   useEffect(() => {
-    let newList = postsData.map(({id, userId, title, body}) => ({
+    const newList = postsData.map(({id, userId, title, body}) => ({
       id,
       userId,
       title: title.slice(0, 10),
@@ -36,41 +32,75 @@ export const PostsReanimated = ({
     setListData(newList);
   }, [postsData]);
 
+  const closeRow = (itemId: number) => {
+    if (
+      previouslyOpenedRow.current &&
+      previouslyOpenedRow.current !== rowsRefsArray.current[itemId]
+    ) {
+      previouslyOpenedRow.current.close();
+    }
+    previouslyOpenedRow.current = rowsRefsArray.current[itemId];
+  };
+
   const renderRightActions = () => (
-    <View
-      style={[
-        {
-          // borderWidth: 1,
-          borderColor: 'violet',
-          right: NEGATVE_RIGHT_OFFSET,
-        },
-        {backgroundColor: 'white', marginBottom: 20},
-      ]}
-    >
-      <View>
-        <Button style={styles.closeButton}>
-          <CrossClose height={24} width={24} />
-        </Button>
-      </View>
+    <View style={styles.rightActionStyle}>
+      <Pressable
+        style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
+        onPress={onNavigateToPopUpModal}
+      >
+        <CrossClose height={24} width={24} />
+      </Pressable>
     </View>
   );
 
+  const onCloseModal = () => {
+    previouslyOpenedRow?.current?.close();
+    previouslyOpenedRow.current = null;
+    navigation.goBack();
+  };
+
+  const ModalContent = () => {
+    return (
+      <>
+        <Typography textStyle={styles.text}>Choose option</Typography>
+        <Button type="secondary" onPress={onCloseModal}>
+          <Typography>Go back</Typography>
+        </Button>
+        <Button type="primary" onPress={onCloseModal}>
+          <Typography>Yes</Typography>
+        </Button>
+      </>
+    );
+  };
+
+  const onNavigateToPopUpModal = () => {
+    navigation.navigate('PopUpModal', {
+      children: <ModalContent />,
+    });
+  };
+
   return (
     <Container
-      hasKeyboardAwareScrollView={false}
-      contentLayout={{paddingHorizontal: 40}}
+      hasKeyboardAwareScrollView={true}
+      contentLayout={styles.contentLayout}
     >
       {listData.map((item: TPost) => {
         return (
-          <View key={item.id} style={styles.wrapper}>
+          <View key={item.id}>
             <Swipeable
+              ref={rowRef => {
+                if (rowRef) {
+                  rowsRefsArray.current[item.id] = rowRef;
+                }
+              }}
+              onSwipeableWillOpen={() => closeRow(item.id)}
               renderRightActions={renderRightActions}
               containerStyle={[styles.containerStyle, styles.shadow]}
               childrenContainerStyle={[styles.childrenContainerStyle]}
-              overshootFriction={8}
+              overshootRight={false}
             >
-              <Pressable style={[styles.rowVisible, styles.shadow]}>
-                <View style={{backgroundColor: 'white'}}>
+              <Pressable style={[styles.rowVisibleOuterShadow, styles.shadow]}>
+                <View style={styles.rowVisibleInner}>
                   <Typography variant="18" fontType="bold">
                     {item.title}
                   </Typography>
@@ -86,38 +116,33 @@ export const PostsReanimated = ({
 };
 
 const styles = StyleSheet.create({
+  contentLayout: {
+    paddingHorizontal: 0,
+  },
   containerStyle: {
-    // borderWidth: 1,
-    borderColor: 'brown',
-    paddingLeft: PADDING_HORIZONTAL - NEGATVE_RIGHT_OFFSET,
-    marginBottom: 20,
-    marginRight: 10,
+    paddingLeft: PADDING_HORIZONTAL,
   },
   childrenContainerStyle: {
-    justifyContent: 'center',
-    // borderWidth: 1,
-    paddingRight: -NEGATVE_RIGHT_OFFSET,
-    borderColor: 'red',
+    marginRight: PADDING_HORIZONTAL,
   },
-  rowVisible: {
-    // borderWidth: 1,
-    borderColor: 'black',
+  rowVisibleOuterShadow: {
+    marginBottom: 20,
+  },
+  rowVisibleInner: {
+    backgroundColor: COLORS.genericWhite,
+    padding: 10,
+  },
+  rightActionStyle: {
+    right: -PADDING_HORIZONTAL,
+    backgroundColor: COLORS.genericWhite,
     marginBottom: 20,
   },
   closeButton: {
-    width: 70,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    width: 70,
   },
-
-  wrapper: {
-    paddingRight: PADDING_HORIZONTAL,
-    width: '100%',
-    justifyContent: 'center',
-  },
-
   shadow: {
     ...Platform.select({
       android: {
@@ -135,5 +160,12 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
       },
     }),
+  },
+  pressed: {
+    opacity: 0.8,
+  },
+  text: {
+    textAlign: 'center',
+    marginBottom: 15,
   },
 });
