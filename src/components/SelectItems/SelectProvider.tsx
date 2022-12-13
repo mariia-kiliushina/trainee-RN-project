@@ -28,7 +28,7 @@ export const SelectProvider = ({value, onPress}: SelectItemProps) => {
           {value.amount}
         </Typography>
       </View>
-      <View style={[styles.bottomLine]} />
+      <View style={styles.bottomLine} />
     </Pressable>
   );
 };

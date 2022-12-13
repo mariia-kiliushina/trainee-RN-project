@@ -117,7 +117,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
   );
 
   return (
-    <Container hasKeyboardAwareScrollView={false}>
+    <Container viewType="fixed">
       <SwipeListView
         style={styles.container}
         data={listData}

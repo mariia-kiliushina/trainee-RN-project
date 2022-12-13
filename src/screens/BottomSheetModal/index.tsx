@@ -19,7 +19,7 @@ export const BottomSheetModal = ({
             <Typography variant="16" textStyle={styles.text}>
               Select
             </Typography>
-            <View style={[styles.bottomLine]} />
+            <View style={styles.bottomLine} />
 
             {children}
           </View>

@@ -3,18 +3,16 @@ import {
   Pressable,
   StyleSheet,
   View,
-  Platform,
   FlatList,
   ListRenderItem,
-  ListRenderItemInfo,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {TPost} from 'src/store/postsSlice/types';
-import {usePosts} from 'src/hooks/usePosts';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Typography} from 'src/components/Typography';
+import {usePosts} from 'src/hooks/usePosts';
 import {CrossClose} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
 
@@ -28,8 +26,6 @@ export const PostsReanimated = ({
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
-  const isIOS = Platform.OS === 'ios';
-
   const closeRow = (itemId: number) => {
     if (
       previouslyOpenedRow.current &&
@@ -41,7 +37,7 @@ export const PostsReanimated = ({
   };
 
   const renderRightActions = () => (
-    <View style={[styles.rightActionStyle, !isIOS && styles.shadow]}>
+    <View style={styles.rightActionStyle}>
       <Pressable
         style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
         onPress={onNavigateToPopUpModal}
@@ -77,41 +73,31 @@ export const PostsReanimated = ({
     });
   };
 
-  const renderItem: ListRenderItem<TPost> = ({
-    item,
-  }: ListRenderItemInfo<TPost>) => (
-    <View key={item.id}>
-      <Swipeable
-        ref={rowRef => {
-          if (rowRef) {
-            rowsRefsArray.current[item.id] = rowRef;
-          }
-        }}
-        onSwipeableWillOpen={() => closeRow(item.id)}
-        renderRightActions={renderRightActions}
-        containerStyle={[styles.containerStyle, isIOS && styles.shadow]}
-        childrenContainerStyle={styles.childrenContainerStyle}
-        overshootRight={false}
-      >
-        <Pressable style={[styles.rowVisibleOuterShadow, styles.shadow]}>
-          <View style={styles.rowVisibleInner}>
-            <Typography numberOfLines={1} variant="18" fontType="bold">
-              {item.title}
-            </Typography>
-            <Typography numberOfLines={2} variant="16">
-              {item.body}
-            </Typography>
-          </View>
-        </Pressable>
-      </Swipeable>
-    </View>
+  const renderItem: ListRenderItem<TPost> = ({item}) => (
+    <Swipeable
+      ref={rowRef => {
+        if (rowRef) {
+          rowsRefsArray.current[item.id] = rowRef;
+        }
+      }}
+      onSwipeableWillOpen={() => closeRow(item.id)}
+      renderRightActions={renderRightActions}
+      containerStyle={styles.containerStyle}
+      overshootRight={false}
+    >
+      <View style={styles.rowVisible}>
+        <Typography numberOfLines={1} variant="18" fontType="bold">
+          {item.title}
+        </Typography>
+        <Typography numberOfLines={2} variant="16">
+          {item.body}
+        </Typography>
+      </View>
+    </Swipeable>
   );
 
   return (
-    <Container
-      hasKeyboardAwareScrollView={false}
-      contentLayout={styles.contentLayout}
-    >
+    <Container viewType="fixed" contentLayout={styles.contentLayout}>
       <FlatList data={postsData} renderItem={renderItem} />
     </Container>
   );
@@ -122,46 +108,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   containerStyle: {
-    paddingLeft: PADDING_HORIZONTAL,
-  },
-  childrenContainerStyle: {
-    marginRight: PADDING_HORIZONTAL,
-  },
-  rowVisibleOuterShadow: {
+    paddingHorizontal: PADDING_HORIZONTAL,
     marginBottom: 20,
   },
-  rowVisibleInner: {
+  rowVisible: {
     backgroundColor: COLORS.genericWhite,
     padding: 10,
+    borderWidth: 1,
+    borderColor: COLORS.neutral300,
   },
   rightActionStyle: {
     right: -PADDING_HORIZONTAL,
     backgroundColor: COLORS.genericWhite,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: COLORS.neutral300,
+    borderLeftColor: 'transparent',
   },
   closeButton: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     width: 70,
-  },
-  shadow: {
-    ...Platform.select({
-      android: {
-        elevation: 4,
-        shadowColor: COLORS.shadow,
-        borderRadius: 6,
-      },
-      ios: {
-        shadowColor: COLORS.shadow,
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-    }),
   },
   pressed: {
     opacity: 0.8,

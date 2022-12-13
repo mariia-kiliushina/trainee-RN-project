@@ -1,59 +1,61 @@
-import {ReactNode} from 'react';
-import {StyleProp, StyleSheet, SafeAreaView, ViewStyle} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React from 'react';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Edge, SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from 'src/constants/colors';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ConditionalWrapper} from 'src/helpers/conditionalWrapper';
 
-type Props = {
-  children: ReactNode;
+export type ContainerProps = {
+  children: React.ReactNode[] | React.ReactNode;
+  viewType?: 'fixed' | 'scroll';
   style?: StyleProp<ViewStyle>;
   contentLayout?: StyleProp<ViewStyle>;
-  hasKeyboardAwareScrollView?: boolean;
+  edges?: Edge[];
 };
 
 export const Container = ({
   children,
+  viewType = 'scroll',
   style,
   contentLayout,
-  hasKeyboardAwareScrollView = true,
-}: Props) => {
-  const insets = useSafeAreaInsets();
-
-  const renderKeyboardAwareScrollView = (wrapperChildren: ReactNode) => {
-    return (
-      <KeyboardAwareScrollView
-        enableOnAndroid
-        contentContainerStyle={[styles.contentContainerStyle, contentLayout]}
-      >
-        {wrapperChildren}
-      </KeyboardAwareScrollView>
-    );
-  };
+  edges = ['top', 'right', 'left'],
+}: ContainerProps) => {
+  const Wrapper = viewType === 'scroll' ? SafeAreaView : View;
 
   return (
-    <SafeAreaView
-      style={[{paddingTop: insets.top}, styles.safeAreaStyle, style]}
-    >
+    <SafeAreaView edges={edges} style={[styles.container, style]}>
       <ConditionalWrapper
-        condition={hasKeyboardAwareScrollView}
-        wrapper={(wrapperChildren: ReactNode) =>
-          renderKeyboardAwareScrollView(wrapperChildren)
-        }
+        condition={viewType === 'scroll'}
+        wrapper={(wrapperChildren: React.ReactNode) => (
+          <KeyboardAwareScrollView
+            contentContainerStyle={styles.wrapper}
+            enableOnAndroid
+          >
+            {wrapperChildren}
+          </KeyboardAwareScrollView>
+        )}
       >
-        <>{children}</>
+        <Wrapper
+          edges={['bottom']}
+          style={[styles.contentContainer, contentLayout]}
+        >
+          <>{children}</>
+        </Wrapper>
       </ConditionalWrapper>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  contentContainerStyle: {
+  container: {
+    backgroundColor: COLORS.genericWhite,
     flexGrow: 1,
+  },
+  contentContainer: {
+    flex: 1,
     paddingHorizontal: 20,
   },
-  safeAreaStyle: {
-    backgroundColor: COLORS.genericWhite,
+  wrapper: {
     flexGrow: 1,
   },
 });
