@@ -8,11 +8,13 @@ import {
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
+import {usePosts} from 'src/hooks/usePosts';
 import {TPost} from 'src/store/postsSlice/types';
+import {deletePostById} from 'src/store/postsSlice/thunks';
+import {useAppDispatch} from 'src/hooks/redux';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Typography} from 'src/components/Typography';
-import {usePosts} from 'src/hooks/usePosts';
 import {CrossClose} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
 
@@ -21,6 +23,8 @@ const PADDING_HORIZONTAL = 20;
 export const PostsReanimated = ({
   navigation,
 }: RootStackScreenProps<'PostsReanimated'>) => {
+  const dispatch = useAppDispatch();
+
   const postsData = usePosts();
 
   const rowsRefsArray = useRef<Swipeable[]>([]);
@@ -36,11 +40,11 @@ export const PostsReanimated = ({
     previouslyOpenedRow.current = rowsRefsArray.current[itemId];
   };
 
-  const renderRightActions = () => (
+  const renderRightActions = (id: number) => (
     <View style={styles.rightActionStyle}>
       <Pressable
         style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
-        onPress={onNavigateToPopUpModal}
+        onPress={() => onNavigateToPopUpModal(id)}
       >
         <CrossClose height={24} width={24} />
       </Pressable>
@@ -53,23 +57,30 @@ export const PostsReanimated = ({
     navigation.goBack();
   };
 
-  const ModalContent = () => {
+  const onDeletePost = (id: number) => {
+    onCloseModal();
+    dispatch(deletePostById(id));
+  };
+
+  const ModalContent = ({id}: {id: number}) => {
     return (
       <>
-        <Typography textStyle={styles.text}>Choose option</Typography>
+        <Typography variant="18" fontType="bold" textStyle={styles.text}>
+          Delete option?
+        </Typography>
         <Button type="secondary" onPress={onCloseModal}>
           <Typography>Go back</Typography>
         </Button>
-        <Button type="primary" onPress={onCloseModal}>
+        <Button type="primary" onPress={() => onDeletePost(id)}>
           <Typography>Yes</Typography>
         </Button>
       </>
     );
   };
 
-  const onNavigateToPopUpModal = () => {
+  const onNavigateToPopUpModal = (id: number) => {
     navigation.navigate('PopUpModal', {
-      children: <ModalContent />,
+      children: <ModalContent id={id} />,
     });
   };
 
@@ -81,7 +92,7 @@ export const PostsReanimated = ({
         }
       }}
       onSwipeableWillOpen={() => closeRow(item.id)}
-      renderRightActions={renderRightActions}
+      renderRightActions={() => renderRightActions(item.id)}
       containerStyle={styles.containerStyle}
       overshootRight={false}
     >
