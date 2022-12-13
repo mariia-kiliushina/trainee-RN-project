@@ -90,7 +90,7 @@ export const PostsReanimated = ({
         onSwipeableWillOpen={() => closeRow(item.id)}
         renderRightActions={renderRightActions}
         containerStyle={[styles.containerStyle, isIOS && styles.shadow]}
-        childrenContainerStyle={[styles.childrenContainerStyle]}
+        childrenContainerStyle={styles.childrenContainerStyle}
         overshootRight={false}
       >
         <Pressable style={[styles.rowVisibleOuterShadow, styles.shadow]}>
