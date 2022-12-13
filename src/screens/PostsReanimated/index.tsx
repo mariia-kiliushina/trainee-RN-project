@@ -1,5 +1,13 @@
-import {useEffect, useRef, useState} from 'react';
-import {Pressable, StyleSheet, View, Platform} from 'react-native';
+import {useRef} from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  Platform,
+  FlatList,
+  ListRenderItem,
+  ListRenderItemInfo,
+} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {TPost} from 'src/store/postsSlice/types';
@@ -17,20 +25,10 @@ export const PostsReanimated = ({
 }: RootStackScreenProps<'PostsReanimated'>) => {
   const postsData = usePosts();
 
-  const [listData, setListData] = useState<TPost[]>([]);
-
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
-  useEffect(() => {
-    const newList = postsData.map(({id, userId, title, body}) => ({
-      id,
-      userId,
-      title: title.slice(0, 10),
-      body: body.slice(0, 20),
-    }));
-    setListData(newList);
-  }, [postsData]);
+  const isIOS = Platform.OS === 'ios';
 
   const closeRow = (itemId: number) => {
     if (
@@ -43,7 +41,7 @@ export const PostsReanimated = ({
   };
 
   const renderRightActions = () => (
-    <View style={styles.rightActionStyle}>
+    <View style={[styles.rightActionStyle, !isIOS && styles.shadow]}>
       <Pressable
         style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
         onPress={onNavigateToPopUpModal}
@@ -79,38 +77,42 @@ export const PostsReanimated = ({
     });
   };
 
+  const renderItem: ListRenderItem<TPost> = ({
+    item,
+  }: ListRenderItemInfo<TPost>) => (
+    <View key={item.id}>
+      <Swipeable
+        ref={rowRef => {
+          if (rowRef) {
+            rowsRefsArray.current[item.id] = rowRef;
+          }
+        }}
+        onSwipeableWillOpen={() => closeRow(item.id)}
+        renderRightActions={renderRightActions}
+        containerStyle={[styles.containerStyle, isIOS && styles.shadow]}
+        childrenContainerStyle={[styles.childrenContainerStyle]}
+        overshootRight={false}
+      >
+        <Pressable style={[styles.rowVisibleOuterShadow, styles.shadow]}>
+          <View style={styles.rowVisibleInner}>
+            <Typography numberOfLines={1} variant="18" fontType="bold">
+              {item.title}
+            </Typography>
+            <Typography numberOfLines={2} variant="16">
+              {item.body}
+            </Typography>
+          </View>
+        </Pressable>
+      </Swipeable>
+    </View>
+  );
+
   return (
     <Container
-      hasKeyboardAwareScrollView={true}
+      hasKeyboardAwareScrollView={false}
       contentLayout={styles.contentLayout}
     >
-      {listData.map((item: TPost) => {
-        return (
-          <View key={item.id}>
-            <Swipeable
-              ref={rowRef => {
-                if (rowRef) {
-                  rowsRefsArray.current[item.id] = rowRef;
-                }
-              }}
-              onSwipeableWillOpen={() => closeRow(item.id)}
-              renderRightActions={renderRightActions}
-              containerStyle={[styles.containerStyle, styles.shadow]}
-              childrenContainerStyle={[styles.childrenContainerStyle]}
-              overshootRight={false}
-            >
-              <Pressable style={[styles.rowVisibleOuterShadow, styles.shadow]}>
-                <View style={styles.rowVisibleInner}>
-                  <Typography variant="18" fontType="bold">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="16">{item.body}</Typography>
-                </View>
-              </Pressable>
-            </Swipeable>
-          </View>
-        );
-      })}
+      <FlatList data={postsData} renderItem={renderItem} />
     </Container>
   );
 };
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
           width: 0,
           height: 2,
         },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.1,
         shadowRadius: 3,
       },
     }),
