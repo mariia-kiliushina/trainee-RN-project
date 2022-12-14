@@ -25,7 +25,7 @@ export const PostsReanimated = ({
 }: RootStackScreenProps<'PostsReanimated'>) => {
   const dispatch = useAppDispatch();
 
-  const postsData = usePosts();
+  const {posts, postsFetchError} = usePosts();
 
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
@@ -109,7 +109,17 @@ export const PostsReanimated = ({
 
   return (
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
-      <FlatList data={postsData} renderItem={renderItem} />
+      {postsFetchError && (
+        <View style={styles.errorHandler}>
+          <Typography textStyle={styles.text}>
+            Failed to display posts
+          </Typography>
+          <Button type="secondary" onPress={navigation.goBack}>
+            <Typography>Go back</Typography>
+          </Button>
+        </View>
+      )}
+      <FlatList data={posts} renderItem={renderItem} />
     </Container>
   );
 };
@@ -147,5 +157,10 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     marginBottom: 15,
+  },
+  errorHandler: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
 });

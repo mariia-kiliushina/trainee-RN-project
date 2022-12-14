@@ -1,17 +1,17 @@
 import {useEffect} from 'react';
-import {selectPosts} from 'src/store/postsSlice/selectors';
+import {selectError, selectPosts} from 'src/store/postsSlice/selectors';
 import {useAppDispatch, useAppSelector} from 'src/hooks/redux';
 import {fetchPosts} from 'src/store/postsSlice/thunks';
 
 export const usePosts = () => {
   const dispatch = useAppDispatch();
   const posts = useAppSelector(selectPosts);
+  const postsFetchError = useAppSelector(selectError);
 
   useEffect(() => {
-    if (posts.length === 0) {
-      dispatch(fetchPosts());
-    }
-  }, [posts, dispatch]);
+    console.log('DISPATCH');
+    dispatch(fetchPosts());
+  });
 
-  return posts;
+  return {posts, postsFetchError};
 };

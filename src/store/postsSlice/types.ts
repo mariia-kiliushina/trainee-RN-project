@@ -7,4 +7,5 @@ export type TPost = {
 
 export type PostsState = {
   posts: TPost[];
+  postsFetchingError: boolean;
 };
