@@ -5,6 +5,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type RootStackParamList = {
   AddRecord: undefined;
   Posts: undefined;
+  PostsReanimated: undefined;
   Animations: undefined;
   Timer: undefined;
   Video: undefined;

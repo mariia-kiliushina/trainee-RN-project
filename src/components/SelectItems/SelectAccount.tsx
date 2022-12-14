@@ -25,7 +25,7 @@ export const SelectAccount = ({value, onPress}: SelectItemProps) => {
           {value.accountNumber}
         </Typography>
       </View>
-      <View style={[styles.bottomLine]} />
+      <View style={styles.bottomLine} />
     </Pressable>
   );
 };

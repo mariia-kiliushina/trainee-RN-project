@@ -60,7 +60,7 @@ export const SelectAddPhotoOption = ({
           {value.name}
         </Typography>
       </View>
-      <View style={[styles.bottomLine]} />
+      <View style={styles.bottomLine} />
     </Pressable>
   );
 };

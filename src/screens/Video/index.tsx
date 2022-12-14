@@ -69,7 +69,7 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
     if (video) {
       return (
         <>
-          <View style={[styles.pressableWrapper]}>
+          <View style={styles.pressableWrapper}>
             <PressableIcon
               color={COLORS.genericWhite}
               onPress={deleteRecording}
