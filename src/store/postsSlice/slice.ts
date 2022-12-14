@@ -5,7 +5,6 @@ import {fetchPosts, deletePostById} from 'src/store/postsSlice/thunks';
 
 const initialState: PostsState = {
   posts: [],
-  postsFetchingError: false,
 };
 
 export const postsSlice = createSlice({
@@ -14,11 +13,11 @@ export const postsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchPosts.fulfilled, (state, action) => {
+      console.log('fulfilled action', action);
+
       state.posts = action.payload;
     });
-    builder.addCase(fetchPosts.rejected, state => {
-      state.postsFetchingError = true;
-    });
+
     builder.addCase(deletePostById.fulfilled, (state, action) => {
       const newPosts = state.posts.filter(post => post.id !== action.payload);
       state.posts = newPosts;

@@ -111,9 +111,7 @@ export const PostsReanimated = ({
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
       {postsFetchError && (
         <View style={styles.errorHandler}>
-          <Typography textStyle={styles.text}>
-            Failed to display posts
-          </Typography>
+          <Typography textStyle={styles.text}>{postsFetchError}</Typography>
           <Button type="secondary" onPress={navigation.goBack}>
             <Typography>Go back</Typography>
           </Button>
