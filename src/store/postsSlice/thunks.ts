@@ -2,26 +2,20 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {TPost} from 'src/store/postsSlice/types';
 import {RootState} from '../index';
 
-const responseHandler = (response: Response) => {
-  if (response.ok) {
-    return response.json();
-  }
-  throw new Error('Request failed from responseHandler');
-};
-
 export const deletePostById = createAsyncThunk<number | undefined, number>(
   'deletePostById',
-  async id => {
+  async (id, thunkApi) => {
     try {
       const response = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         {method: 'DELETE'},
       );
-      const responseBody = await responseHandler(response);
-      console.log(responseBody);
+      if (!response.ok) {
+        return thunkApi.rejectWithValue({error: 'error message'});
+      }
       return id;
-    } catch (error) {
-      console.error(error);
+    } catch {
+      return thunkApi.rejectWithValue({error: 'error fetch message'});
     }
   },
 );
@@ -34,10 +28,9 @@ export const fetchPosts = createAsyncThunk<TPost[]>(
         'https://jsonplaceholder.typicode.com/posts',
       );
       if (!response.ok) {
-        // Return the known error for future handling
         return thunkApi.rejectWithValue({error: 'error message'});
       }
-      return (await response.json()) as TPost[];
+      return await response.json();
     } catch {
       return thunkApi.rejectWithValue({error: 'error fetch message'});
     }
