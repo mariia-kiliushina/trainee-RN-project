@@ -18,18 +18,6 @@ export const usePosts = () => {
         never
       >
     | PayloadAction<
-        {error: string},
-        string,
-        {
-          arg: void;
-          requestId: string;
-          requestStatus: 'rejected';
-          aborted: boolean;
-          condition: boolean;
-        } & ({rejectedWithValue: true} | ({rejectedWithValue: false} & {})),
-        SerializedError
-      >
-    | PayloadAction<
         unknown,
         string,
         {
@@ -41,10 +29,13 @@ export const usePosts = () => {
         } & ({rejectedWithValue: true} | ({rejectedWithValue: false} & {})),
         SerializedError
       >;
+
   const initFunc = useCallback(async () => {
     const fetchResult: action = await dispatch(fetchPosts());
-    if (fetchResult.payload?.error) {
-      setPostsFetchError(fetchResult.payload?.error);
+
+    if (fetchResult.meta.requestStatus === 'rejected') {
+      const obj = fetchResult.payload as {error: string};
+      setPostsFetchError(obj.error);
     } else {
       setPostsFetchError('');
     }
@@ -56,10 +47,3 @@ export const usePosts = () => {
 
   return {posts, postsFetchError};
 };
-
-//PayloadAction<{
-//   payload;
-//   type;
-//   meta;
-//   error;
-// };
