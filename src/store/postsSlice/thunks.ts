@@ -2,37 +2,46 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {TPost} from 'src/store/postsSlice/types';
 import {RootState} from '../index';
 
-export const deletePostById = createAsyncThunk<number | undefined, number>(
-  'deletePostById',
-  async (id, thunkApi) => {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}`,
-        {method: 'DELETE'},
-      );
-      if (!response.ok) {
-        return thunkApi.rejectWithValue({error: 'error message'});
-      }
-      return id;
-    } catch {
-      return thunkApi.rejectWithValue({error: 'error fetch message'});
-    }
-  },
-);
+type ThunkError = {
+  error: string;
+};
 
-export const fetchPosts = createAsyncThunk<TPost[]>(
+export const deletePostById = createAsyncThunk<
+  number,
+  number,
+  {rejectValue: ThunkError}
+>('deletePostById', async id => {
+  try {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+      {method: 'DELETE'},
+    );
+    if (!response.ok) {
+      throw new Error('connection error');
+    }
+    return id;
+  } catch (e: any) {
+    throw new Error(e?.message);
+  }
+});
+
+export const fetchPosts = createAsyncThunk<
+  TPost[],
+  undefined,
+  {rejectValue: ThunkError}
+>(
   'fetchPosts',
-  async (_, thunkApi) => {
+  async () => {
     try {
       const response = await fetch(
         'https://jsonplaceholder.typicode.com/posts',
       );
       if (!response.ok) {
-        return thunkApi.rejectWithValue({error: 'error message'});
+        throw new Error('connection error');
       }
-      return await response.json();
-    } catch {
-      return thunkApi.rejectWithValue({error: 'error fetch message'});
+      return (await response.json()) as TPost[];
+    } catch (e: any) {
+      throw new Error(e?.message);
     }
   },
   {
