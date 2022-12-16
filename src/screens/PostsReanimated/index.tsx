@@ -1,10 +1,12 @@
-import {useRef} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {
   Pressable,
   StyleSheet,
   View,
   FlatList,
   ListRenderItem,
+  LayoutAnimation,
+  Platform,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
@@ -25,10 +27,12 @@ export const PostsReanimated = ({
 }: RootStackScreenProps<'PostsReanimated'>) => {
   const dispatch = useAppDispatch();
 
-  const {posts, postsFetchError} = usePosts();
-
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
+
+  const {posts, postsFetchError} = usePosts();
+
+  const [closed, setClosed] = useState(0);
 
   const closeRow = (itemId: number) => {
     if (
@@ -60,6 +64,13 @@ export const PostsReanimated = ({
   const onDeletePost = (id: number) => {
     onCloseModal();
     dispatch(deletePostById(id));
+    setClosed(id);
+
+    LayoutAnimation.configureNext({
+      duration: 2000,
+      update: {type: 'easeInEaseOut', property: 'opacity'},
+      delete: {type: 'easeInEaseOut', property: 'scaleX'},
+    });
   };
 
   const onNavigateToPopUpModal = (postId: number) => {

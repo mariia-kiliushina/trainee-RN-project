@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {StatusBar, LogBox} from 'react-native';
+import {StatusBar, LogBox, Platform, UIManager} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,6 +29,13 @@ const getFireBaseMesagesToken = async () => {
   await messaging().getToken();
   //do sth with   token
 };
+
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const App = () => {
   useEffect(() => {
