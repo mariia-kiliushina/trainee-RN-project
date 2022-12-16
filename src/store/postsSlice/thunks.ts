@@ -1,43 +1,29 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {TPost} from 'src/store/postsSlice/types';
-import {RootState} from '../index';
+import {fetchWithErrorCatching, ThunkConfig} from '../helpers';
 
-export const deletePostById = createAsyncThunk<number | undefined, number>(
+export const deletePostById = createAsyncThunk<number, number, ThunkConfig>(
   'deletePostById',
-  async (id, thunkApi) => {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}`,
-        {method: 'DELETE'},
-      );
-      if (!response.ok) {
-        return thunkApi.rejectWithValue({error: 'error message'});
-      }
-      return id;
-    } catch {
-      return thunkApi.rejectWithValue({error: 'error fetch message'});
-    }
+  async id => {
+    await fetchWithErrorCatching(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+      {method: 'DELETE'},
+    );
+    return id;
   },
 );
 
-export const fetchPosts = createAsyncThunk<TPost[]>(
+export const fetchPosts = createAsyncThunk<TPost[], undefined, ThunkConfig>(
   'fetchPosts',
-  async (_, thunkApi) => {
-    try {
-      const response = await fetch(
-        'https://jsonplaceholder.typicode.com/posts',
-      );
-      if (!response.ok) {
-        return thunkApi.rejectWithValue({error: 'error message'});
-      }
-      return await response.json();
-    } catch {
-      return thunkApi.rejectWithValue({error: 'error fetch message'});
-    }
+  async () => {
+    const posts = await fetchWithErrorCatching(
+      'https://jsonplaceholder.typicode.com/posts',
+    );
+    return posts;
   },
   {
     condition: (_, {getState}) => {
-      const {posts} = getState() as RootState;
+      const {posts} = getState();
       const arePostsCached = posts.posts.length;
       if (arePostsCached) {
         return false;
