@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   ListRenderItem,
   LayoutAnimation,
   Platform,
+  UIManager,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
@@ -22,6 +23,13 @@ import {COLORS} from 'src/constants/colors';
 
 const PADDING_HORIZONTAL = 20;
 
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 export const PostsReanimated = ({
   navigation,
 }: RootStackScreenProps<'PostsReanimated'>) => {
@@ -32,7 +40,14 @@ export const PostsReanimated = ({
 
   const {posts, postsFetchError} = usePosts();
 
-  const [closed, setClosed] = useState(0);
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      LayoutAnimation.configureNext({
+        duration: 1000,
+        update: {type: 'easeInEaseOut'},
+      });
+    }
+  }, [posts]);
 
   const closeRow = (itemId: number) => {
     if (
@@ -56,19 +71,19 @@ export const PostsReanimated = ({
   );
 
   const onCloseModal = () => {
+    navigation.goBack();
     previouslyOpenedRow?.current?.close();
     previouslyOpenedRow.current = null;
-    navigation.goBack();
   };
 
   const onDeletePost = (id: number) => {
     onCloseModal();
+
     dispatch(deletePostById(id));
-    setClosed(id);
 
     LayoutAnimation.configureNext({
-      duration: 2000,
-      update: {type: 'easeInEaseOut', property: 'opacity'},
+      duration: 1000,
+      update: {type: 'easeInEaseOut', property: 'scaleX'},
       delete: {type: 'easeInEaseOut', property: 'scaleX'},
     });
   };
