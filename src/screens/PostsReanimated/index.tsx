@@ -62,25 +62,13 @@ export const PostsReanimated = ({
     dispatch(deletePostById(id));
   };
 
-  const ModalContent = ({id}: {id: number}) => {
-    return (
-      <>
-        <Typography variant="18" fontType="bold" textStyle={styles.text}>
-          Delete option?
-        </Typography>
-        <Button type="secondary" onPress={onCloseModal}>
-          <Typography>Go back</Typography>
-        </Button>
-        <Button type="primary" onPress={() => onDeletePost(id)}>
-          <Typography>Yes</Typography>
-        </Button>
-      </>
-    );
-  };
-
-  const onNavigateToPopUpModal = (id: number) => {
+  const onNavigateToPopUpModal = (postId: number) => {
     navigation.navigate('PopUpModal', {
-      children: <ModalContent id={id} />,
+      body: 'Are you sure you want to delete this post?',
+      buttonText: 'Yes',
+      onButtonPress: () => onDeletePost(postId),
+      secondButtonText: 'No',
+      onSecondButtonPress: onCloseModal,
     });
   };
 

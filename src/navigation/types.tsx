@@ -1,6 +1,7 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import {TPopUpModalParams} from 'src/screens/PopUpModal';
 
 export type RootStackParamList = {
   AddRecord: undefined;
@@ -13,7 +14,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   BottomSheetModal: {children: React.ReactNode};
-  PopUpModal: {children: React.ReactNode};
+  PopUpModal: TPopUpModalParams;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

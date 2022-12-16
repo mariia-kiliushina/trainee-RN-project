@@ -9,27 +9,14 @@ import {
 } from 'react-native';
 import VideoPlayer from 'react-native-video';
 import {useIsFocused} from '@react-navigation/core';
-import {useNavigation} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {PressableIcon} from 'src/components/PressableIcon';
 import {Typography} from 'src/components/Typography';
-import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {Loading} from 'src/components/Loading';
 
-const RecordingError = () => {
-  const navigation = useNavigation();
-  return (
-    <>
-      <Typography textStyle={styles.text}>Video recording error</Typography>
-      <Button type="secondary" onPress={navigation.goBack}>
-        <Typography>Go back</Typography>
-      </Button>
-    </>
-  );
-};
 export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
   const insets = useSafeAreaInsets();
   const cameraRef = useRef<Camera>(null);
@@ -194,7 +181,9 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
 
         if (error?.code !== 'capture/inactive-source') {
           navigation.navigate('PopUpModal', {
-            children: <RecordingError />,
+            body: 'Video recording error',
+            buttonText: 'Go back',
+            onButtonPress: navigation.goBack,
           });
         }
       },

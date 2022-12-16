@@ -1,29 +1,10 @@
 import {StyleSheet, Linking} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
-import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
 import {Logo} from 'src/assets/svg/index';
-
-const ModalContent = () => {
-  const navigation = useNavigation();
-  return (
-    <>
-      <Typography textStyle={styles.text}>
-        Biometrics is unavailable until camera permission is given
-      </Typography>
-      <Button type="secondary" onPress={navigation.goBack}>
-        <Typography>Go back</Typography>
-      </Button>
-      <Button type="secondary" onPress={Linking.openSettings}>
-        <Typography>Go to settings</Typography>
-      </Button>
-    </>
-  );
-};
 
 export const Onboarding = ({
   navigation,
@@ -42,7 +23,11 @@ export const Onboarding = ({
         navigation.navigate('Video');
       } else {
         navigation.navigate('PopUpModal', {
-          children: <ModalContent />,
+          body: 'Video recording error',
+          buttonText: 'Go back',
+          onButtonPress: navigation.goBack,
+          secondButtonText: 'Go to settings',
+          onSecondButtonPress: Linking.openSettings,
         });
       }
     });
@@ -80,9 +65,5 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.omniDark,
-  },
-  text: {
-    textAlign: 'center',
-    marginBottom: 15,
   },
 });
