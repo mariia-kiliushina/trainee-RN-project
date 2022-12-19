@@ -1,22 +1,33 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {TPost} from 'src/store/postsSlice/types';
+import {fetchWithErrorCatching, ThunkConfig} from '../helpers';
 
-export const fetchPosts = createAsyncThunk('posts/fetchAll', async () => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  return (await response.json()) as TPost[];
-});
-
-export const deletePostById = createAsyncThunk(
+export const deletePostById = createAsyncThunk<number, number, ThunkConfig>(
   'deletePostById',
-  async (id: number) => {
-    try {
-      await fetch('https://jsonplaceholder.typicode.com/posts', {
-        method: 'DELETE',
-      });
-      return id as number;
-    } catch (error: any) {
-      console.log(error.message);
-      throw new Error('Request rejected');
-    }
+  async id => {
+    await fetchWithErrorCatching(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+      {method: 'DELETE'},
+    );
+    return id;
+  },
+);
+
+export const fetchPosts = createAsyncThunk<TPost[], undefined, ThunkConfig>(
+  'fetchPosts',
+  async () => {
+    const posts = await fetchWithErrorCatching(
+      'https://jsonplaceholder.typicode.com/posts',
+    );
+    return posts;
+  },
+  {
+    condition: (_, {getState}) => {
+      const {posts} = getState();
+      const arePostsCached = posts.posts.length;
+      if (arePostsCached) {
+        return false;
+      }
+    },
   },
 );

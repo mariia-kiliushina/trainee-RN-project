@@ -1,18 +1,54 @@
 import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {COLORS} from 'constants/colors';
 import {RootStackScreenProps} from 'src/navigation/types';
+import {Button} from 'src/components/Button';
+import {Typography} from 'src/components/Typography';
+import {COLORS} from 'src/constants/colors';
+
+export type TPopUpModalParams = {
+  body: string;
+  buttonText: string;
+  onButtonPress?: () => void;
+  secondButtonText?: string;
+  onSecondButtonPress?: () => void;
+};
 
 export const PopUpModal = ({
   navigation,
   route,
 }: RootStackScreenProps<'PopUpModal'>) => {
-  const {children} = route.params;
+  const {
+    body,
+    buttonText,
+    onButtonPress,
+    secondButtonText,
+    onSecondButtonPress,
+  } = route.params;
+
+  const buttonProxy = () => {
+    navigation.goBack();
+    onButtonPress && onButtonPress();
+  };
+
+  const secondButtonProxy = () => {
+    navigation.goBack();
+    onSecondButtonPress && onSecondButtonPress();
+  };
 
   return (
     <TouchableOpacity style={styles.background}>
       <Pressable style={styles.pressableWraper} onPress={navigation.goBack}>
         <View onStartShouldSetResponder={_ => true} style={styles.modalView}>
-          {children}
+          <Typography variant="16" fontType="bold" textStyle={styles.text}>
+            {body}
+          </Typography>
+          {secondButtonText && (
+            <Button type="secondary" onPress={secondButtonProxy}>
+              <Typography>{secondButtonText}</Typography>
+            </Button>
+          )}
+          <Button type="primary" onPress={buttonProxy}>
+            <Typography>{buttonText}</Typography>
+          </Button>
         </View>
       </Pressable>
     </TouchableOpacity>
@@ -35,5 +71,9 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: COLORS.neutral500opaque,
+  },
+  text: {
+    textAlign: 'center',
+    marginBottom: 15,
   },
 });

@@ -1,10 +1,13 @@
-import {useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {
   Pressable,
   StyleSheet,
   View,
   FlatList,
   ListRenderItem,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RootStackScreenProps} from 'src/navigation/types';
@@ -20,15 +23,31 @@ import {COLORS} from 'src/constants/colors';
 
 const PADDING_HORIZONTAL = 20;
 
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 export const PostsReanimated = ({
   navigation,
 }: RootStackScreenProps<'PostsReanimated'>) => {
   const dispatch = useAppDispatch();
 
-  const postsData = usePosts();
-
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
+
+  const {posts, postsFetchError} = usePosts();
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      LayoutAnimation.configureNext({
+        duration: 1000,
+        update: {type: 'easeInEaseOut'},
+      });
+    }
+  }, [posts]);
 
   const closeRow = (itemId: number) => {
     if (
@@ -54,33 +73,27 @@ export const PostsReanimated = ({
   const onCloseModal = () => {
     previouslyOpenedRow?.current?.close();
     previouslyOpenedRow.current = null;
-    navigation.goBack();
   };
 
   const onDeletePost = (id: number) => {
     onCloseModal();
+
     dispatch(deletePostById(id));
+
+    LayoutAnimation.configureNext({
+      duration: 1000,
+      update: {type: 'easeInEaseOut', property: 'scaleX'},
+      delete: {type: 'easeInEaseOut', property: 'scaleX'},
+    });
   };
 
-  const ModalContent = ({id}: {id: number}) => {
-    return (
-      <>
-        <Typography variant="18" fontType="bold" textStyle={styles.text}>
-          Delete option?
-        </Typography>
-        <Button type="secondary" onPress={onCloseModal}>
-          <Typography>Go back</Typography>
-        </Button>
-        <Button type="primary" onPress={() => onDeletePost(id)}>
-          <Typography>Yes</Typography>
-        </Button>
-      </>
-    );
-  };
-
-  const onNavigateToPopUpModal = (id: number) => {
+  const onNavigateToPopUpModal = (postId: number) => {
     navigation.navigate('PopUpModal', {
-      children: <ModalContent id={id} />,
+      body: 'Are you sure you want to delete this post?',
+      buttonText: 'Yes',
+      onButtonPress: () => onDeletePost(postId),
+      secondButtonText: 'No',
+      onSecondButtonPress: onCloseModal,
     });
   };
 
@@ -109,7 +122,15 @@ export const PostsReanimated = ({
 
   return (
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
-      <FlatList data={postsData} renderItem={renderItem} />
+      {postsFetchError && (
+        <View style={styles.errorHandler}>
+          <Typography textStyle={styles.text}>{postsFetchError}</Typography>
+          <Button type="secondary" onPress={navigation.goBack}>
+            <Typography>Go back</Typography>
+          </Button>
+        </View>
+      )}
+      <FlatList data={posts} renderItem={renderItem} />
     </Container>
   );
 };
@@ -147,5 +168,10 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     marginBottom: 15,
+  },
+  errorHandler: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
 });

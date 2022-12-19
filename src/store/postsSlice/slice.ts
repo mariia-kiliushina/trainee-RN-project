@@ -15,6 +15,7 @@ export const postsSlice = createSlice({
     builder.addCase(fetchPosts.fulfilled, (state, action) => {
       state.posts = action.payload;
     });
+
     builder.addCase(deletePostById.fulfilled, (state, action) => {
       const newPosts = state.posts.filter(post => post.id !== action.payload);
       state.posts = newPosts;
