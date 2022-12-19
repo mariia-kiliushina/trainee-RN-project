@@ -71,7 +71,6 @@ export const PostsReanimated = ({
   );
 
   const onCloseModal = () => {
-    navigation.goBack();
     previouslyOpenedRow?.current?.close();
     previouslyOpenedRow.current = null;
   };

@@ -6,10 +6,10 @@ import {COLORS} from 'src/constants/colors';
 
 export type TPopUpModalParams = {
   body: string;
-  buttonText?: string;
-  onButtonPress?: (arg: any) => void;
+  buttonText: string;
+  onButtonPress?: () => void;
   secondButtonText?: string;
-  onSecondButtonPress?: (arg: any) => void;
+  onSecondButtonPress?: () => void;
 };
 
 export const PopUpModal = ({
@@ -24,6 +24,16 @@ export const PopUpModal = ({
     onSecondButtonPress,
   } = route.params;
 
+  const buttonProxy = () => {
+    navigation.goBack();
+    onButtonPress && onButtonPress();
+  };
+
+  const secondButtonProxy = () => {
+    navigation.goBack();
+    onSecondButtonPress && onSecondButtonPress();
+  };
+
   return (
     <TouchableOpacity style={styles.background}>
       <Pressable style={styles.pressableWraper} onPress={navigation.goBack}>
@@ -32,11 +42,11 @@ export const PopUpModal = ({
             {body}
           </Typography>
           {secondButtonText && (
-            <Button type="secondary" onPress={onSecondButtonPress}>
+            <Button type="secondary" onPress={secondButtonProxy}>
               <Typography>{secondButtonText}</Typography>
             </Button>
           )}
-          <Button type="primary" onPress={onButtonPress}>
+          <Button type="primary" onPress={buttonProxy}>
             <Typography>{buttonText}</Typography>
           </Button>
         </View>

@@ -25,7 +25,6 @@ export const Onboarding = ({
         navigation.navigate('PopUpModal', {
           body: 'Video recording error',
           buttonText: 'Go back',
-          onButtonPress: navigation.goBack,
           secondButtonText: 'Go to settings',
           onSecondButtonPress: Linking.openSettings,
         });

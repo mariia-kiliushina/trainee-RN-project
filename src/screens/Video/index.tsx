@@ -183,7 +183,6 @@ export const Video = ({navigation}: RootStackScreenProps<'Video'>) => {
           navigation.navigate('PopUpModal', {
             body: 'Video recording error',
             buttonText: 'Go back',
-            onButtonPress: navigation.goBack,
           });
         }
       },
