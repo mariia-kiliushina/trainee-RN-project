@@ -17,6 +17,7 @@
 		C5960A7B651C5415C018E963 /* Pods_testProject_testProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373A16D8F440867E1E50DF56 /* Pods_testProject_testProjectTests.framework */; };
 		C60560E750C5D3B459272758 /* Pods_testProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9155CBC0AE8240754F3ED4F9 /* Pods_testProject.framework */; };
 		DB9A86A6293E1F0900A76391 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB9A86A5293E1F0900A76391 /* GoogleService-Info.plist */; };
+		DBAC155E2950800400671618 /* forGeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBAC155D2950800400671618 /* forGeo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		934C88DACB6ED5C943BF2A14 /* Pods-testProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testProject.debug.xcconfig"; path = "Target Support Files/Pods-testProject/Pods-testProject.debug.xcconfig"; sourceTree = "<group>"; };
 		AE3F82A71D2B93C1FB7669A5 /* Pods-testProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testProject.release.xcconfig"; path = "Target Support Files/Pods-testProject/Pods-testProject.release.xcconfig"; sourceTree = "<group>"; };
 		DB9A86A5293E1F0900A76391 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DBAC155C2950800300671618 /* testProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "testProject-Bridging-Header.h"; sourceTree = "<group>"; };
+		DBAC155D2950800400671618 /* forGeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = forGeo.swift; sourceTree = "<group>"; };
 		DC16DFDFC25544498A08500D /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		E1D93D00E2107318B7AF0807 /* Pods-testProject-testProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testProject-testProjectTests.release.xcconfig"; path = "Target Support Files/Pods-testProject-testProjectTests/Pods-testProject-testProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -122,6 +125,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				DBAC155D2950800400671618 /* forGeo.swift */,
 				DB9A86A5293E1F0900A76391 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* testProject */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -130,6 +134,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				A0A940CF1B67467E974BDB63 /* Resources */,
+				DBAC155C2950800300671618 /* testProject-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -225,7 +230,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1340;
 					};
 				};
 			};
@@ -447,6 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				DBAC155E2950800400671618 /* forGeo.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,6 +545,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.testProject2;
 				PRODUCT_NAME = testProject;
+				SWIFT_OBJC_BRIDGING_HEADER = "testProject-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -566,6 +573,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.testProject2;
 				PRODUCT_NAME = testProject;
+				SWIFT_OBJC_BRIDGING_HEADER = "testProject-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

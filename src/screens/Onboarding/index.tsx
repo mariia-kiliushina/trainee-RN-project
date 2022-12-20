@@ -1,4 +1,4 @@
-import {StyleSheet, Linking} from 'react-native';
+import {StyleSheet, Linking, PermissionsAndroid, Platform} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
@@ -32,6 +32,31 @@ export const Onboarding = ({
     });
   };
 
+  const onNavigateToGeolocation = async () => {
+    // if (Platform.OS === 'android') {
+    //   const response = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //     {
+    //       title: 'Geolocation Permission',
+    //       message: 'Geolocation service needs access to your location ',
+    //       buttonNegative: 'Cancel',
+    //       buttonPositive: 'OK',
+    //     },
+    //   );
+    //   if (response === PermissionsAndroid.RESULTS.GRANTED) {
+    //     navigation.navigate('GeolocationScreen');
+    //   } else {
+    //     navigation.navigate('PopUpModal', {
+    //       body: 'Location permission denied',
+    //       buttonText: 'Go back',
+    //       secondButtonText: 'Go to settings',
+    //       onSecondButtonPress: Linking.openSettings,
+    //     });
+    //   }
+    // }
+    navigation.navigate('GeolocationScreen');
+  };
+
   return (
     <Container contentLayout={styles.contentLayout} style={styles.style}>
       <Logo style={styles.logo} />
@@ -47,6 +72,13 @@ export const Onboarding = ({
           Create biometry snapshot
         </Button>
       )}
+      <Button
+        type="primary"
+        onPress={onNavigateToGeolocation}
+        style={styles.button}
+      >
+        See geolocation
+      </Button>
     </Container>
   );
 };
