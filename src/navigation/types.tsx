@@ -8,7 +8,6 @@ export type RootStackParamList = {
   Posts: undefined;
   PostsReanimated: undefined;
   GeolocationScreen: undefined;
-  Navigation: undefined;
   Animations: undefined;
   Timer: undefined;
   Video: undefined;

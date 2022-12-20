@@ -1,16 +1,26 @@
 import {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import MapView, {Marker, LatLng} from 'react-native-maps';
 import {Container} from 'src/components/Container';
-import {Typography} from 'src/components/Typography';
+
+const initialRegion = {
+  latitude: 41.6397547,
+  longitude: 41.6234405,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+};
 
 export const GeolocationScreen = () => {
-  const [coordinates, setCoordinates] = useState<Geolocation.GeoCoordinates>();
+  const [coordinates, setCoordinates] = useState<LatLng>();
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
-        setCoordinates(position.coords);
+        setCoordinates({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
       },
       error => {
         console.log(error.code, error.message);
@@ -25,13 +35,17 @@ export const GeolocationScreen = () => {
 
   return (
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
-      <Typography>Hehe</Typography>
-      {coordinates && (
-        <Typography>{JSON.stringify(coordinates.latitude)}</Typography>
-      )}
-      {coordinates && (
-        <Typography>{JSON.stringify(coordinates.longitude)}</Typography>
-      )}
+      <MapView style={styles.map} initialRegion={initialRegion}>
+        <Marker
+          draggable
+          title={'My draggable location'}
+          description={"I'm here and I'm draggable"}
+          coordinate={coordinates || initialRegion}
+          onDragEnd={event => {
+            setCoordinates(event.nativeEvent.coordinate);
+          }}
+        />
+      </MapView>
     </Container>
   );
 };
@@ -39,5 +53,8 @@ export const GeolocationScreen = () => {
 const styles = StyleSheet.create({
   contentLayout: {
     paddingHorizontal: 0,
+  },
+  map: {
+    flex: 1,
   },
 });
