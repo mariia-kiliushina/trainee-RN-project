@@ -15,7 +15,7 @@ export const Onboarding = ({
   const hasCamera = devices.back || devices.front;
 
   const onLogin = () => {
-    navigation.navigate('PostsReanimated');
+    navigation.navigate('Login');
   };
 
   const onNavigateToVideo = () => {
@@ -80,7 +80,7 @@ export const Onboarding = ({
         onPress={onNavigateToGeolocation}
         style={styles.button}
       >
-        See geolocation
+        Show geolocation
       </Button>
     </Container>
   );
