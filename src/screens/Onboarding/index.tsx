@@ -1,5 +1,6 @@
 import {StyleSheet, Linking, PermissionsAndroid, Platform} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import Geolocation from 'react-native-geolocation-service';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
@@ -33,28 +34,30 @@ export const Onboarding = ({
   };
 
   const onNavigateToGeolocation = async () => {
-    // if (Platform.OS === 'android') {
-    //   const response = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    //     {
-    //       title: 'Geolocation Permission',
-    //       message: 'Geolocation service needs access to your location ',
-    //       buttonNegative: 'Cancel',
-    //       buttonPositive: 'OK',
-    //     },
-    //   );
-    //   if (response === PermissionsAndroid.RESULTS.GRANTED) {
-    //     navigation.navigate('GeolocationScreen');
-    //   } else {
-    //     navigation.navigate('PopUpModal', {
-    //       body: 'Location permission denied',
-    //       buttonText: 'Go back',
-    //       secondButtonText: 'Go to settings',
-    //       onSecondButtonPress: Linking.openSettings,
-    //     });
-    //   }
-    // }
-    navigation.navigate('GeolocationScreen');
+    let response;
+    if (Platform.OS === 'android') {
+      response = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    }
+
+    if (Platform.OS === 'ios') {
+      response = await Geolocation.requestAuthorization('whenInUse');
+    }
+
+    if (
+      response === PermissionsAndroid.RESULTS.GRANTED ||
+      response === 'granted'
+    ) {
+      navigation.navigate('GeolocationScreen');
+    } else {
+      navigation.navigate('PopUpModal', {
+        body: 'Unable to work without acces to your location',
+        buttonText: 'Go to settings',
+        secondButtonText: 'Go back',
+        onButtonPress: Linking.openSettings,
+      });
+    }
   };
 
   return (

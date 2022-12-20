@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useState} from 'react';
-import {PermissionsAndroid, Platform, StyleSheet} from 'react-native';
+import {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {Container} from 'src/components/Container';
 import {Typography} from 'src/components/Typography';
@@ -7,7 +7,7 @@ import {Typography} from 'src/components/Typography';
 export const GeolocationScreen = () => {
   const [coordinates, setCoordinates] = useState<Geolocation.GeoCoordinates>();
 
-  const initializeLocationTracking = useCallback(() => {
+  useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
         setCoordinates(position.coords);
@@ -22,30 +22,6 @@ export const GeolocationScreen = () => {
       },
     );
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS === 'android') {
-        const response = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        );
-        if (response === PermissionsAndroid.RESULTS.GRANTED) {
-          initializeLocationTracking();
-        }
-      }
-    })();
-  }, [initializeLocationTracking]);
-
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS === 'ios') {
-        const response = await Geolocation.requestAuthorization('whenInUse');
-        if (response === 'granted') {
-          initializeLocationTracking();
-        }
-      }
-    })();
-  }, [initializeLocationTracking]);
 
   return (
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
