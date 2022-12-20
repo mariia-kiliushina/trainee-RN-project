@@ -1,18 +1,25 @@
-import {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, LatLng} from 'react-native-maps';
-import {Container} from 'src/components/Container';
+import {Button} from 'src/components/Button';
+import {Typography} from 'src/components/Typography';
+import {COLORS} from 'src/constants/colors';
 
-const initialRegion = {
-  latitude: 41.6397547,
-  longitude: 41.6234405,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
+const deltas = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
 
 export const GeolocationScreen = () => {
-  const [coordinates, setCoordinates] = useState<LatLng>();
+  const [coordinates, setCoordinates] = useState<LatLng>({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  const mapRef = useRef<MapView>(null);
+
+  const goToMarker = useCallback(() => {
+    console.log('goHome');
+    mapRef?.current?.animateToRegion({...coordinates, ...deltas}, 1000);
+  }, [mapRef, coordinates]);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -22,6 +29,7 @@ export const GeolocationScreen = () => {
           longitude: position.coords.longitude,
         });
       },
+
       error => {
         console.log(error.code, error.message);
       },
@@ -33,28 +41,42 @@ export const GeolocationScreen = () => {
     );
   }, []);
 
+  useEffect(() => {
+    goToMarker();
+  }, [goToMarker]);
+
   return (
-    <Container viewType="fixed" contentLayout={styles.contentLayout}>
-      <MapView style={styles.map} initialRegion={initialRegion}>
+    <View style={styles.flex}>
+      <MapView ref={mapRef} style={styles.flex}>
         <Marker
           draggable
           title={'My draggable location'}
           description={"I'm here and I'm draggable"}
-          coordinate={coordinates || initialRegion}
+          coordinate={coordinates}
           onDragEnd={event => {
             setCoordinates(event.nativeEvent.coordinate);
           }}
         />
       </MapView>
-    </Container>
+      <View style={styles.apiWrapper}>
+        <Typography> Some API to interact with maps</Typography>
+        <Button type="primary" onPress={goToMarker}>
+          Go to marker
+        </Button>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
-    paddingHorizontal: 0,
-  },
-  map: {
+  flex: {
     flex: 1,
+  },
+  apiWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.neutral100opaque,
   },
 });
