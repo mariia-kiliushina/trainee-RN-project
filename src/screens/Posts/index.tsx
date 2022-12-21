@@ -12,32 +12,42 @@ import {
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {usePosts} from 'src/hooks/usePosts';
 import {TPost} from 'src/store/postsSlice/types';
+import {RootStackScreenProps} from 'src/navigation/types';
 import {deletePostById} from 'src/store/postsSlice/thunks';
 import {useAppDispatch} from 'src/hooks/redux';
-import {Button} from 'src/components/Button';
 import {Typography} from 'src/components/Typography';
+import {PostReanimated} from 'src/components/PostReanimated';
+import {Container} from 'src/components/Container';
+import {Button} from 'src/components/Button';
 import {CrossClose} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackScreenProps} from 'src/navigation/types';
+
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const PADDING_HORIZONTAL = 20;
 
-export const PostsReanimated = () => {
-  if (
-    Platform.OS === 'android' &&
-    UIManager.setLayoutAnimationEnabledExperimental
-  ) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
+export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
   const dispatch = useAppDispatch();
-  const navigation =
-    useNavigation<RootStackScreenProps<'PopUpModal'>['navigation']>();
 
-  const rowsRefsArray = useRef<Swipeable[]>([]);
+  const rowsRefsArray = useRef<any>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
   const {posts, postsFetchError} = usePosts();
+
+  const renderHeader = () => {
+    return (
+      <View style={styles.listHeader}>
+        <Typography variant="18" textStyle={styles.text}>
+          Full posts list
+        </Typography>
+      </View>
+    );
+  };
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -98,31 +108,28 @@ export const PostsReanimated = () => {
     });
   };
 
+  const onSwipeableWillOpen = (id: number) => {
+    closeRow(id);
+  };
+
   const renderItem: ListRenderItem<TPost> = ({item}) => (
-    <Swipeable
-      ref={rowRef => {
+    <PostReanimated
+      title={item.title}
+      body={item.body}
+      ref={(rowRef: any) => {
         if (rowRef) {
           rowsRefsArray.current[item.id] = rowRef;
         }
       }}
-      onSwipeableWillOpen={() => closeRow(item.id)}
+      onSwipeableWillOpen={() => onSwipeableWillOpen(item.id)}
       renderRightActions={() => renderRightActions(item.id)}
       containerStyle={styles.containerStyle}
       overshootRight={false}
-    >
-      <View style={styles.rowVisible}>
-        <Typography numberOfLines={1} variant="18" fontType="bold">
-          {item.title}
-        </Typography>
-        <Typography numberOfLines={2} variant="16">
-          {item.body}
-        </Typography>
-      </View>
-    </Swipeable>
+    />
   );
 
   return (
-    <>
+    <Container viewType="fixed" contentLayout={styles.contentLayout}>
       {postsFetchError && (
         <View style={styles.errorHandler}>
           <Typography textStyle={styles.text}>{postsFetchError}</Typography>
@@ -132,8 +139,15 @@ export const PostsReanimated = () => {
         </View>
       )}
 
-      <FlatList data={posts} renderItem={renderItem} />
-    </>
+      <FlatList
+        data={posts}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+      />
+      <Button type="primary" style={styles.button} onPress={navigation.goBack}>
+        <Typography>Go back</Typography>
+      </Button>
+    </Container>
   );
 };
 
@@ -142,11 +156,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: PADDING_HORIZONTAL,
     marginBottom: 20,
   },
-  rowVisible: {
-    backgroundColor: COLORS.genericWhite,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: COLORS.neutral300,
+  contentLayout: {
+    paddingHorizontal: 0,
   },
   rightActionStyle: {
     right: -PADDING_HORIZONTAL,
@@ -172,5 +183,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+  },
+  listHeader: {
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderColor: COLORS.neutral300,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 20,
+    right: 10,
+    padding: 20,
+    alignItems: 'center',
+    borderRadius: 10,
   },
 });
