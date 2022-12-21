@@ -14,7 +14,7 @@ export const Onboarding = ({
   const hasCamera = devices.back || devices.front;
 
   const onLogin = () => {
-    navigation.navigate('PostsReanimated');
+    navigation.navigate('ScrollScreen');
   };
 
   const onNavigateToVideo = () => {

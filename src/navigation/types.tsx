@@ -6,7 +6,7 @@ import {TPopUpModalParams} from 'src/screens/PopUpModal';
 export type RootStackParamList = {
   AddRecord: undefined;
   Posts: undefined;
-  PostsReanimated: undefined;
+  ScrollScreen: undefined;
   Animations: undefined;
   Timer: undefined;
   Video: undefined;

@@ -10,30 +10,29 @@ import {
   UIManager,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {RootStackScreenProps} from 'src/navigation/types';
 import {usePosts} from 'src/hooks/usePosts';
 import {TPost} from 'src/store/postsSlice/types';
 import {deletePostById} from 'src/store/postsSlice/thunks';
 import {useAppDispatch} from 'src/hooks/redux';
-import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Typography} from 'src/components/Typography';
 import {CrossClose} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackScreenProps} from 'src/navigation/types';
 
 const PADDING_HORIZONTAL = 20;
 
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
-export const PostsReanimated = ({
-  navigation,
-}: RootStackScreenProps<'PostsReanimated'>) => {
+export const PostsReanimated = () => {
+  if (
+    Platform.OS === 'android' &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
   const dispatch = useAppDispatch();
+  const navigation =
+    useNavigation<RootStackScreenProps<'PopUpModal'>['navigation']>();
 
   const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
@@ -121,7 +120,7 @@ export const PostsReanimated = ({
   );
 
   return (
-    <Container viewType="fixed" contentLayout={styles.contentLayout}>
+    <>
       {postsFetchError && (
         <View style={styles.errorHandler}>
           <Typography textStyle={styles.text}>{postsFetchError}</Typography>
@@ -130,15 +129,13 @@ export const PostsReanimated = ({
           </Button>
         </View>
       )}
+
       <FlatList data={posts} renderItem={renderItem} />
-    </Container>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
-    paddingHorizontal: 0,
-  },
   containerStyle: {
     paddingHorizontal: PADDING_HORIZONTAL,
     marginBottom: 20,
