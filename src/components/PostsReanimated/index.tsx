@@ -79,11 +79,13 @@ export const PostsReanimated = () => {
 
     dispatch(deletePostById(id));
 
-    LayoutAnimation.configureNext({
-      duration: 1000,
-      update: {type: 'easeInEaseOut', property: 'scaleX'},
-      delete: {type: 'easeInEaseOut', property: 'scaleX'},
-    });
+    if (Platform.OS === 'ios') {
+      LayoutAnimation.configureNext({
+        duration: 1000,
+        update: {type: 'easeInEaseOut', property: 'scaleX'},
+        delete: {type: 'easeInEaseOut', property: 'scaleX'},
+      });
+    }
   };
 
   const onNavigateToPopUpModal = (postId: number) => {
