@@ -1,24 +1,14 @@
 import {View, StyleSheet} from 'react-native';
-import {HomeTabScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
-import {Button} from 'components/Button';
 import {TabView} from 'components/TabView';
 import {COLORS} from 'src/constants/colors';
 import {tabs} from './mock';
 
-export const Budget = ({navigation}: HomeTabScreenProps<'Budget'>) => {
-  const onNavigate = () => {
-    navigation.navigate('AddRecord');
-  };
-
+export const Budget = () => {
   return (
     <Container style={styles.style} contentLayout={styles.contentLayout}>
       <TabView tabs={tabs} />
-      <View style={styles.wrapper}>
-        <Button onPress={onNavigate} type="primary">
-          Go to another screen
-        </Button>
-      </View>
+      <View style={styles.wrapper} />
     </Container>
   );
 };

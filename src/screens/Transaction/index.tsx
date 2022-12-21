@@ -16,16 +16,23 @@ import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {Account} from './types';
-import {ownAccountData, cardsData} from './mock';
+import {ownAccountData, cardsData, Provider, providerData} from './mock';
+import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 
 export type InitialValues = {
   fromAccount: Account;
+  provider: Provider;
 };
 
 const initialValues: InitialValues = {
   fromAccount: {
     name: '',
     accountNumber: '',
+  },
+  provider: {
+    provider: '',
+    currency: '',
+    amount: 0,
   },
 };
 
@@ -39,9 +46,9 @@ export const Transaction = ({
     },
   });
 
-  const keyExtractor = (item: Account) => item.accountNumber;
+  const keyLabelExtractor = (item: Account) => item.accountNumber;
 
-  const renderItem: ListRenderItem<Account> = ({
+  const renderLabelItem: ListRenderItem<Account> = ({
     item,
   }: ListRenderItemInfo<Account>) => (
     <SelectAccount
@@ -52,18 +59,42 @@ export const Transaction = ({
     />
   );
 
-  const onInputPress = () => {
+  const keyProviderExtractor = (item: Provider) => item.provider;
+
+  const renderProviderItem: ListRenderItem<Provider> = ({
+    item,
+  }: ListRenderItemInfo<Provider>) => (
+    <SelectProvider
+      value={item}
+      onPress={provider => {
+        formik.setFieldValue('provider', provider);
+      }}
+    />
+  );
+
+  const onLabelInputPress = () => {
     navigation.navigate('BottomSheetModal', {
       children: (
         <BaseList
           options={ownAccountData}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
+          renderItem={renderLabelItem}
+          keyExtractor={keyLabelExtractor}
         />
       ),
     });
   };
 
+  const onProviderInputPress = () => {
+    navigation.navigate('BottomSheetModal', {
+      children: (
+        <BaseList
+          options={providerData}
+          renderItem={renderProviderItem}
+          keyExtractor={keyProviderExtractor}
+        />
+      ),
+    });
+  };
   return (
     <Container contentLayout={styles.contentLayout}>
       <View style={styles.contentWrapper}>
@@ -72,7 +103,17 @@ export const Transaction = ({
           errorText={formik.errors.fromAccount?.accountNumber}
           placeholder="Select beneficiary"
           label="Label"
-          onPress={onInputPress}
+          onPress={onLabelInputPress}
+          isPressable
+          iconName="arrow-down"
+          iconColor={COLORS.neutral500}
+        />
+        <Input
+          value={formik.values.provider?.provider}
+          errorText={formik.errors.provider?.provider}
+          placeholder="Select provider"
+          label="Provider"
+          onPress={onProviderInputPress}
           isPressable
           iconName="arrow-down"
           iconColor={COLORS.neutral500}

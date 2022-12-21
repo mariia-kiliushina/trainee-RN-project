@@ -4,9 +4,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {TPopUpModalParams} from 'src/screens/PopUpModal';
 
 export type RootStackParamList = {
-  AddRecord: undefined;
   Posts: undefined;
   ScrollScreen: undefined;
+  GeolocationScreen: undefined;
   Animations: undefined;
   Timer: undefined;
   Video: undefined;
