@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
-import {AddRecord} from 'screens/AddRecord';
 import {PostsReanimated} from 'screens/PostsReanimated';
+import {GeolocationScreen} from 'screens/GeolocationScreen';
 import {Animations} from 'screens/Animations';
 import {Onboarding} from 'screens/Onboarding';
 import {Video} from 'screens/Video';
@@ -25,17 +25,13 @@ export const ScreenNavigation = () => {
       {isSignedIn ? (
         <>
           <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen
-            options={{headerShown: true}}
-            name="AddRecord"
-            component={AddRecord}
-          />
+          <Stack.Screen name="PostsReanimated" component={PostsReanimated} />
+          <Stack.Screen name="Animations" component={Animations} />
         </>
       ) : (
         <>
           <Stack.Screen name="Onboarding" component={Onboarding} />
-          <Stack.Screen name="PostsReanimated" component={PostsReanimated} />
-          <Stack.Screen name="Animations" component={Animations} />
+
           <Stack.Screen
             name="Login"
             component={Login}
@@ -43,6 +39,12 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
+
+          <Stack.Screen
+            name="GeolocationScreen"
+            component={GeolocationScreen}
+          />
+
           <Stack.Screen name="Video" component={Video} />
         </>
       )}
