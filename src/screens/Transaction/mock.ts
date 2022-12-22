@@ -1,4 +1,4 @@
-import {Account, SlideCard} from './types';
+import {Account} from './types';
 
 export const ownAccountData: Account[] = [
   {
@@ -37,13 +37,6 @@ export const ownAccountData: Account[] = [
     name: 'Account9',
     accountNumber: '30187876787',
   },
-];
-
-export const cardsData: SlideCard[] = [
-  {text: 'Make\nTransfers', iconName: 'ArrowsDownUp'},
-  {text: 'Airtime &\nData', iconName: 'Phone'},
-  {text: 'Bill\nPayments', iconName: 'FileCheck'},
-  {text: 'Manage\nCards', iconName: 'CreditCard'},
 ];
 
 export type Provider = {

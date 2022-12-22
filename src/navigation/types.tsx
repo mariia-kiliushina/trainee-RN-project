@@ -8,7 +8,7 @@ export type RootStackParamList = {
   ScrollScreen: undefined;
   GeolocationScreen: undefined;
   Animations: undefined;
-  Timer: undefined;
+  ChangePassword: undefined;
   Video: undefined;
   Main: undefined;
   Onboarding: undefined;

@@ -1,5 +1,3 @@
-import {SlideCard} from './types';
-
 export type Provider = {
   provider: string;
   currency: string;
@@ -22,11 +20,4 @@ export const providerData: Provider[] = [
     currency: 'USD',
     amount: 12,
   },
-];
-
-export const cardsData: SlideCard[] = [
-  {text: 'Make\nTransfers', iconName: 'ArrowsDownUp'},
-  {text: 'Airtime &\nData', iconName: 'Phone'},
-  {text: 'Bill\nPayments', iconName: 'FileCheck'},
-  {text: 'Manage\nCards', iconName: 'CreditCard'},
 ];

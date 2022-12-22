@@ -39,6 +39,15 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
 
   const {posts, postsFetchError} = usePosts();
 
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      LayoutAnimation.configureNext({
+        duration: 1000,
+        update: {type: 'easeInEaseOut'},
+      });
+    }
+  }, [posts]);
+
   const renderHeader = () => {
     return (
       <View style={styles.listHeader}>
@@ -48,15 +57,6 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
       </View>
     );
   };
-
-  useEffect(() => {
-    if (Platform.OS === 'android') {
-      LayoutAnimation.configureNext({
-        duration: 1000,
-        update: {type: 'easeInEaseOut'},
-      });
-    }
-  }, [posts]);
 
   const closeRow = (itemId: number) => {
     if (
@@ -98,16 +98,6 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     }
   };
 
-  const onNavigateToPopUpModal = (postId: number) => {
-    navigation.navigate('PopUpModal', {
-      body: 'Are you sure you want to delete this post?',
-      buttonText: 'Yes',
-      onButtonPress: () => onDeletePost(postId),
-      secondButtonText: 'No',
-      onSecondButtonPress: onCloseModal,
-    });
-  };
-
   const onSwipeableWillOpen = (id: number) => {
     closeRow(id);
   };
@@ -128,6 +118,16 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     />
   );
 
+  const onNavigateToPopUpModal = (postId: number) => {
+    navigation.navigate('PopUpModal', {
+      body: 'Are you sure you want to delete this post?',
+      buttonText: 'Yes',
+      onButtonPress: () => onDeletePost(postId),
+      secondButtonText: 'No',
+      onSecondButtonPress: onCloseModal,
+    });
+  };
+
   return (
     <Container viewType="fixed" contentLayout={styles.contentLayout}>
       {postsFetchError && (
@@ -145,7 +145,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
         ListHeaderComponent={renderHeader}
       />
       <Button type="primary" style={styles.button} onPress={navigation.goBack}>
-        <Typography>Go back</Typography>
+        Go back
       </Button>
     </Container>
   );

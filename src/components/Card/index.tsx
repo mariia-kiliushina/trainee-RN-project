@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Pressable} from 'react-native';
 import {Typography} from 'src/components/Typography';
 import {ArrowsDownUp, CreditCard, FileCheck, Phone} from 'assets/svg';
 import {COLORS} from 'src/constants/colors';
@@ -16,18 +16,26 @@ type Props = {
   text: string;
   iconName: keyof typeof images;
   isLast: boolean;
+  onPress: () => void;
 };
 
-export const Card = ({text, iconName, isLast}: Props) => {
+export const Card = ({text, iconName, isLast, onPress}: Props) => {
   const Image = iconName ? images[iconName] : undefined;
 
   return (
-    <View style={[styles.wrapper, !isLast && styles.rightMargin]}>
+    <Pressable
+      onPress={onPress}
+      style={({pressed}) => [
+        styles.wrapper,
+        !isLast && styles.rightMargin,
+        pressed && styles.pressed,
+      ]}
+    >
       <Typography fontType="bold" textStyle={[styles.text]}>
         {text}
       </Typography>
       {Image && <Image color={COLORS.neutral900} style={styles.icon} />}
-    </View>
+    </Pressable>
   );
 };
 
@@ -51,5 +59,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+  },
+  pressed: {
+    opacity: 0.8,
   },
 });

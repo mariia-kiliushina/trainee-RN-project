@@ -4,15 +4,15 @@ import {useFormik} from 'formik';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import {useAppDispatch} from 'src/hooks/redux';
-import {COLORS} from 'constants/colors';
+import {logInUser} from 'src/store/profileSlice/slice';
+import {loginValidationSchema} from 'src/helpers/validation';
 import {Typography} from 'src/components/Typography';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {Input} from 'src/components/Input';
-import {STORAGE} from 'src/constants/storage';
 import {InputPassword} from 'src/components/InputPassword';
-import {loginValidationSchema} from 'src/helpers/validation';
-import {logInUser} from 'src/store/profileSlice/slice';
+import {STORAGE} from 'src/constants/storage';
+import {COLORS} from 'src/constants/colors';
 
 const rnBiometrics = new ReactNativeBiometrics({allowDeviceCredentials: true});
 
@@ -126,7 +126,7 @@ export const Login = () => {
         value={values.password}
         errorText={errors.password}
       />
-      <Button type="secondary" onPress={handleSubmit}>
+      <Button type="primary" onPress={handleSubmit}>
         Log in
       </Button>
       {isBiometricsAvailable && (

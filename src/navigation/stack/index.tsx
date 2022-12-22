@@ -4,7 +4,7 @@ import {ScrollScreen} from 'screens/ScrollScreen';
 import {Posts} from 'screens/Posts';
 import {GeolocationScreen} from 'screens/GeolocationScreen';
 import {Animations} from 'screens/Animations';
-import {Onboarding} from 'screens/Onboarding';
+import {ChangePassword} from 'screens/ChangePassword';
 import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
@@ -27,12 +27,17 @@ export const ScreenNavigation = () => {
         <>
           <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Animations" component={Animations} />
+          <Stack.Screen name="Posts" component={Posts} />
+          <Stack.Screen name="ScrollScreen" component={ScrollScreen} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="Video" component={Video} />
+          <Stack.Screen
+            name="GeolocationScreen"
+            component={GeolocationScreen}
+          />
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Onboarding} />
-          <Stack.Screen name="Posts" component={Posts} />
-          <Stack.Screen name="ScrollScreen" component={ScrollScreen} />
           <Stack.Screen
             name="Login"
             component={Login}
@@ -40,13 +45,6 @@ export const ScreenNavigation = () => {
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
             }}
           />
-
-          <Stack.Screen
-            name="GeolocationScreen"
-            component={GeolocationScreen}
-          />
-
-          <Stack.Screen name="Video" component={Video} />
         </>
       )}
       <Stack.Group

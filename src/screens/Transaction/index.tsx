@@ -1,27 +1,40 @@
-import {useFormik} from 'formik';
 import {
   Keyboard,
   ListRenderItem,
   ListRenderItemInfo,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
+import {useFormik} from 'formik';
+import {useNavigation} from '@react-navigation/native';
+import {HomeTabScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
-import {Card} from 'components/Card';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
-import {COLORS} from 'src/constants/colors';
-import {HomeTabScreenProps} from 'src/navigation/types';
-import {Account} from './types';
-import {ownAccountData, cardsData, Provider, providerData} from './mock';
+import {Timer} from 'src/components/Timer';
 import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
+import {COLORS} from 'src/constants/colors';
+import {ownAccountData, Provider, providerData} from './mock';
+import {Account} from './types';
 
 export type InitialValues = {
   fromAccount: Account;
   provider: Provider;
+};
+
+const OTPConfirmation = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.wrapper}>
+      <Input placeholder="Enter your OTP code" />
+      <Button type="primary" onPress={navigation.goBack}>
+        Submit
+      </Button>
+      <Timer time={5} />
+    </View>
+  );
 };
 
 const initialValues: InitialValues = {
@@ -43,6 +56,9 @@ export const Transaction = ({
     initialValues,
     onSubmit: () => {
       Keyboard.dismiss();
+      navigation.navigate('BottomSheetModal', {
+        children: <OTPConfirmation />,
+      });
     },
   });
 
@@ -96,64 +112,38 @@ export const Transaction = ({
     });
   };
   return (
-    <Container contentLayout={styles.contentLayout}>
-      <View style={styles.contentWrapper}>
-        <Input
-          value={formik.values.fromAccount?.accountNumber}
-          errorText={formik.errors.fromAccount?.accountNumber}
-          placeholder="Select beneficiary"
-          label="Label"
-          onPress={onLabelInputPress}
-          isPressable
-          iconName="arrow-down"
-          iconColor={COLORS.neutral500}
-        />
-        <Input
-          value={formik.values.provider?.provider}
-          errorText={formik.errors.provider?.provider}
-          placeholder="Select provider"
-          label="Provider"
-          onPress={onProviderInputPress}
-          isPressable
-          iconName="arrow-down"
-          iconColor={COLORS.neutral500}
-        />
-        <Button onPress={formik.handleSubmit} type="primary">
-          Proceed
-        </Button>
-      </View>
-      <View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.sliderContainer}
-        >
-          {cardsData.map((card, index) => {
-            return (
-              <Card
-                key={card.iconName}
-                text={card.text}
-                iconName={card.iconName}
-                isLast={cardsData.length - 1 === index}
-              />
-            );
-          })}
-        </ScrollView>
-      </View>
+    <Container>
+      <Input
+        value={formik.values.fromAccount?.accountNumber}
+        errorText={formik.errors.fromAccount?.accountNumber}
+        placeholder="Select beneficiary"
+        label="Label"
+        onPress={onLabelInputPress}
+        isPressable
+        iconName="arrow-down"
+        iconColor={COLORS.neutral500}
+      />
+      <Input
+        value={formik.values.provider?.provider}
+        errorText={formik.errors.provider?.provider}
+        placeholder="Select provider"
+        label="Provider"
+        onPress={onProviderInputPress}
+        isPressable
+        iconName="arrow-down"
+        iconColor={COLORS.neutral500}
+      />
+      <Button onPress={formik.handleSubmit} type="primary">
+        Confirm payment
+      </Button>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  sliderContainer: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  contentLayout: {
-    paddingHorizontal: 0,
-  },
-  contentWrapper: {
+  wrapper: {
+    paddingVertical: 20,
+    width: '100%',
     paddingHorizontal: 20,
   },
 });

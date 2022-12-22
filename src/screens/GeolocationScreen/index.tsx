@@ -3,12 +3,14 @@ import {StyleSheet, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, LatLng} from 'react-native-maps';
 import {Button} from 'src/components/Button';
-import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
+import {RootStackScreenProps} from 'src/navigation/types';
 
 const deltas = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
 
-export const GeolocationScreen = () => {
+export const GeolocationScreen = ({
+  navigation,
+}: RootStackScreenProps<'GeolocationScreen'>) => {
   const [coordinates, setCoordinates] = useState<LatLng>({
     latitude: 0,
     longitude: 0,
@@ -59,9 +61,11 @@ export const GeolocationScreen = () => {
         />
       </MapView>
       <View style={styles.apiWrapper}>
-        <Typography> Some API to interact with maps</Typography>
         <Button type="primary" onPress={goToMarker}>
           Go to marker
+        </Button>
+        <Button type="secondary" onPress={navigation.goBack}>
+          Done
         </Button>
       </View>
     </View>
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    paddingHorizontal: 20,
+    padding: 20,
     backgroundColor: COLORS.neutral100opaque,
   },
 });
