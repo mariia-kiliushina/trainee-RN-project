@@ -141,7 +141,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   };
 
   return (
-    <Container contentLayout={styles.contentLayout}>
+    <Container contentLayout={styles.contentLayout} viewType="fixed">
       <View>
         <ScrollView
           horizontal={true}
@@ -228,7 +228,6 @@ const styles = StyleSheet.create({
   outerScroll: {
     marginTop: 20,
     backgroundColor: COLORS.genericWhite,
-    height: 1,
   },
   innerScroll: {
     height: 300,
