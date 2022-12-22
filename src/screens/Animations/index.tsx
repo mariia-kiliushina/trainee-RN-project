@@ -382,7 +382,7 @@ export const Animations = ({
 
         <Container
           style={styles.containerStyle}
-          contentLayout={{paddingHorizontal: 0}}
+          contentContainerStyle={{paddingHorizontal: 0}}
         >
           <Typography>Bubbles</Typography>
           <View style={styles.followerWrapper}>

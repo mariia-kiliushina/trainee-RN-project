@@ -6,7 +6,10 @@ import {tabs} from './mock';
 
 export const Budget = () => {
   return (
-    <Container style={styles.style} contentLayout={styles.contentLayout}>
+    <Container
+      style={styles.style}
+      contentContainerStyle={styles.contentContainerStyle}
+    >
       <TabView tabs={tabs} />
       <View style={styles.wrapper} />
     </Container>
@@ -17,7 +20,7 @@ const styles = StyleSheet.create({
   style: {
     backgroundColor: COLORS.neutral100,
   },
-  contentLayout: {
+  contentContainerStyle: {
     paddingHorizontal: 0,
   },
   wrapper: {

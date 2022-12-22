@@ -48,16 +48,6 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     }
   }, [posts]);
 
-  const renderHeader = () => {
-    return (
-      <View style={styles.listHeader}>
-        <Typography variant="18" textStyle={styles.text}>
-          Full posts list
-        </Typography>
-      </View>
-    );
-  };
-
   const closeRow = (itemId: number) => {
     if (
       previouslyOpenedRow.current &&
@@ -129,7 +119,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
   };
 
   return (
-    <Container viewType="fixed" contentLayout={styles.contentLayout}>
+    <Container viewType="fixed" contentContainerStyle={styles.contentContainerStyle}>
       {postsFetchError && (
         <View style={styles.errorHandler}>
           <Typography textStyle={styles.text}>{postsFetchError}</Typography>
@@ -139,11 +129,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
         </View>
       )}
 
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        ListHeaderComponent={renderHeader}
-      />
+      <FlatList data={posts} renderItem={renderItem} />
       <Button type="primary" style={styles.button} onPress={navigation.goBack}>
         Go back
       </Button>
@@ -156,7 +142,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: PADDING_HORIZONTAL,
     marginBottom: 20,
   },
-  contentLayout: {
+  contentContainerStyle: {
     paddingHorizontal: 0,
   },
   rightActionStyle: {
@@ -183,11 +169,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
-  },
-  listHeader: {
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderColor: COLORS.neutral300,
   },
   button: {
     position: 'absolute',

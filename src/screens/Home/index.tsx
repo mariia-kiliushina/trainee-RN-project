@@ -9,9 +9,14 @@ import {
   StyleSheet,
   UIManager,
   View,
+  useWindowDimensions,
+  BackHandler,
+  Alert,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {Swipeable} from 'react-native-gesture-handler';
+import {useIsFocused} from '@react-navigation/native';
+
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {deletePostById} from 'src/store/postsSlice/thunks';
 import {usePosts} from 'src/hooks/usePosts';
@@ -35,12 +40,36 @@ const PADDING_HORIZONTAL = 20;
 
 export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   const {posts, postsFetchError} = usePosts();
+  const {width: screenWidth} = useWindowDimensions();
+  const isFocused = useIsFocused();
 
   const postsSlice = posts.slice(0, 10);
   const dispatch = useAppDispatch();
 
   const rowsRefsArray = useRef<any>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
+
+  const backAction = () => {
+    Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {text: 'Yes', onPress: () => BackHandler.exitApp()},
+    ]);
+    return true;
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backAction);
+      };
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -141,12 +170,21 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   };
 
   return (
-    <Container contentLayout={styles.contentLayout} viewType="fixed">
+    <Container
+      viewType="fixed"
+      contentContainerStyle={{
+        paddingHorizontal: 0,
+      }}
+    >
       <View>
         <ScrollView
-          horizontal={true}
+          horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.sliderContainer}
+          style={styles.quickTransactions}
+          contentContainerStyle={[
+            styles.quickTransactionsContainer,
+            {minWidth: screenWidth},
+          ]}
         >
           {cardsData.map((card, index) => {
             return (
@@ -155,13 +193,14 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
                 text={card.text}
                 iconName={card.iconName}
                 isLast={cardsData.length - 1 === index}
+                index={index}
                 onPress={onCardPress}
               />
             );
           })}
         </ScrollView>
       </View>
-      <ScrollView nestedScrollEnabled={true} style={styles.outerScroll}>
+      <ScrollView style={{flex: 1}}>
         <View style={styles.contentWrapper}>
           <Pressable onPress={onNavigateToGeolocation}>
             <View style={styles.card}>
@@ -204,6 +243,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
             />
           ))}
         </ScrollView>
+
         <View style={styles.contentWrapper}>
           <Pressable onPress={() => navigation.navigate('Posts')}>
             <View style={styles.card}>
@@ -217,17 +257,15 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
+  contentContainerStyle: {
     paddingHorizontal: 0,
   },
-  sliderContainer: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
+  quickTransactionsContainer: {
     paddingHorizontal: 20,
+    paddingBottom: 5,
   },
-  outerScroll: {
-    marginTop: 20,
-    backgroundColor: COLORS.genericWhite,
+  quickTransactions: {
+    marginBottom: 15,
   },
   innerScroll: {
     height: 300,

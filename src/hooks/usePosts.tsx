@@ -10,7 +10,7 @@ export const usePosts = () => {
 
   const initFunc = useCallback(async () => {
     const fetchResult = await dispatch(fetchPosts());
-    console.log(fetchResult);
+
     if (fetchPosts.rejected.match(fetchResult) && !fetchResult.meta.condition) {
       setPostsFetchError(fetchResult.error.message || '');
     } else {

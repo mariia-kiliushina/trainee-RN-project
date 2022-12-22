@@ -105,7 +105,7 @@ export const Login = () => {
   }, [setValues]);
 
   return (
-    <Container contentLayout={styles.contentLayout}>
+    <Container contentContainerStyle={styles.contentContainerStyle}>
       <Typography fontType="bold" color={COLORS.warning500} variant="24">
         Welcome back
       </Typography>
@@ -139,7 +139,7 @@ export const Login = () => {
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
+  contentContainerStyle: {
     justifyContent: 'center',
   },
 });

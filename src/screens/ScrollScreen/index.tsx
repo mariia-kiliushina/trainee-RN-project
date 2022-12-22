@@ -102,7 +102,7 @@ export const ScrollScreen = ({
   };
 
   return (
-    <Container contentLayout={styles.contentLayout}>
+    <Container contentContainerStyle={styles.contentContainerStyle}>
       <ScrollView style={styles.outerScroll}>
         <View style={styles.contentWrapper}>
           <Pressable onPress={() => navigation.navigate('Posts')}>
@@ -153,7 +153,7 @@ export const ScrollScreen = ({
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
+  contentContainerStyle: {
     paddingHorizontal: 0,
   },
   outerScroll: {

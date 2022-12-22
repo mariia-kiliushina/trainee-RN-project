@@ -20,12 +20,16 @@ export const ScreenNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
       }}
     >
       {isSignedIn ? (
         <>
-          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="Animations" component={Animations} />
           <Stack.Screen name="Posts" component={Posts} />
           <Stack.Screen name="ScrollScreen" component={ScrollScreen} />

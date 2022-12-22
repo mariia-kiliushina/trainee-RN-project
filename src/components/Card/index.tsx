@@ -16,19 +16,20 @@ type Props = {
   text: string;
   iconName: keyof typeof images;
   isLast: boolean;
+  index: number;
   onPress: () => void;
 };
 
-export const Card = ({text, iconName, isLast, onPress}: Props) => {
+export const Card = ({text, iconName, isLast, index, onPress}: Props) => {
   const Image = iconName ? images[iconName] : undefined;
 
   return (
     <Pressable
       onPress={onPress}
-      style={({pressed}) => [
-        styles.wrapper,
+      style={[
+        styles.container,
         !isLast && styles.rightMargin,
-        pressed && styles.pressed,
+        index !== 0 && styles.leftMargin,
       ]}
     >
       <Typography fontType="bold" textStyle={[styles.text]}>
@@ -40,17 +41,22 @@ export const Card = ({text, iconName, isLast, onPress}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flexGrow: 1,
-    aspectRatio: 1,
-    padding: 10,
-    backgroundColor: COLORS.cardFiller,
-    borderRadius: 10,
-    minWidth: 90,
+  container: {
+    width: 80,
+    height: 80,
     maxWidth: 120,
+    maxHeight: 120,
+    flex: 1,
+    aspectRatio: 1,
+    borderRadius: 10,
+    padding: 8,
+    borderWidth: 1,
   },
   rightMargin: {
     marginRight: 5,
+  },
+  leftMargin: {
+    marginLeft: 'auto',
   },
   text: {
     color: COLORS.neutral900,
@@ -59,8 +65,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-  },
-  pressed: {
-    opacity: 0.8,
   },
 });
