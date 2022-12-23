@@ -40,12 +40,21 @@ export const ScreenNavigation = () => {
           />
           <Stack.Screen name="Animations" component={Animations} />
           <Stack.Screen name="Posts" component={Posts} />
-          <Stack.Screen name="ScrollScreen" component={ScrollScreen} />
-          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen
+            name="ScrollScreen"
+            component={ScrollScreen}
+            options={{headerTitle: 'Scroll Screen'}}
+          />
+          <Stack.Screen
+            name="ChangePassword"
+            component={ChangePassword}
+            options={{headerTitle: 'Change Password'}}
+          />
           <Stack.Screen name="Video" component={Video} />
           <Stack.Screen
             name="GeolocationScreen"
             component={GeolocationScreen}
+            options={{headerTitle: 'Geolocation Screen'}}
           />
         </>
       ) : (
