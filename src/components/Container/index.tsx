@@ -24,7 +24,10 @@ export const Container = ({
       <ConditionalWrapper
         condition={viewType === 'scroll'}
         wrapper={(wrapperChildren: React.ReactNode) => (
-          <KeyboardAwareScrollView style={{flex: 1}} enableOnAndroid>
+          <KeyboardAwareScrollView
+            contentContainerStyle={styles.keyboardAwareContainerStyle}
+            enableOnAndroid
+          >
             <>{wrapperChildren}</>
           </KeyboardAwareScrollView>
         )}
@@ -45,5 +48,9 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     paddingHorizontal: 20,
+  },
+  keyboardAwareContainerStyle: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

@@ -26,10 +26,11 @@ export const Card = ({text, iconName, isLast, index, onPress}: Props) => {
   return (
     <Pressable
       onPress={onPress}
-      style={[
+      style={({pressed}) => [
         styles.container,
         !isLast && styles.rightMargin,
         index !== 0 && styles.leftMargin,
+        pressed && styles.pressed,
       ]}
     >
       <Typography fontType="bold" textStyle={[styles.text]}>
@@ -42,15 +43,15 @@ export const Card = ({text, iconName, isLast, index, onPress}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     maxWidth: 120,
     maxHeight: 120,
     flex: 1,
     aspectRatio: 1,
     borderRadius: 10,
     padding: 8,
-    borderWidth: 1,
+    backgroundColor: COLORS.omniPrimaryColor,
   },
   rightMargin: {
     marginRight: 5,
@@ -65,5 +66,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+  },
+  pressed: {
+    opacity: 0.8,
   },
 });

@@ -12,6 +12,7 @@ import {PopUpModal} from 'screens/PopUpModal';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks/redux';
 import {RootStackParamList} from '../types';
+import {COLORS} from 'src/constants/colors';
 
 export const ScreenNavigation = () => {
   const isSignedIn = useAppSelector(selectProfile);
@@ -20,7 +21,14 @@ export const ScreenNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: true,
+        headerStyle: {
+          backgroundColor: COLORS.omniPrimaryColor,
+        },
+        headerTintColor: COLORS.genericWhite,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerBackTitleVisible: false,
       }}
     >
       {isSignedIn ? (
@@ -47,6 +55,7 @@ export const ScreenNavigation = () => {
             component={Login}
             options={{
               animationTypeForReplace: isSignedIn ? 'pop' : 'push',
+              headerShown: false,
             }}
           />
         </>

@@ -23,19 +23,15 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import {Button} from 'src/components/Button';
 import {Container} from 'src/components/Container';
 import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
-import {RootStackScreenProps} from 'src/navigation/types';
 import {ToDos} from './mock';
 
 const {width} = Dimensions.get('window');
 const SIZE = 120;
 
-export const Animations = ({
-  navigation,
-}: RootStackScreenProps<'Animations'>) => {
+export const Animations = () => {
   const rotation = useSharedValue(0);
   const offset = useSharedValue(0);
   const pressedForColor = useSharedValue(false);
@@ -434,13 +430,6 @@ export const Animations = ({
           })}
         </Container>
       </ScrollView>
-      <Button
-        type="secondary"
-        onPress={navigation.goBack}
-        style={styles.goBackButton}
-      >
-        Go back
-      </Button>
     </View>
   );
 };
@@ -516,13 +505,5 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     position: 'absolute',
     justifyContent: 'center',
-  },
-  goBackButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    padding: 20,
-    alignItems: 'center',
-    borderRadius: 10,
   },
 });

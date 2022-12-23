@@ -4,13 +4,10 @@ import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, LatLng} from 'react-native-maps';
 import {Button} from 'src/components/Button';
 import {COLORS} from 'src/constants/colors';
-import {RootStackScreenProps} from 'src/navigation/types';
 
 const deltas = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
 
-export const GeolocationScreen = ({
-  navigation,
-}: RootStackScreenProps<'GeolocationScreen'>) => {
+export const GeolocationScreen = () => {
   const [coordinates, setCoordinates] = useState<LatLng>({
     latitude: 0,
     longitude: 0,
@@ -19,7 +16,6 @@ export const GeolocationScreen = ({
   const mapRef = useRef<MapView>(null);
 
   const goToMarker = useCallback(() => {
-    console.log('goHome');
     mapRef?.current?.animateToRegion({...coordinates, ...deltas}, 1000);
   }, [mapRef, coordinates]);
 
@@ -63,9 +59,6 @@ export const GeolocationScreen = ({
       <View style={styles.apiWrapper}>
         <Button type="primary" onPress={goToMarker}>
           Go to marker
-        </Button>
-        <Button type="secondary" onPress={navigation.goBack}>
-          Done
         </Button>
       </View>
     </View>

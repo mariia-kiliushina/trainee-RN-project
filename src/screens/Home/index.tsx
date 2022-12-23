@@ -26,8 +26,8 @@ import {Card} from 'src/components/Card';
 import {Typography} from 'src/components/Typography';
 import {PostReanimated} from 'src/components/PostReanimated';
 import {COLORS} from 'src/constants/colors';
-import {CrossClose} from 'src/assets/svg';
 import {cardsData} from './mock';
+import {RightAction} from 'src/components/RightAction';
 
 if (
   Platform.OS === 'android' &&
@@ -80,16 +80,6 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     }
   }, [posts]);
 
-  const onNavigateToPopUpModal = (postId: number) => {
-    navigation.navigate('PopUpModal', {
-      body: 'Are you sure you want to delete this post?',
-      buttonText: 'Yes',
-      onButtonPress: () => onDeletePost(postId),
-      secondButtonText: 'No',
-      onSecondButtonPress: onCloseModal,
-    });
-  };
-
   const closeRow = (itemId: number) => {
     if (
       previouslyOpenedRow.current &&
@@ -99,17 +89,6 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     }
     previouslyOpenedRow.current = rowsRefsArray.current[itemId];
   };
-
-  const renderRightActions = (id: number) => (
-    <View style={styles.rightActionStyle}>
-      <Pressable
-        style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
-        onPress={() => onNavigateToPopUpModal(id)}
-      >
-        <CrossClose height={24} width={24} />
-      </Pressable>
-    </View>
-  );
 
   const onCloseModal = () => {
     previouslyOpenedRow?.current?.close();
@@ -168,13 +147,20 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   const onNavigateToAnimation = () => {
     navigation.navigate('Animations');
   };
+  const onNavigateToPopUpModal = (postId: number) => {
+    navigation.navigate('PopUpModal', {
+      body: 'Are you sure you want to delete this post?',
+      buttonText: 'Yes',
+      onButtonPress: () => onDeletePost(postId),
+      secondButtonText: 'No',
+      onSecondButtonPress: onCloseModal,
+    });
+  };
 
   return (
     <Container
       viewType="fixed"
-      contentContainerStyle={{
-        paddingHorizontal: 0,
-      }}
+      contentContainerStyle={styles.contentContainerStyle}
     >
       <View>
         <ScrollView
@@ -200,13 +186,15 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
           })}
         </ScrollView>
       </View>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={styles.flex}>
         <View style={styles.contentWrapper}>
-          <Pressable onPress={onNavigateToGeolocation}>
-            <View style={styles.card}>
-              <Typography variant="18">Set my geolocation</Typography>
-            </View>
-          </Pressable>
+          {Platform.OS === 'ios' && (
+            <Pressable onPress={onNavigateToGeolocation}>
+              <View style={styles.card}>
+                <Typography variant="18">Set my geolocation</Typography>
+              </View>
+            </Pressable>
+          )}
           <View style={styles.card} />
           <Pressable onPress={onNavigateToAnimation}>
             <View style={styles.card}>
@@ -237,7 +225,15 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
                 }
               }}
               onSwipeableWillOpen={() => onSwipeableWillOpen(post.id)}
-              renderRightActions={() => renderRightActions(post.id)}
+              renderRightActions={() => {
+                return (
+                  <RightAction
+                    onNavigateToPopUpModal={() =>
+                      onNavigateToPopUpModal(post.id)
+                    }
+                  />
+                );
+              }}
               containerStyle={styles.containerStyle}
               overshootRight={false}
             />
@@ -259,6 +255,9 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
 const styles = StyleSheet.create({
   contentContainerStyle: {
     paddingHorizontal: 0,
+  },
+  flex: {
+    flex: 1,
   },
   quickTransactionsContainer: {
     paddingHorizontal: 20,
@@ -283,22 +282,6 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.neutral500,
     marginBottom: 15,
-  },
-  rightActionStyle: {
-    right: -PADDING_HORIZONTAL,
-    backgroundColor: COLORS.genericWhite,
-    borderWidth: 1,
-    borderColor: COLORS.neutral300,
-    borderLeftColor: 'transparent',
-  },
-  closeButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 70,
-  },
-  pressed: {
-    opacity: 0.8,
   },
   containerStyle: {
     paddingHorizontal: PADDING_HORIZONTAL,
