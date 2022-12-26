@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {StatusBar, LogBox} from 'react-native';
+import {StatusBar, LogBox, StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
@@ -14,47 +14,29 @@ LogBox.ignoreLogs([
 
 const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
+
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  if (enabled) {
-    //do sth with   enabled
-  }
-};
-const registerDeviceInFireBaseMesages = async () => {
-  await messaging().registerDeviceForRemoteMessages();
+
+  return enabled;
 };
 
-const getFireBaseMesagesToken = async () => {
-  await messaging().getToken();
-  //do sth with   token
+const initFunc = async () => {
+  const permission = await requestUserPermission();
+
+  if (permission) {
+    messaging().registerDeviceForRemoteMessages();
+    messaging().getToken(); // for testing purposes
+    messaging().onMessage(async () => {
+      //do sth with   remoteMessage.notification
+    });
+  }
 };
 
 const App = () => {
   useEffect(() => {
-    requestUserPermission();
-    registerDeviceInFireBaseMesages();
-    getFireBaseMesagesToken(); // for testing purposes
-  }, []);
-
-  useEffect(() => {
-    messaging().onNotificationOpenedApp(() => {
-      //do sth with   remoteMessage.notification
-    });
-
-    messaging()
-      .getInitialNotification()
-      .then(() => {
-        //do sth with   remoteMessage.notification
-      });
-  });
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async () => {
-      //do sth with   remoteMessage.notification
-    });
-
-    return unsubscribe;
+    initFunc();
   }, []);
 
   return (
@@ -65,7 +47,7 @@ const App = () => {
         barStyle="dark-content"
       />
       <Provider store={store}>
-        <GestureHandlerRootView style={{flex: 1}}>
+        <GestureHandlerRootView style={styles.gestureHandlerWrapper}>
           <NavigationContainer>
             <ScreenNavigation />
           </NavigationContainer>
@@ -76,3 +58,9 @@ const App = () => {
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  gestureHandlerWrapper: {
+    flex: 1,
+  },
+});

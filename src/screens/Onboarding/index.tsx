@@ -61,7 +61,7 @@ export const Onboarding = ({
   };
 
   return (
-    <Container contentLayout={styles.contentLayout} style={styles.style}>
+    <Container contentContainerStyle={styles.contentContainerStyle} style={styles.style}>
       <Logo style={styles.logo} />
       <Button type="primary" onPress={onLogin} style={styles.button}>
         Get started
@@ -87,7 +87,7 @@ export const Onboarding = ({
 };
 
 const styles = StyleSheet.create({
-  contentLayout: {
+  contentContainerStyle: {
     justifyContent: 'center',
   },
   style: {

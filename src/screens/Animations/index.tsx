@@ -305,138 +305,142 @@ export const Animations = () => {
   };
 
   return (
-    <ScrollView horizontal={true} pagingEnabled={true}>
-      <Container style={styles.containerStyle}>
-        <Typography>GestureHandlers</Typography>
-        <View style={styles.wrapper}>
-          <Pressable onPress={() => (rotation.value += 20)}>
-            <Animated.View style={[styles.quadro, rotateStyle]} />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              offset.value += 20;
-            }}
-          >
-            <Animated.View style={[styles.quadro, offsetStyle]} />
-          </Pressable>
-        </View>
-        <View style={styles.wrapper}>
-          <TapGestureHandler onGestureEvent={tapHandlerColor}>
-            <Animated.View style={[styles.quadro, colorStyle]} />
-          </TapGestureHandler>
-          <TapGestureHandler onGestureEvent={tapHandlerScale}>
-            <Animated.View style={[styles.quadro, scaleAndColorStyle]} />
-          </TapGestureHandler>
-        </View>
-        <View style={styles.wrapper}>
-          <PanGestureHandler onGestureEvent={dragHandler}>
-            <Animated.View style={[styles.smallCircle, positionStyle]} />
-          </PanGestureHandler>
-          <PanGestureHandler onGestureEvent={dragHandlerWithContext}>
-            <Animated.View style={[styles.smallCircle, positionCtxStyle]} />
-          </PanGestureHandler>
-        </View>
-      </Container>
-      <Container style={styles.containerStyle}>
-        <Typography>GestureDetector</Typography>
-        <View style={styles.wrapper}>
-          <GestureDetector gesture={longPressGestureColors}>
-            <Animated.View style={[styles.quadro, colorStyleSecondScreen]} />
-          </GestureDetector>
-          <GestureDetector gesture={longPressGestureScaleAndColors}>
+    <View style={styles.flex}>
+      <ScrollView horizontal={true} pagingEnabled={true}>
+        <Container style={styles.containerStyle}>
+          <Typography>GestureHandlers</Typography>
+          <View style={styles.wrapper}>
+            <Pressable onPress={() => (rotation.value += 20)}>
+              <Animated.View style={[styles.quadro, rotateStyle]} />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                offset.value += 20;
+              }}
+            >
+              <Animated.View style={[styles.quadro, offsetStyle]} />
+            </Pressable>
+          </View>
+          <View style={styles.wrapper}>
+            <TapGestureHandler onGestureEvent={tapHandlerColor}>
+              <Animated.View style={[styles.quadro, colorStyle]} />
+            </TapGestureHandler>
+            <TapGestureHandler onGestureEvent={tapHandlerScale}>
+              <Animated.View style={[styles.quadro, scaleAndColorStyle]} />
+            </TapGestureHandler>
+          </View>
+          <View style={styles.wrapper}>
+            <PanGestureHandler onGestureEvent={dragHandler}>
+              <Animated.View style={[styles.smallCircle, positionStyle]} />
+            </PanGestureHandler>
+            <PanGestureHandler onGestureEvent={dragHandlerWithContext}>
+              <Animated.View style={[styles.smallCircle, positionCtxStyle]} />
+            </PanGestureHandler>
+          </View>
+        </Container>
+        <Container style={styles.containerStyle}>
+          <Typography>GestureDetector</Typography>
+          <View style={styles.wrapper}>
+            <GestureDetector gesture={longPressGestureColors}>
+              <Animated.View style={[styles.quadro, colorStyleSecondScreen]} />
+            </GestureDetector>
+            <GestureDetector gesture={longPressGestureScaleAndColors}>
+              <Animated.View
+                style={[styles.quadro, scaleAndColorStyleSecondScreen]}
+              />
+            </GestureDetector>
+          </View>
+        </Container>
+        <Container style={styles.containerStyle}>
+          <Typography>GestureDetector</Typography>
+          <Typography>Zoom</Typography>
+          <View style={styles.wrapperColumn}>
+            <GestureDetector gesture={pinchGesture}>
+              <View style={[styles.containerCentering, {width}]}>
+                <Animated.View style={[styles.bigCircle, scalePinchStyle]} />
+              </View>
+            </GestureDetector>
+          </View>
+        </Container>
+        <Container style={styles.containerStyle}>
+          <Typography>GestureDetector</Typography>
+          <Typography>Rotate</Typography>
+          <View style={styles.wrapperColumn}>
+            <GestureDetector gesture={rotationGesture}>
+              <View style={[styles.containerCentering, {width}]}>
+                <Animated.View
+                  style={[styles.quadro, styles.bigQuadro, rotationStyle]}
+                />
+              </View>
+            </GestureDetector>
+          </View>
+        </Container>
+
+        <Container
+          style={styles.containerStyle}
+          contentContainerStyle={{paddingHorizontal: 0}}
+        >
+          <Typography>Bubbles</Typography>
+          <View style={styles.followerWrapper}>
             <Animated.View
-              style={[styles.quadro, scaleAndColorStyleSecondScreen]}
+              style={[
+                styles.smallCircle,
+                {backgroundColor: '#A633FF', height: SIZE * 0.6},
+                secondFollowerBubbleStyle,
+              ]}
+            />
+          </View>
+          <View style={styles.followerWrapper}>
+            <Animated.View
+              style={[
+                styles.smallCircle,
+                {backgroundColor: '#33FFA5', height: SIZE * 0.8},
+                firstFollowerBubbleStyle,
+              ]}
+            />
+          </View>
+          <GestureDetector gesture={dragAndBubbleGesture}>
+            <Animated.View
+              style={[
+                styles.smallCircle,
+                {backgroundColor: '#33AAFF', position: 'absolute'},
+                bubbleStyle,
+              ]}
             />
           </GestureDetector>
-        </View>
-      </Container>
-      <Container style={styles.containerStyle}>
-        <Typography>GestureDetector</Typography>
-        <Typography>Zoom</Typography>
-        <View style={styles.wrapperColumn}>
-          <GestureDetector gesture={pinchGesture}>
-            <View style={[styles.containerCentering, {width}]}>
-              <Animated.View style={[styles.bigCircle, scalePinchStyle]} />
-            </View>
-          </GestureDetector>
-        </View>
-      </Container>
-      <Container style={styles.containerStyle}>
-        <Typography>GestureDetector</Typography>
-        <Typography>Rotate</Typography>
-        <View style={styles.wrapperColumn}>
-          <GestureDetector gesture={rotationGesture}>
-            <View style={[styles.containerCentering, {width}]}>
-              <Animated.View
-                style={[styles.quadro, styles.bigQuadro, rotationStyle]}
-              />
-            </View>
-          </GestureDetector>
-        </View>
-      </Container>
-
-      <Container
-        style={styles.containerStyle}
-        contentLayout={{paddingHorizontal: 0}}
-      >
-        <Typography>Bubbles</Typography>
-        <View style={styles.followerWrapper}>
-          <Animated.View
-            style={[
-              styles.smallCircle,
-              {backgroundColor: '#A633FF', height: SIZE * 0.6},
-              secondFollowerBubbleStyle,
-            ]}
-          />
-        </View>
-        <View style={styles.followerWrapper}>
-          <Animated.View
-            style={[
-              styles.smallCircle,
-              {backgroundColor: '#33FFA5', height: SIZE * 0.8},
-              firstFollowerBubbleStyle,
-            ]}
-          />
-        </View>
-        <GestureDetector gesture={dragAndBubbleGesture}>
-          <Animated.View
-            style={[
-              styles.smallCircle,
-              {backgroundColor: '#33AAFF', position: 'absolute'},
-              bubbleStyle,
-            ]}
-          />
-        </GestureDetector>
-      </Container>
-      <Container style={styles.containerStyle}>
-        <Typography>Swipable</Typography>
-        {ToDos.map(todo => {
-          return (
-            <Swipeable
-              key={todo}
-              renderLeftActions={renderLeftActions}
-              renderRightActions={renderRightActions}
-            >
-              <Typography
-                variant="18"
-                style={styles.typographyStyle}
-                textStyle={styles.textStyle}
+        </Container>
+        <Container style={styles.containerStyle}>
+          <Typography>Swipable</Typography>
+          {ToDos.map(todo => {
+            return (
+              <Swipeable
+                key={todo}
+                renderLeftActions={renderLeftActions}
+                renderRightActions={renderRightActions}
               >
-                {todo}
-              </Typography>
-            </Swipeable>
-          );
-        })}
-      </Container>
-    </ScrollView>
+                <Typography
+                  variant="18"
+                  style={styles.typographyStyle}
+                  textStyle={styles.textStyle}
+                >
+                  {todo}
+                </Typography>
+              </Swipeable>
+            );
+          })}
+        </Container>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   containerStyle: {
     width,
   },
-
   wrapper: {
     flex: 1,
     flexDirection: 'row',

@@ -1,9 +1,11 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, AppStateStatus, AppState} from 'react-native';
-import {Container} from 'src/components/Container';
 import {Typography} from 'src/components/Typography';
 import {Button} from 'src/components/Button';
-import {COLORS} from 'src/constants/colors';
+
+type TProps = {
+  time: number;
+};
 
 export const useTimer = (timerSec: number) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>();
@@ -71,43 +73,33 @@ export const useTimer = (timerSec: number) => {
   return {timer, resetTimer};
 };
 
-export const Timer = () => {
-  const {timer, resetTimer} = useTimer(8);
+export const Timer = ({time}: TProps) => {
+  const {timer, resetTimer} = useTimer(time);
 
   return (
-    <Container style={styles.style} contentLayout={styles.contentLayout}>
+    <View>
       <Typography variant="24" textStyle={styles.textStyle}>
         {`${timer}s`}
       </Typography>
-
       <View style={styles.buttonsWrapper}>
         <Button
           disabled={!!timer}
           type="secondary"
-          style={[styles.buttonStyle, {marginRight: 40}]}
+          style={styles.buttonStyle}
           onPress={resetTimer}
         >
           Resend OTP
         </Button>
-        <Button type="primary" style={styles.buttonStyle}>
-          Continue
-        </Button>
       </View>
-    </Container>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  style: {
-    backgroundColor: COLORS.genericWhite,
-  },
-  contentLayout: {
-    justifyContent: 'center',
-  },
   buttonsWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 20,
   },
   buttonStyle: {
     flex: 1,

@@ -1,6 +1,5 @@
 import {useEffect, useRef} from 'react';
 import {
-  Pressable,
   StyleSheet,
   View,
   FlatList,
@@ -19,8 +18,7 @@ import {Typography} from 'src/components/Typography';
 import {PostReanimated} from 'src/components/PostReanimated';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
-import {CrossClose} from 'src/assets/svg';
-import {COLORS} from 'src/constants/colors';
+import {RightAction} from 'src/components/RightAction';
 
 if (
   Platform.OS === 'android' &&
@@ -28,7 +26,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
 const PADDING_HORIZONTAL = 20;
 
 export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
@@ -38,16 +35,6 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
   const {posts, postsFetchError} = usePosts();
-
-  const renderHeader = () => {
-    return (
-      <View style={styles.listHeader}>
-        <Typography variant="18" textStyle={styles.text}>
-          Full posts list
-        </Typography>
-      </View>
-    );
-  };
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -67,17 +54,15 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     }
     previouslyOpenedRow.current = rowsRefsArray.current[itemId];
   };
-
-  const renderRightActions = (id: number) => (
-    <View style={styles.rightActionStyle}>
-      <Pressable
-        style={({pressed}) => [styles.closeButton, pressed && styles.pressed]}
-        onPress={() => onNavigateToPopUpModal(id)}
-      >
-        <CrossClose height={24} width={24} />
-      </Pressable>
-    </View>
-  );
+  const onNavigateToPopUpModal = (postId: number) => {
+    navigation.navigate('PopUpModal', {
+      body: 'Are you sure you want to delete this post?',
+      buttonText: 'Yes',
+      onButtonPress: () => onDeletePost(postId),
+      secondButtonText: 'No',
+      onSecondButtonPress: onCloseModal,
+    });
+  };
 
   const onCloseModal = () => {
     previouslyOpenedRow?.current?.close();
@@ -98,16 +83,6 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     }
   };
 
-  const onNavigateToPopUpModal = (postId: number) => {
-    navigation.navigate('PopUpModal', {
-      body: 'Are you sure you want to delete this post?',
-      buttonText: 'Yes',
-      onButtonPress: () => onDeletePost(postId),
-      secondButtonText: 'No',
-      onSecondButtonPress: onCloseModal,
-    });
-  };
-
   const onSwipeableWillOpen = (id: number) => {
     closeRow(id);
   };
@@ -122,14 +97,23 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
         }
       }}
       onSwipeableWillOpen={() => onSwipeableWillOpen(item.id)}
-      renderRightActions={() => renderRightActions(item.id)}
+      renderRightActions={() => {
+        return (
+          <RightAction
+            onNavigateToPopUpModal={() => onNavigateToPopUpModal(item.id)}
+          />
+        );
+      }}
       containerStyle={styles.containerStyle}
       overshootRight={false}
     />
   );
 
   return (
-    <Container viewType="fixed" contentLayout={styles.contentLayout}>
+    <Container
+      viewType="fixed"
+      contentContainerStyle={styles.contentContainerStyle}
+    >
       {postsFetchError && (
         <View style={styles.errorHandler}>
           <Typography textStyle={styles.text}>{postsFetchError}</Typography>
@@ -139,14 +123,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
         </View>
       )}
 
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        ListHeaderComponent={renderHeader}
-      />
-      <Button type="primary" style={styles.button} onPress={navigation.goBack}>
-        <Typography>Go back</Typography>
-      </Button>
+      <FlatList data={posts} renderItem={renderItem} />
     </Container>
   );
 };
@@ -156,24 +133,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: PADDING_HORIZONTAL,
     marginBottom: 20,
   },
-  contentLayout: {
+  contentContainerStyle: {
     paddingHorizontal: 0,
-  },
-  rightActionStyle: {
-    right: -PADDING_HORIZONTAL,
-    backgroundColor: COLORS.genericWhite,
-    borderWidth: 1,
-    borderColor: COLORS.neutral300,
-    borderLeftColor: 'transparent',
-  },
-  closeButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 70,
-  },
-  pressed: {
-    opacity: 0.8,
   },
   text: {
     textAlign: 'center',
@@ -183,18 +144,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
-  },
-  listHeader: {
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderColor: COLORS.neutral300,
-  },
-  button: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    padding: 20,
-    alignItems: 'center',
-    borderRadius: 10,
   },
 });

@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, LatLng} from 'react-native-maps';
 import {Button} from 'src/components/Button';
-import {Typography} from 'src/components/Typography';
 import {COLORS} from 'src/constants/colors';
 
 const deltas = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
@@ -17,7 +16,6 @@ export const GeolocationScreen = () => {
   const mapRef = useRef<MapView>(null);
 
   const goToMarker = useCallback(() => {
-    console.log('goHome');
     mapRef?.current?.animateToRegion({...coordinates, ...deltas}, 1000);
   }, [mapRef, coordinates]);
 
@@ -59,7 +57,6 @@ export const GeolocationScreen = () => {
         />
       </MapView>
       <View style={styles.apiWrapper}>
-        <Typography> Some API to interact with maps</Typography>
         <Button type="primary" onPress={goToMarker}>
           Go to marker
         </Button>
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    paddingHorizontal: 20,
+    padding: 20,
     backgroundColor: COLORS.neutral100opaque,
   },
 });
