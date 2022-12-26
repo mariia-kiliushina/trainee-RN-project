@@ -3,7 +3,8 @@ import {COLORS} from 'constants/colors';
 import {Profile} from 'screens/Profile';
 import {Budget} from 'screens/Budget';
 import {Transaction} from 'src/screens/Transaction';
-import {Home} from 'screens/Home';
+// import {Home} from 'screens/Home';
+import {Bills} from 'screens/Bills';
 import {ProfileIcon, HomeIcon, BudgetIcon, TransactionIcon} from 'assets/svg';
 import {HomeTabsParamList} from '../types';
 
@@ -20,10 +21,15 @@ export const Main = () => {
       backBehavior={'history'}
     >
       <Tab.Screen
+        name="Bills"
+        component={Bills}
+        options={{tabBarIcon: HomeIcon}}
+      />
+      {/* <Tab.Screen
         name="Home"
         component={Home}
         options={{tabBarIcon: HomeIcon}}
-      />
+      /> */}
       <Tab.Screen
         name="Transaction"
         component={Transaction}
