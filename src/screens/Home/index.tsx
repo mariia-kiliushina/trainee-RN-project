@@ -18,16 +18,14 @@ import {Swipeable} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
 
 import {HomeTabScreenProps} from 'src/navigation/types';
-import {deletePostById} from 'src/store/postsSlice/thunks';
 import {usePosts} from 'src/hooks/usePosts';
-import {useAppDispatch} from 'src/hooks/redux';
 import {Container} from 'src/components/Container';
 import {Card} from 'src/components/Card';
 import {Typography} from 'src/components/Typography';
 import {PostReanimated} from 'src/components/PostReanimated';
 import {COLORS} from 'src/constants/colors';
 import {cardsData} from './mock';
-import {RightAction} from 'src/components/RightAction';
+import {PostRightAction} from 'src/components/PostRightAction';
 
 if (
   Platform.OS === 'android' &&
@@ -44,9 +42,8 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   const isFocused = useIsFocused();
 
   const postsSlice = posts.slice(0, 10);
-  const dispatch = useAppDispatch();
 
-  const rowsRefsArray = useRef<any>([]);
+  const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
   const backAction = () => {
@@ -90,29 +87,6 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
     previouslyOpenedRow.current = rowsRefsArray.current[itemId];
   };
 
-  const onCloseModal = () => {
-    previouslyOpenedRow?.current?.close();
-    previouslyOpenedRow.current = null;
-  };
-
-  const onDeletePost = (id: number) => {
-    onCloseModal();
-
-    dispatch(deletePostById(id));
-
-    if (Platform.OS === 'ios') {
-      LayoutAnimation.configureNext({
-        duration: 1000,
-        update: {type: 'easeInEaseOut', property: 'scaleX'},
-        delete: {type: 'easeInEaseOut', property: 'scaleX'},
-      });
-    }
-  };
-
-  const onSwipeableWillOpen = (id: number) => {
-    closeRow(id);
-  };
-
   const onCardPress = () => {
     navigation.navigate('Budget');
   };
@@ -147,14 +121,10 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
   const onNavigateToAnimation = () => {
     navigation.navigate('Animations');
   };
-  const onNavigateToPopUpModal = (postId: number) => {
-    navigation.navigate('PopUpModal', {
-      body: 'Are you sure you want to delete this post?',
-      buttonText: 'Yes',
-      onButtonPress: () => onDeletePost(postId),
-      secondButtonText: 'No',
-      onSecondButtonPress: onCloseModal,
-    });
+
+  const slideRowBack = () => {
+    previouslyOpenedRow.current?.close();
+    previouslyOpenedRow.current = null;
   };
 
   return (
@@ -224,16 +194,10 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
                   rowsRefsArray.current[post.id] = rowRef;
                 }
               }}
-              onSwipeableWillOpen={() => onSwipeableWillOpen(post.id)}
-              renderRightActions={() => {
-                return (
-                  <RightAction
-                    onNavigateToPopUpModal={() =>
-                      onNavigateToPopUpModal(post.id)
-                    }
-                  />
-                );
-              }}
+              onSwipeableWillOpen={() => closeRow(post.id)}
+              renderRightActions={() => (
+                <PostRightAction postId={post.id} slideRowBack={slideRowBack} />
+              )}
               containerStyle={styles.containerStyle}
               overshootRight={false}
             />
