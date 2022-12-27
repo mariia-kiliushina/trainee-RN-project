@@ -1,4 +1,4 @@
-import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {COLORS} from 'src/constants/colors';
@@ -26,7 +26,6 @@ export const Bills = ({}: HomeTabScreenProps<'Bills'>) => {
       style={styles.style}
       contentContainerStyle={styles.contentContainerStyle}
     >
-      <StatusBar barStyle="dark-content" />
       <View style={styles.resultView}>
         <CrossClose width={50} height={50} />
         <Typography
@@ -38,64 +37,59 @@ export const Bills = ({}: HomeTabScreenProps<'Bills'>) => {
           Transaction unsuccessful
         </Typography>
       </View>
-      <View style={styles.scrollWrapper}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.topCard}>
-            <Typography color={COLORS.neutral400}>Amount</Typography>
-            <Typography variant="24" fontType="bold" color={COLORS.neutral900}>
-              $10.00
-            </Typography>
-
-            <View style={[styles.circle, leftStyle]} />
-            <View style={[styles.circle, rightStyle]} />
-          </View>
-          <View style={styles.bottomCard}>
-            {infoList.map((infoItem: TInfoItem) => (
-              <View key={infoItem.title} style={styles.bottomCardItem}>
-                <Typography color={COLORS.neutral400}>
-                  {infoItem.title}
-                </Typography>
-                <Typography color={COLORS.neutral900}>
-                  {infoItem.text}
-                </Typography>
-              </View>
-            ))}
-            <Button type="primary" style={styles.topButton}>
-              Try again
-            </Button>
-            <Button type="secondary" style={styles.bottomButton}>
-              Close
-            </Button>
-          </View>
-          <View style={styles.topCard}>
-            <View style={[styles.circle, leftStyle]} />
-            <View style={[styles.circle, rightStyle]} />
-
-            <Typography color={COLORS.neutral400}>Amount</Typography>
-            <Typography variant="24" fontType="bold" color={COLORS.neutral900}>
-              $10.00
-            </Typography>
-          </View>
-          <View style={styles.bottomCard}>
-            {infoList.map((infoItem: TInfoItem) => (
-              <View key={infoItem.title} style={styles.bottomCardItem}>
-                <Typography color={COLORS.neutral400}>
-                  {infoItem.title}
-                </Typography>
-                <Typography color={COLORS.neutral900}>
-                  {infoItem.text}
-                </Typography>
-              </View>
-            ))}
-            <Button type="primary" style={styles.topButton}>
-              Try again
-            </Button>
-            <Button type="secondary" style={styles.bottomButton}>
-              Close
-            </Button>
-          </View>
-        </ScrollView>
-      </View>
+      <ScrollView
+        style={styles.scrollWrapper}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        <View style={styles.topCard}>
+          <Typography color={COLORS.neutral400}>Amount</Typography>
+          <Typography variant="24" fontType="bold" color={COLORS.neutral900}>
+            $10.00
+          </Typography>
+        </View>
+        <View style={styles.bottomCard}>
+          <View style={[styles.circle, leftStyle]} />
+          <View style={[styles.circle, rightStyle]} />
+          {infoList.map((infoItem: TInfoItem) => (
+            <View key={infoItem.title} style={styles.bottomCardItem}>
+              <Typography color={COLORS.neutral400}>
+                {infoItem.title}
+              </Typography>
+              <Typography color={COLORS.neutral900}>{infoItem.text}</Typography>
+            </View>
+          ))}
+          <Button type="primary" style={styles.topButton}>
+            Try again
+          </Button>
+          <Button type="secondary" style={styles.bottomButton}>
+            Close
+          </Button>
+        </View>
+        <View style={styles.topCard}>
+          <Typography color={COLORS.neutral400}>Amount</Typography>
+          <Typography variant="24" fontType="bold" color={COLORS.neutral900}>
+            $10.00
+          </Typography>
+        </View>
+        <View style={styles.bottomCard}>
+          <View style={[styles.circle, leftStyle]} />
+          <View style={[styles.circle, rightStyle]} />
+          {infoList.map((infoItem: TInfoItem) => (
+            <View key={infoItem.title} style={styles.bottomCardItem}>
+              <Typography color={COLORS.neutral400}>
+                {infoItem.title}
+              </Typography>
+              <Typography color={COLORS.neutral900}>{infoItem.text}</Typography>
+            </View>
+          ))}
+          <Button type="primary" style={styles.topButton}>
+            Try again
+          </Button>
+          <Button type="secondary" style={styles.bottomButton}>
+            Close
+          </Button>
+        </View>
+      </ScrollView>
     </Container>
   );
 };
@@ -108,16 +102,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   resultView: {
-    flex: 1,
-    backgroundColor: COLORS.omniDark,
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 15,
   },
   resultViewTextStyle: {
     marginTop: 15,
   },
   scrollWrapper: {
-    flex: 4,
+    flex: 1,
     backgroundColor: backgroundColor,
   },
   scrollContainer: {
@@ -126,12 +118,10 @@ const styles = StyleSheet.create({
   topCard: {
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 6,
     marginBottom: 2,
     padding: 20,
   },
   bottomCard: {
-    zIndex: -1,
     backgroundColor: 'white',
     borderRadius: 6,
     marginBottom: 20,
@@ -151,7 +141,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     height: circleSize,
     borderRadius: circleSize / 2,
-    bottom: -circleSize / 2,
+    top: -circleSize / 2,
   },
   topButton: {
     marginTop: 70,
