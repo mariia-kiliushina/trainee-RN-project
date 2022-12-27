@@ -13,7 +13,7 @@ import {usePosts} from 'src/hooks/usePosts';
 import {TPost} from 'src/store/postsSlice/types';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {Typography} from 'src/components/Typography';
-import {PostReanimated} from 'src/components/PostReanimated';
+import {SwipeableComponent} from 'src/components/SwipeableComponent';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
 import {PostRightAction} from 'src/components/PostRightAction';
@@ -57,7 +57,7 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
   };
 
   const renderItem: ListRenderItem<TPost> = ({item}) => (
-    <PostReanimated
+    <SwipeableComponent
       title={item.title}
       body={item.body}
       ref={(rowRef: any) => {

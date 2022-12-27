@@ -22,7 +22,7 @@ import {usePosts} from 'src/hooks/usePosts';
 import {Container} from 'src/components/Container';
 import {Card} from 'src/components/Card';
 import {Typography} from 'src/components/Typography';
-import {PostReanimated} from 'src/components/PostReanimated';
+import {SwipeableComponent} from 'src/components/SwipeableComponent';
 import {COLORS} from 'src/constants/colors';
 import {cardsData} from './mock';
 import {PostRightAction} from 'src/components/PostRightAction';
@@ -185,7 +185,7 @@ export const Home = ({navigation}: HomeTabScreenProps<'Home'>) => {
             </View>
           )}
           {postsSlice.map(post => (
-            <PostReanimated
+            <SwipeableComponent
               key={post.id}
               title={post.title}
               body={post.body}

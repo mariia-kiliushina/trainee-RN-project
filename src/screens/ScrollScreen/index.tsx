@@ -13,7 +13,7 @@ import {deletePostById} from 'src/store/postsSlice/thunks';
 import {usePosts} from 'src/hooks/usePosts';
 import {Container} from 'src/components/Container';
 import {Typography} from 'src/components/Typography';
-import {PostReanimated} from 'src/components/PostReanimated';
+import {SwipeableComponent} from 'src/components/SwipeableComponent';
 import {CrossClose} from 'src/assets/svg';
 import {COLORS} from 'src/constants/colors';
 import {useAppDispatch} from 'src/hooks/redux';
@@ -127,7 +127,7 @@ export const ScrollScreen = ({
             </View>
           )}
           {postsSlice.map(post => (
-            <PostReanimated
+            <SwipeableComponent
               key={post.id}
               title={post.title}
               body={post.body}
