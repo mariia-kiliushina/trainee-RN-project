@@ -12,13 +12,11 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {usePosts} from 'src/hooks/usePosts';
 import {TPost} from 'src/store/postsSlice/types';
 import {RootStackScreenProps} from 'src/navigation/types';
-import {deletePostById} from 'src/store/postsSlice/thunks';
-import {useAppDispatch} from 'src/hooks/redux';
 import {Typography} from 'src/components/Typography';
-import {PostReanimated} from 'src/components/PostReanimated';
+import {SwipeableComponent} from 'src/components/SwipeableComponent';
 import {Container} from 'src/components/Container';
 import {Button} from 'src/components/Button';
-import {RightAction} from 'src/components/RightAction';
+import {PostRightAction} from 'src/components/PostRightAction';
 
 if (
   Platform.OS === 'android' &&
@@ -29,9 +27,7 @@ if (
 const PADDING_HORIZONTAL = 20;
 
 export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
-  const dispatch = useAppDispatch();
-
-  const rowsRefsArray = useRef<any>([]);
+  const rowsRefsArray = useRef<Swipeable[]>([]);
   const previouslyOpenedRow = useRef<Swipeable | null>(null);
 
   const {posts, postsFetchError} = usePosts();
@@ -54,41 +50,14 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
     }
     previouslyOpenedRow.current = rowsRefsArray.current[itemId];
   };
-  const onNavigateToPopUpModal = (postId: number) => {
-    navigation.navigate('PopUpModal', {
-      body: 'Are you sure you want to delete this post?',
-      buttonText: 'Yes',
-      onButtonPress: () => onDeletePost(postId),
-      secondButtonText: 'No',
-      onSecondButtonPress: onCloseModal,
-    });
-  };
 
-  const onCloseModal = () => {
-    previouslyOpenedRow?.current?.close();
+  const slideRowBack = () => {
+    previouslyOpenedRow.current?.close();
     previouslyOpenedRow.current = null;
   };
 
-  const onDeletePost = (id: number) => {
-    onCloseModal();
-
-    dispatch(deletePostById(id));
-
-    if (Platform.OS === 'ios') {
-      LayoutAnimation.configureNext({
-        duration: 1000,
-        update: {type: 'easeInEaseOut', property: 'scaleX'},
-        delete: {type: 'easeInEaseOut', property: 'scaleX'},
-      });
-    }
-  };
-
-  const onSwipeableWillOpen = (id: number) => {
-    closeRow(id);
-  };
-
   const renderItem: ListRenderItem<TPost> = ({item}) => (
-    <PostReanimated
+    <SwipeableComponent
       title={item.title}
       body={item.body}
       ref={(rowRef: any) => {
@@ -96,14 +65,10 @@ export const Posts = ({navigation}: RootStackScreenProps<'Posts'>) => {
           rowsRefsArray.current[item.id] = rowRef;
         }
       }}
-      onSwipeableWillOpen={() => onSwipeableWillOpen(item.id)}
-      renderRightActions={() => {
-        return (
-          <RightAction
-            onNavigateToPopUpModal={() => onNavigateToPopUpModal(item.id)}
-          />
-        );
-      }}
+      onSwipeableWillOpen={() => closeRow(item.id)}
+      renderRightActions={() => (
+        <PostRightAction postId={item.id} slideRowBack={slideRowBack} />
+      )}
       containerStyle={styles.containerStyle}
       overshootRight={false}
     />

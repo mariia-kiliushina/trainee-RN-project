@@ -1,4 +1,4 @@
-import {forwardRef, LegacyRef} from 'react';
+import {forwardRef, Ref} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Swipeable, {
   SwipeableProps,
@@ -14,15 +14,14 @@ type TProps = SwipeableProps & {
   renderRightActions?: any;
   onSwipeableWillOpen?: any;
 };
-export const PostReanimated = forwardRef(
-  (props: TProps, ref: LegacyRef<Swipeable> | undefined) => {
-    const {title, body, onSwipeableWillOpen, renderRightActions} = props;
+export const SwipeableComponent = forwardRef(
+  (props: TProps, ref: Ref<Swipeable> | undefined) => {
+    const {title, body, onSwipeableWillOpen} = props;
 
     return (
       <Swipeable
         ref={ref}
         onSwipeableWillOpen={onSwipeableWillOpen}
-        renderRightActions={renderRightActions}
         containerStyle={styles.containerStyle}
         overshootRight={false}
         {...props}
