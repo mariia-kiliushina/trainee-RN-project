@@ -35,3 +35,4 @@ export {default as Checkmark} from './checkmark.svg';
 export {default as Reset} from './reset.svg';
 export {default as Stop} from './stopRecording.svg';
 export {default as Flip} from './flip.svg';
+export {default as Backspace} from './backspace.svg';

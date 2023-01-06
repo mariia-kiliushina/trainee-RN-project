@@ -13,8 +13,9 @@ export type RootStackParamList = {
   Main: undefined;
   Onboarding: undefined;
   Login: undefined;
-
+  Bills: {code: string};
   BottomSheetModal: {children: React.ReactNode};
+  OtpModal: {children: React.ReactNode};
   PopUpModal: TPopUpModalParams;
 };
 
@@ -22,7 +23,6 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
 export type HomeTabsParamList = {
-  Bills: undefined;
   Home: undefined;
   Transaction: undefined;
   Budget: undefined;

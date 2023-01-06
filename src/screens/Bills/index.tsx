@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {HomeTabScreenProps} from 'src/navigation/types';
+import {RootStackScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {COLORS} from 'src/constants/colors';
 import {Typography} from 'src/components/Typography';
@@ -19,7 +19,7 @@ const rightStyle = {
 
 const backgroundColor = COLORS.neutral100;
 
-export const Bills = ({}: HomeTabScreenProps<'Bills'>) => {
+export const Bills = ({navigation}: RootStackScreenProps<'Bills'>) => {
   return (
     <Container
       viewType="fixed"
@@ -58,10 +58,18 @@ export const Bills = ({}: HomeTabScreenProps<'Bills'>) => {
               <Typography color={COLORS.neutral900}>{infoItem.text}</Typography>
             </View>
           ))}
-          <Button type="primary" style={styles.topButton}>
+          <Button
+            type="primary"
+            style={styles.topButton}
+            onPress={navigation.goBack}
+          >
             Try again
           </Button>
-          <Button type="secondary" style={styles.bottomButton}>
+          <Button
+            type="secondary"
+            style={styles.bottomButton}
+            onPress={navigation.goBack}
+          >
             Close
           </Button>
         </View>
@@ -82,10 +90,18 @@ export const Bills = ({}: HomeTabScreenProps<'Bills'>) => {
               <Typography color={COLORS.neutral900}>{infoItem.text}</Typography>
             </View>
           ))}
-          <Button type="primary" style={styles.topButton}>
+          <Button
+            type="primary"
+            style={styles.topButton}
+            onPress={navigation.goBack}
+          >
             Try again
           </Button>
-          <Button type="secondary" style={styles.bottomButton}>
+          <Button
+            type="secondary"
+            style={styles.bottomButton}
+            onPress={navigation.goBack}
+          >
             Close
           </Button>
         </View>

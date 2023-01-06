@@ -9,6 +9,7 @@ import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {PopUpModal} from 'screens/PopUpModal';
+import {OtpModal} from 'screens/OtpModal';
 import {Bills} from 'screens/Bills';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks/redux';
@@ -47,6 +48,11 @@ export const ScreenNavigation = () => {
             options={{headerTitle: 'Scroll Screen'}}
           />
           <Stack.Screen
+            name="Bills"
+            component={Bills}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="ChangePassword"
             component={ChangePassword}
             options={{headerTitle: 'Change Password'}}
@@ -75,10 +81,12 @@ export const ScreenNavigation = () => {
           animation: 'fade',
           presentation: 'transparentModal',
           gestureEnabled: false,
+          headerShown: false,
         }}
       >
         <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
         <Stack.Screen name="PopUpModal" component={PopUpModal} />
+        <Stack.Screen name="OtpModal" component={OtpModal} />
       </Stack.Group>
     </Stack.Navigator>
   );

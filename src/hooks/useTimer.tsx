@@ -1,17 +1,11 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {View, StyleSheet, AppStateStatus, AppState} from 'react-native';
-import {Typography} from 'src/components/Typography';
-import {Button} from 'src/components/Button';
-
-type TProps = {
-  time: number;
-};
+import {AppState, AppStateStatus} from 'react-native';
 
 export const useTimer = (timerSec: number) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>();
   const terminateTimeRef = useRef(Date.now() + timerSec * 1000);
 
-  const [timer, setTimer] = useState(timerSec);
+  const [time, setTime] = useState(timerSec);
 
   const stopTimer = () => {
     if (intervalRef.current) {
@@ -21,14 +15,15 @@ export const useTimer = (timerSec: number) => {
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
-      setTimer(prevTimer => prevTimer - 1);
+      setTime(prevTimer => prevTimer - 1);
     }, 1000);
   };
 
-  const resetTimer = () => {
+  const resetTime = () => {
+    console.log('inside timer');
     stopTimer();
     terminateTimeRef.current = Date.now() + timerSec * 1000;
-    setTimer(timerSec);
+    setTime(timerSec);
     startTimer();
   };
 
@@ -41,11 +36,11 @@ export const useTimer = (timerSec: number) => {
       );
 
       if (timeLeft > 0) {
-        setTimer(timeLeft);
+        setTime(timeLeft);
 
         startTimer();
       } else {
-        setTimer(0);
+        setTime(0);
       }
     }
   }, []);
@@ -65,46 +60,10 @@ export const useTimer = (timerSec: number) => {
   }, [appStateOnChange]);
 
   useEffect(() => {
-    if (timer === 0) {
+    if (time === 0) {
       stopTimer();
     }
-  }, [timer]);
+  }, [time]);
 
-  return {timer, resetTimer};
+  return {time, resetTime};
 };
-
-export const Timer = ({time}: TProps) => {
-  const {timer, resetTimer} = useTimer(time);
-
-  return (
-    <View>
-      <Typography variant="24" textStyle={styles.textStyle}>
-        {`${timer}s`}
-      </Typography>
-      <View style={styles.buttonsWrapper}>
-        <Button
-          disabled={!!timer}
-          type="secondary"
-          style={styles.buttonStyle}
-          onPress={resetTimer}
-        >
-          Resend OTP
-        </Button>
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  buttonsWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  buttonStyle: {
-    flex: 1,
-  },
-  textStyle: {
-    textAlign: 'center',
-  },
-});

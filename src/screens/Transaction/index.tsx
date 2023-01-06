@@ -3,17 +3,14 @@ import {
   ListRenderItem,
   ListRenderItemInfo,
   StyleSheet,
-  View,
 } from 'react-native';
 import {useFormik} from 'formik';
-import {useNavigation} from '@react-navigation/native';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
 import {SelectAccount} from 'src/components/SelectItems/SelectAccount';
 import {Input} from 'src/components/Input';
 import {BaseList} from 'src/components/BaseList';
 import {Button} from 'src/components/Button';
-import {Timer} from 'src/components/Timer';
 import {SelectProvider} from 'src/components/SelectItems/SelectProvider';
 import {COLORS} from 'src/constants/colors';
 import {ownAccountData, Provider, providerData} from './mock';
@@ -22,19 +19,6 @@ import {Account} from './types';
 export type InitialValues = {
   fromAccount: Account;
   provider: Provider;
-};
-
-const OTPConfirmation = () => {
-  const navigation = useNavigation();
-  return (
-    <View style={styles.wrapper}>
-      <Input placeholder="Enter your OTP code" />
-      <Button type="primary" onPress={navigation.goBack}>
-        Submit
-      </Button>
-      <Timer time={5} />
-    </View>
-  );
 };
 
 const initialValues: InitialValues = {
@@ -56,8 +40,8 @@ export const Transaction = ({
     initialValues,
     onSubmit: () => {
       Keyboard.dismiss();
-      navigation.navigate('BottomSheetModal', {
-        children: <OTPConfirmation />,
+      navigation.navigate('OtpModal', {
+        children: <></>,
       });
     },
   });
@@ -140,10 +124,4 @@ export const Transaction = ({
   );
 };
 
-const styles = StyleSheet.create({
-  wrapper: {
-    paddingVertical: 20,
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-});
+const styles = StyleSheet.create({});

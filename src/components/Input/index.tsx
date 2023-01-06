@@ -43,6 +43,7 @@ export const Input = ({
   onIconPress,
   onBlur,
   editable = true,
+  style,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -55,6 +56,7 @@ export const Input = ({
     isFocused && styles.focused,
     editable && Boolean(errorText) && styles.error,
     !editable && styles.disabled,
+    style,
   ]);
 
   const renderPressableInputWrapper = (children: JSX.Element) => {
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: COLORS.neutral100,
     paddingHorizontal: INPUT_PADDING,
-    paddingVertical: 10,
+    paddingVertical: 5,
     backgroundColor: COLORS.genericWhite,
   },
   iconPadding: {
