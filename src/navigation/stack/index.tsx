@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
-import {ScrollScreen} from 'screens/ScrollScreen';
+import {Onboarding} from 'screens/Onboarding';
 import {Posts} from 'screens/Posts';
 import {GeolocationScreen} from 'screens/GeolocationScreen';
 import {Animations} from 'screens/Animations';
@@ -43,11 +43,6 @@ export const ScreenNavigation = () => {
           <Stack.Screen name="Animations" component={Animations} />
           <Stack.Screen name="Posts" component={Posts} />
           <Stack.Screen
-            name="ScrollScreen"
-            component={ScrollScreen}
-            options={{headerTitle: 'Scroll Screen'}}
-          />
-          <Stack.Screen
             name="Bills"
             component={Bills}
             options={{headerShown: false}}
@@ -66,6 +61,11 @@ export const ScreenNavigation = () => {
         </>
       ) : (
         <>
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Login"
             component={Login}

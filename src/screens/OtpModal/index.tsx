@@ -1,29 +1,40 @@
 import {Pressable, StyleSheet, View} from 'react-native';
 import {COLORS} from 'constants/colors';
 import {Typography} from 'src/components/Typography';
-import {ModalOverlay} from 'src/components/ModalOverlay';
 import {RootStackScreenProps} from 'src/navigation/types';
 import {useTimer} from 'src/hooks/useTimer';
 import {useNavigation} from '@react-navigation/native';
 import {TimeCounter} from 'src/components/TimeCounter';
 import {Button} from 'src/components/Button';
-import {Input} from 'src/components/Input';
 import {useState} from 'react';
 import {Backspace} from 'src/assets/svg';
 
-const otpRegExp = /^[0-9]{0,6}$/;
+const buttonsArray = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  null,
+  '0',
+  'delete',
+];
 
 export const OtpModal = () => {
   const navigation =
-    useNavigation<RootStackScreenProps<'BottomSheetModal'>['navigation']>();
+    useNavigation<RootStackScreenProps<'OtpModal'>['navigation']>();
 
   const [otpCode, setOtpCode] = useState('');
 
   const {time, resetTime} = useTimer(5);
 
-  const onContinue = (code: string) => {
+  const onContinue = () => {
     navigation.goBack();
-    navigation.navigate('Bills', {code});
+    navigation.navigate('Bills');
   };
 
   const onResendOTP = () => {
@@ -33,92 +44,115 @@ export const OtpModal = () => {
 
   const selectOnPress = (item: number | null | string) => {
     if (item === 'delete') {
-      setOtpCode(otpCode.slice(0, -1));
+      setOtpCode(prevOtpCode => prevOtpCode.slice(0, -1));
     }
     if (item) {
-      if (otpRegExp.test(otpCode + item.toString())) {
-        setOtpCode(otpCode + item.toString());
+      if (otpCode.length < 6) {
+        setOtpCode(prevOtpCode => prevOtpCode + item);
       }
     }
     return;
   };
 
   return (
-    <ModalOverlay variant="bottom" background="transparent">
-      <View style={styles.header}>
-        <Typography style={styles.header} variant="24" textStyle={styles.text}>
-          Enter OTP
-        </Typography>
-      </View>
-      <View style={styles.container}>
-        <Typography textStyle={styles.textStyle}>
-          {'OTP has been sent to\n the registered phone number'}
-        </Typography>
-        <Input
-          style={styles.inputText}
-          showSoftInputOnFocus={false}
-          value={otpCode.toString()}
-        />
-        <TimeCounter time={time} />
+    <View style={styles.flex}>
+      <Pressable onPress={navigation.goBack} style={styles.pressable} />
+      <View style={styles.background}>
+        <View style={styles.header}>
+          <Typography
+            style={styles.header}
+            variant="24"
+            textStyle={styles.headerText}
+          >
+            Enter OTP
+          </Typography>
+        </View>
+        <View style={styles.contentContainer}>
+          <Typography textStyle={styles.generalText}>
+            {'OTP has been sent to\n the registered phone number'}
+          </Typography>
 
-        <View style={styles.buttonWrapper}>
-          <Button
-            type="secondary"
-            disabled={!!time}
-            onPress={onResendOTP}
-            style={styles.button}
-          >
-            resend OTP
-          </Button>
-          <Button
-            type="primary"
-            disabled={otpCode.length < 6}
-            onPress={() => onContinue(otpCode)}
-            style={styles.button}
-          >
-            Continue
-          </Button>
+          <Typography variant="36" textStyle={styles.codeText}>
+            {otpCode}
+          </Typography>
+
+          <TimeCounter time={time} />
+
+          <View style={styles.buttonWrapper}>
+            <Button
+              type="secondary"
+              disabled={!!time}
+              onPress={onResendOTP}
+              style={styles.button}
+            >
+              resend OTP
+            </Button>
+            <Button
+              type="primary"
+              disabled={otpCode.length < 6}
+              onPress={onContinue}
+              style={styles.button}
+            >
+              Continue
+            </Button>
+          </View>
+        </View>
+        <View style={styles.bottomLine} />
+        <View style={styles.numButtonsWrapper}>
+          {buttonsArray.map(item => (
+            <Pressable
+              key={item}
+              style={({pressed}) => [
+                styles.numButton,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => selectOnPress(item)}
+            >
+              {item === 'delete' && <Backspace height={30} />}
+              {item !== 'delete' && (
+                <Typography variant="40">{item}</Typography>
+              )}
+            </Pressable>
+          ))}
         </View>
       </View>
-      <View style={styles.bottomLine} />
-      <View style={styles.numButtonsWrapper}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, 'delete'].map(item => (
-          <Pressable
-            key={item}
-            style={({pressed}) => [styles.numButton, pressed && styles.pressed]}
-            onPress={() => selectOnPress(item)}
-          >
-            {item === 'delete' && <Backspace height={30} />}
-            {item !== 'delete' && <Typography variant="40">{item}</Typography>}
-          </Pressable>
-        ))}
-      </View>
-    </ModalOverlay>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  background: {
+    backgroundColor: COLORS.genericWhite,
+    flex: 1,
+  },
+  pressable: {
+    height: '20%',
+  },
   header: {
     alignItems: 'center',
     backgroundColor: COLORS.warning500,
-    borderRadius: 10,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
-  text: {
+  headerText: {
     color: COLORS.genericWhite,
     fontSize: 16,
     marginVertical: 10,
   },
-  container: {
+  contentContainer: {
     padding: 20,
   },
-  textStyle: {
+  generalText: {
     marginBottom: 10,
     textAlign: 'center',
   },
-  inputText: {
+
+  codeText: {
     fontSize: 24,
+    height: 50,
     letterSpacing: 5,
     textAlign: 'center',
   },

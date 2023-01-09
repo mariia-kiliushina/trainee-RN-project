@@ -1,9 +1,4 @@
-import {
-  Keyboard,
-  ListRenderItem,
-  ListRenderItemInfo,
-  StyleSheet,
-} from 'react-native';
+import {Keyboard, ListRenderItem, ListRenderItemInfo} from 'react-native';
 import {useFormik} from 'formik';
 import {HomeTabScreenProps} from 'src/navigation/types';
 import {Container} from 'src/components/Container';
@@ -40,9 +35,7 @@ export const Transaction = ({
     initialValues,
     onSubmit: () => {
       Keyboard.dismiss();
-      navigation.navigate('OtpModal', {
-        children: <></>,
-      });
+      navigation.navigate('OtpModal');
     },
   });
 
@@ -123,5 +116,3 @@ export const Transaction = ({
     </Container>
   );
 };
-
-const styles = StyleSheet.create({});

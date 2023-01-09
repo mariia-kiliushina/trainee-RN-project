@@ -5,7 +5,6 @@ import {TPopUpModalParams} from 'src/screens/PopUpModal';
 
 export type RootStackParamList = {
   Posts: undefined;
-  ScrollScreen: undefined;
   GeolocationScreen: undefined;
   Animations: undefined;
   ChangePassword: undefined;
@@ -13,9 +12,9 @@ export type RootStackParamList = {
   Main: undefined;
   Onboarding: undefined;
   Login: undefined;
-  Bills: {code: string};
+  Bills: undefined;
   BottomSheetModal: {children: React.ReactNode};
-  OtpModal: {children: React.ReactNode};
+  OtpModal: undefined;
   PopUpModal: TPopUpModalParams;
 };
 
