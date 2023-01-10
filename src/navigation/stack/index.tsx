@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Main} from 'src/navigation/tabs';
-import {ScrollScreen} from 'screens/ScrollScreen';
+import {Onboarding} from 'screens/Onboarding';
 import {Posts} from 'screens/Posts';
 import {GeolocationScreen} from 'screens/GeolocationScreen';
 import {Animations} from 'screens/Animations';
@@ -9,6 +9,7 @@ import {Video} from 'screens/Video';
 import {Login} from 'screens/Login';
 import {BottomSheetModal} from 'screens/BottomSheetModal';
 import {PopUpModal} from 'screens/PopUpModal';
+import {OtpModal} from 'screens/OtpModal';
 import {Bills} from 'screens/Bills';
 import {selectProfile} from 'src/store/profileSlice/selectors';
 import {useAppSelector} from 'src/hooks/redux';
@@ -42,9 +43,9 @@ export const ScreenNavigation = () => {
           <Stack.Screen name="Animations" component={Animations} />
           <Stack.Screen name="Posts" component={Posts} />
           <Stack.Screen
-            name="ScrollScreen"
-            component={ScrollScreen}
-            options={{headerTitle: 'Scroll Screen'}}
+            name="Bills"
+            component={Bills}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="ChangePassword"
@@ -61,6 +62,11 @@ export const ScreenNavigation = () => {
       ) : (
         <>
           <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Login"
             component={Login}
             options={{
@@ -75,10 +81,12 @@ export const ScreenNavigation = () => {
           animation: 'fade',
           presentation: 'transparentModal',
           gestureEnabled: false,
+          headerShown: false,
         }}
       >
         <Stack.Screen name="BottomSheetModal" component={BottomSheetModal} />
         <Stack.Screen name="PopUpModal" component={PopUpModal} />
+        <Stack.Screen name="OtpModal" component={OtpModal} />
       </Stack.Group>
     </Stack.Navigator>
   );
